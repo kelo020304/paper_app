@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "pdfPolicy": "download",
+  "autoSync": true,
+  "autoSyncIntervalSeconds": 30,
+  "git": {
+    "remote": "git@github.com:kelo020304/paper_app.git",
+    "branch": "vault"
+  }
+}
