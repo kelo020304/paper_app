@@ -98,7 +98,10 @@ function registerIpc() {
     let saved = await library.upsertPaper(vaultPath, paper, { tags: options.tags || [], source: 'manual' });
     if (options.downloadPdf) await downloadPdf(vaultPath, saved);
     const settings = await library.getSettings(vaultPath);
-    if (settings.ai?.autoAnalyze) saved = await analyzeAndStorePaper(vaultPath, { ...saved, hasPdf: options.downloadPdf || saved.hasPdf }, settings);
+    if (settings.ai?.autoAnalyze) {
+      try { saved = await analyzeAndStorePaper(vaultPath, { ...saved, hasPdf: options.downloadPdf || saved.hasPdf }, settings); }
+      catch (error) { saved = { ...saved, analysisStatus: 'failed', analysisError: error.message }; await library.updatePaper(vaultPath, saved.key, { analysisStatus: 'failed' }); }
+    }
     return { ...saved, hasPdf: options.downloadPdf || saved.hasPdf };
   });
 
@@ -142,7 +145,8 @@ function registerIpc() {
     const vaultPath = await currentVault();
     const paper = (await library.listPapers(vaultPath)).find((item) => item.key === key);
     if (!paper) throw new Error('论文不存在');
-    return analyzeAndStorePaper(vaultPath, paper, await library.getSettings(vaultPath));
+    try { return await analyzeAndStorePaper(vaultPath, paper, await library.getSettings(vaultPath)); }
+    catch (error) { await library.updatePaper(vaultPath, key, { analysisStatus: 'failed' }); throw error; }
   });
   handle('category:create', async (input) => library.createCategory(await currentVault(), input));
   handle('category:update-summary', async (id) => updateCategorySummary(await currentVault(), id, await library.getSettings(await currentVault())));

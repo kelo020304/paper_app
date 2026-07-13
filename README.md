@@ -107,6 +107,8 @@ npm run dist:linux
 
 生成的安装包位于 `dist/`。Linux 的 AppImage 可以直接运行，macOS 会生成 DMG 和 ZIP。
 
+每次推送 `main` 后，GitHub Actions 也会自动运行测试，并分别生成 macOS DMG/ZIP 与 Linux AppImage/DEB，可在仓库 Actions 的构建产物中下载。
+
 ## 隐私与安全
 
 - 默认没有云数据库，数据只位于你选择的本地目录和你的 GitHub 仓库。

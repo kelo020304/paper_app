@@ -207,7 +207,7 @@ $$('[data-open-import]').forEach((button) => { button.onclick = showImport; });
 $('#import-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   if (event.submitter?.value === 'cancel') { $('#import-dialog').close(); return; }
-  const button = $('#import-submit'); button.disabled = true; button.textContent = '正在获取…';
+  const button = $('#import-submit'); button.disabled = true; button.textContent = '正在导入并解析…';
   try {
     const paper = await window.paperVault.importPaper($('#arxiv-input').value, {
       tags: $('#import-tags').value.split(/[,，]/).map((tag) => tag.trim()).filter(Boolean),
@@ -215,7 +215,7 @@ $('#import-form').addEventListener('submit', async (event) => {
     });
     const old = state.papers.findIndex((item) => item.key === paper.key);
     if (old >= 0) state.papers[old] = paper; else state.papers.unshift(paper);
-    $('#import-dialog').close(); $('#import-form').reset(); $('#download-pdf').checked = true; render(); toast('论文已导入');
+    $('#import-dialog').close(); $('#import-form').reset(); $('#download-pdf').checked = true; render(); toast(paper.analysisStatus === 'failed' ? '论文已导入；AI 解析可稍后重试' : '论文已导入并完成 AI 整理');
     scheduleAutoSync();
   } catch (error) { toast(error.message, true); }
   finally { button.disabled = false; button.textContent = '导入论文'; }
