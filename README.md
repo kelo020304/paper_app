@@ -1,6 +1,6 @@
 # Paper Vault
 
-一个面向 arXiv 的本地优先 AI 论文工作台。macOS 和 Linux 使用同一套 Electron 代码，论文、分类、HTML 解析和 Related Works 通过 GitHub 私有仓库近实时同步。
+一个面向 arXiv 的本地优先 AI 论文工作台。macOS 和 Linux 使用同一套 Electron 代码，论文、分类、HTML 解析和 Related Works 通过 GitHub 仓库近实时同步。
 
 ## 已实现
 
@@ -20,6 +20,7 @@
 - 默认连接 `git@github.com:kelo020304/paper_app.git` 的 `vault` 分支
 - 修改后约 2 秒自动推送，另一台设备每 30 秒自动拉取，也可手动同步
 - 可在设置中切换本地论文库目录
+- 紧凑列表式界面，集中呈现阅读状态、来源、分类、价值评分与 AI 报告状态
 
 ## 本地运行
 
@@ -44,7 +45,7 @@ npm test
 - `main` 保存应用源码。
 - `vault` 保存论文元数据、笔记和可选 PDF。
 
-1. 使用 SSH key，或先执行 `gh auth login` 让 Git 具备 GitHub 凭据。
+1. 每台设备分别生成自己的 SSH key，把两份公钥都添加到同一个 GitHub 账号；不要在设备之间复制私钥。也可以执行 `gh auth login` 让 Git 具备 GitHub 凭据。
 2. 首次启动会自动初始化本地论文库，并连接 `vault` 分支。
 3. 修改论文后约 2 秒自动提交并推送；其他设备每 30 秒拉取一次。
 4. Linux 或另一台 Mac 安装应用后，使用同一 GitHub SSH 账号即可自动接入。
@@ -112,6 +113,7 @@ npm run dist:linux
 ## 隐私与安全
 
 - 默认没有云数据库，数据只位于你选择的本地目录和你的 GitHub 仓库。
+- `vault` 分支的可见性与仓库一致；公开仓库中的论文元数据、笔记和 PDF 也会公开，敏感资料请使用私有仓库。
 - GitHub 凭据由 SSH agent、GitHub CLI 或系统 credential helper 管理，应用不保存 GitHub 访问令牌。
 - OpenAI API Key 仅保存在当前设备的系统安全存储，不能通过 GitHub 同步。
 - 渲染进程开启 context isolation 与 sandbox，并限制外部链接为 arXiv 域名。

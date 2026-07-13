@@ -45,16 +45,23 @@ function filteredPapers() {
 function render() {
   const papers = filteredPapers();
   $('#count-all').textContent = state.papers.length;
+  $('#count-unread').textContent = state.papers.filter((paper) => paper.status === 'unread').length;
+  $('#count-reading').textContent = state.papers.filter((paper) => paper.status === 'reading').length;
+  $('#count-done').textContent = state.papers.filter((paper) => paper.status === 'done').length;
+  $('#count-favorite').textContent = state.papers.filter((paper) => paper.favorite).length;
   $('#vault-path').textContent = state.vaultPath;
   $('#vault-path').title = state.vaultPath;
   const activeCategory = state.categories.find((item) => item.id === state.categoryId);
   $('#page-title').textContent = activeCategory?.name || (state.tag ? `# ${state.tag}` : filterNames[state.filter]);
+  $('#view-context').textContent = activeCategory ? '论文分类' : (state.tag ? '标签筛选' : (state.filter === 'all' ? '论文库' : '智能筛选'));
   $('#category-summary-btn').classList.toggle('hidden', !activeCategory);
-  $('#result-count').textContent = state.papers.length ? `显示 ${papers.length} / ${state.papers.length} 篇论文` : '你的本地优先研究资料库';
+  $('#result-count').textContent = state.papers.length ? `${papers.length} 篇论文${papers.length !== state.papers.length ? ` · 全库 ${state.papers.length} 篇` : ''}` : '本地优先、可跨设备同步的研究资料库';
+  renderSyncState();
   renderTags();
   renderCategories();
   const grid = $('#paper-grid');
   const empty = $('#empty-state');
+  $('.list-caption').classList.toggle('hidden', papers.length === 0);
   grid.classList.toggle('hidden', papers.length === 0);
   empty.classList.toggle('hidden', papers.length !== 0);
   empty.querySelector('h2').textContent = state.papers.length ? '没有匹配的论文' : '开始建立你的论文库';
@@ -62,15 +69,40 @@ function render() {
   grid.innerHTML = papers.map(paperCard).join('');
 }
 
+function renderSyncState() {
+  const ready = Boolean(state.gitStatus.initialized && (state.settings.git?.remote || state.gitStatus.remote));
+  const dirty = Boolean(state.gitStatus.dirty);
+  const label = ready ? (dirty ? '等待同步' : 'GitHub 已同步') : '仅保存在本机';
+  const compactLabel = ready ? (dirty ? '有更改等待同步' : '已连接 GitHub') : '未连接 GitHub';
+  const classes = ready ? (dirty ? 'dirty' : 'connected') : '';
+  const syncState = $('#sync-state');
+  const syncMini = $('.sync-mini');
+  syncState.className = `sync-state ${classes}`.trim();
+  syncState.querySelector('span').textContent = label;
+  syncMini.className = `sync-mini ${classes}`.trim();
+  $('#sync-mini-label').textContent = compactLabel;
+}
+
 function paperCard(paper) {
-  const tags = (paper.tags || []).slice(0, 3).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('');
-  const extra = (paper.tags || []).length > 3 ? `<span class="tag">+${paper.tags.length - 3}</span>` : '';
+  const category = state.categories.find((item) => item.id === paper.categoryId);
+  const tags = (paper.tags || []).slice(0, 2).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('');
+  const extra = (paper.tags || []).length > 2 ? `<span class="tag">+${paper.tags.length - 2}</span>` : '';
+  const sourceLabel = paper.source === 'daily' ? '每日精选' : '手动导入';
+  const signal = paper.valueScore
+    ? `<div class="score-badge"><strong>${escapeHtml(paper.valueScore)}</strong><span>/ 10</span></div>`
+    : (paper.hasPdf ? '<span class="pdf-badge">PDF 已归档</span>' : '<span class="pdf-badge">仅元数据</span>');
   return `<article class="paper-card" data-key="${escapeHtml(paper.key)}" data-source="${escapeHtml(paper.source || 'manual')}">
-    <div class="card-top"><button class="status-pill" data-action="cycle-status" data-status="${paper.status}">${statusNames[paper.status] || '待读'}</button><span class="arxiv-id">${escapeHtml(paper.id)}</span><button class="favorite-btn ${paper.favorite ? 'active' : ''}" data-action="favorite" title="收藏">${paper.favorite ? '◆' : '◇'}</button></div>
-    <h2 class="paper-title">${escapeHtml(paper.title)}</h2>
-    <div class="authors">${escapeHtml((paper.authors || []).join(', '))}</div>
-    <p class="abstract">${escapeHtml(paper.abstract)}</p>
-    <div class="card-bottom">${tags}${extra}${paper.analysisStatus === 'ready' ? '<span class="analysis-badge">解析 ✓</span>' : ''}${paper.valueScore ? `<span class="score-badge">${paper.valueScore}/10</span>` : (paper.hasPdf ? '<span class="pdf-badge">PDF ✓</span>' : '')}</div>
+    <div class="paper-content">
+      <div class="card-top"><button class="status-pill" data-action="cycle-status" data-status="${paper.status}" aria-label="切换阅读状态">${statusNames[paper.status] || '待读'}</button><span class="arxiv-id">${escapeHtml(paper.id)}</span><span class="source-label">${sourceLabel}</span><span class="published-year">${escapeHtml((paper.published || '').slice(0, 4))}</span></div>
+      <h2 class="paper-title">${escapeHtml(paper.title)}</h2>
+      <div class="authors">${escapeHtml((paper.authors || []).join(', '))}</div>
+      <p class="abstract">${escapeHtml(paper.abstract)}</p>
+      <div class="card-bottom">${category ? `<span class="category-chip">${escapeHtml(category.name)}</span>` : ''}${tags}${extra}</div>
+    </div>
+    <aside class="paper-aside">
+      <button class="favorite-btn ${paper.favorite ? 'active' : ''}" data-action="favorite" title="${paper.favorite ? '取消收藏' : '收藏'}" aria-label="${paper.favorite ? '取消收藏' : '收藏'}">${paper.favorite ? '★' : '☆'}</button>
+      <div class="paper-signals">${signal}${paper.analysisStatus === 'ready' ? '<span class="analysis-badge">AI 报告已生成</span>' : ''}<span class="open-indicator">›</span></div>
+    </aside>
   </article>`;
 }
 
@@ -106,7 +138,7 @@ function openDetail(paper) {
   $('#detail-content').innerHTML = `<div class="detail-shell">
     <button class="dialog-close detail-close" data-detail-close>×</button>
     <section class="detail-main">
-      <p class="eyebrow">ARXIV · ${escapeHtml(paper.id)}</p>
+      <p class="detail-kicker ${paper.source === 'daily' ? 'daily' : ''}"><i></i>ARXIV · ${escapeHtml(paper.id)} · ${paper.source === 'daily' ? '每日精选' : '手动导入'}</p>
       <h2>${escapeHtml(paper.title)}</h2>
       <div class="detail-authors">${escapeHtml((paper.authors || []).join(', '))}</div>
       <div class="detail-section"><h3>摘要</h3><p class="detail-abstract">${escapeHtml(paper.abstract)}</p></div>
@@ -119,10 +151,11 @@ function openDetail(paper) {
       <div class="side-field"><h3>论文信息</h3><div class="meta-line">来源：${paper.source === 'daily' ? '每日抓取' : '人工加入'}<br>发表：${escapeHtml((paper.published || '').slice(0, 10))}<br>arXiv 分类：${escapeHtml((paper.categories || []).join(', '))}<br>${paper.valueScore ? `价值：${paper.valueScore}/10<br>${escapeHtml(paper.valueReason || '')}` : ''}</div></div>
       <div class="detail-actions">
         <button class="button primary" id="detail-save">保存修改</button>
-        <button class="button ghost" id="detail-analyze">${paper.analysisStatus === 'ready' ? '打开 AI 解析' : 'AI 解析与自动分类'}</button>
-        <button class="button ghost" id="detail-translate">幻觉翻译（HJFY）</button>
-        <button class="button ghost" id="detail-pdf">${paper.hasPdf ? '打开 PDF' : '下载 PDF'}</button>
-        <button class="button ghost" id="detail-arxiv">在 arXiv 查看</button>
+        <button class="button secondary" id="detail-analyze">${paper.analysisStatus === 'ready' ? '打开 AI 研究报告' : '生成 AI 研究报告'}</button>
+        <button class="button secondary" id="detail-translate">HJFY 中文翻译</button>
+        <button class="button secondary" id="detail-pdf">${paper.hasPdf ? '打开本地 PDF' : '下载 PDF'}</button>
+        <button class="button secondary" id="detail-arxiv">打开 arXiv 页面</button>
+        <div class="action-separator"></div>
         <button class="button danger" id="detail-delete">移出论文库</button>
       </div>
     </aside>
@@ -185,8 +218,18 @@ $('#nav').addEventListener('click', (event) => {
   $$('.nav-item[data-filter]').forEach((node) => node.classList.toggle('active', node === item));
   state.filter = item.dataset.filter; state.tag = ''; state.categoryId = ''; render();
 });
-$('#tag-list').addEventListener('click', (event) => { const item = event.target.closest('[data-tag]'); if (!item) return; state.tag = item.dataset.tag; render(); });
-$('#category-list').addEventListener('click', (event) => { const item = event.target.closest('[data-category]'); if (!item) return; state.categoryId = item.dataset.category; state.tag = ''; render(); });
+$('#tag-list').addEventListener('click', (event) => {
+  const item = event.target.closest('[data-tag]'); if (!item) return;
+  state.tag = item.dataset.tag; state.categoryId = ''; state.filter = 'all';
+  $$('.nav-item[data-filter]').forEach((node) => node.classList.remove('active'));
+  render();
+});
+$('#category-list').addEventListener('click', (event) => {
+  const item = event.target.closest('[data-category]'); if (!item) return;
+  state.categoryId = item.dataset.category; state.tag = ''; state.filter = 'all';
+  $$('.nav-item[data-filter]').forEach((node) => node.classList.remove('active'));
+  render();
+});
 $('#category-summary-btn').onclick = () => window.paperVault.openCategorySummary(state.categoryId).catch((error) => toast(error.message, true));
 $('#search').addEventListener('input', (event) => { state.query = event.target.value; render(); });
 $('#sort-select').addEventListener('change', (event) => { state.sort = event.target.value; render(); });
@@ -285,7 +328,7 @@ $('#category-form').addEventListener('submit', async (event) => {
   event.preventDefault(); if (event.submitter?.value === 'cancel') { $('#category-dialog').close(); return; }
   try {
     const category = await window.paperVault.createCategory({ name: $('#category-name').value.trim(), color: $('#category-color').value, kind: 'manual' });
-    state.categories.push(category); $('#category-form').reset(); $('#category-color').value = '#58756b'; $('#category-dialog').close(); render(); scheduleAutoSync(); toast('分类已创建');
+    state.categories.push(category); $('#category-form').reset(); $('#category-color').value = '#2563eb'; $('#category-dialog').close(); render(); scheduleAutoSync(); toast('分类已创建');
   } catch (error) { toast(error.message, true); }
 });
 

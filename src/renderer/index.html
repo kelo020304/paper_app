@@ -10,62 +10,106 @@
 <body>
   <div class="app-shell">
     <aside class="sidebar">
-      <div class="brand"><span class="brand-mark">P</span><span>Paper Vault</span></div>
-      <nav id="nav">
-        <button class="nav-item active" data-filter="all"><span>▦</span>全部论文 <b id="count-all">0</b></button>
-        <button class="nav-item" data-filter="unread"><span>○</span>待读</button>
-        <button class="nav-item" data-filter="reading"><span>◐</span>阅读中</button>
-        <button class="nav-item" data-filter="done"><span>●</span>已读</button>
-        <button class="nav-item" data-filter="favorite"><span>◇</span>收藏</button>
+      <div class="brand">
+        <span class="brand-mark">PV</span>
+        <span class="brand-copy"><strong>Paper Vault</strong><small>RESEARCH LIBRARY</small></span>
+      </div>
+
+      <nav id="nav" class="primary-nav" aria-label="论文筛选">
+        <button class="nav-item active" data-filter="all">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v13H4zM8 5.5v13M4 10h16"/></svg>
+          <span>全部论文</span><b id="count-all">0</b>
+        </button>
+        <button class="nav-item" data-filter="unread">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/></svg>
+          <span>待读</span><b id="count-unread">0</b>
+        </button>
+        <button class="nav-item" data-filter="reading">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><path d="M12 5v14M12 5a7 7 0 0 1 0 14"/></svg>
+          <span>阅读中</span><b id="count-reading">0</b>
+        </button>
+        <button class="nav-item" data-filter="done">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><path d="m8.8 12 2.1 2.1 4.5-4.6"/></svg>
+          <span>已读</span><b id="count-done">0</b>
+        </button>
+        <button class="nav-item" data-filter="favorite">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 4 2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8z"/></svg>
+          <span>收藏</span><b id="count-favorite">0</b>
+        </button>
       </nav>
-      <div class="sidebar-section">
-        <div class="section-label section-row"><span>分类</span><button id="add-category" title="新建分类">＋</button></div>
-        <div id="category-list" class="tag-list"></div>
-      </div>
-      <div class="sidebar-section compact-section">
+
+      <section class="sidebar-section">
+        <div class="section-label section-row"><span>分类</span><button id="add-category" title="新建分类" aria-label="新建分类">＋</button></div>
+        <div id="category-list" class="filter-list"></div>
+      </section>
+
+      <section class="sidebar-section tag-section">
         <div class="section-label">标签</div>
-        <div id="tag-list" class="tag-list"></div>
+        <div id="tag-list" class="filter-list"></div>
+      </section>
+
+      <div class="source-legend" aria-label="论文来源颜色">
+        <span><i class="source-dot manual"></i>手动导入</span>
+        <span><i class="source-dot daily"></i>每日精选</span>
       </div>
-      <div class="source-legend"><span><i class="source-dot manual"></i>人工加入</span><span><i class="source-dot daily"></i>每日抓取</span></div>
+
       <div class="sidebar-bottom">
-        <button id="settings-btn" class="nav-item"><span>⚙</span>设置与同步</button>
+        <button id="settings-btn" class="nav-item settings-entry">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1a8 8 0 0 0-1.8-1L14.4 3h-4l-.4 3.1a8 8 0 0 0-1.8 1l-2.4-1-2 3.4 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.4-1a8 8 0 0 0 1.8 1l.4 3.1h4l.4-3.1a8 8 0 0 0 1.8-1l2.4 1 2-3.4-2-1.5a7 7 0 0 0 .1-1z"/></svg>
+          <span>设置与同步</span>
+        </button>
+        <div class="sync-mini"><i id="sync-mini-dot"></i><span id="sync-mini-label">正在读取论文库</span></div>
         <div class="vault-path" id="vault-path" title="论文库目录"></div>
       </div>
     </aside>
 
     <main class="main">
       <header class="toolbar">
-        <div class="search-wrap"><span>⌕</span><input id="search" placeholder="搜索标题、作者、摘要或标签…"></div>
-        <button id="sync-btn" class="button ghost"><span id="sync-icon">↻</span> 同步</button>
-        <button id="import-btn" class="button primary">＋ 导入 arXiv</button>
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.2"/><path d="m15.5 15.5 4 4"/></svg>
+          <input id="search" placeholder="搜索标题、作者、摘要或标签">
+        </div>
+        <div class="sync-state" id="sync-state"><i></i><span>本地论文库</span></div>
+        <button id="sync-btn" class="button secondary"><span id="sync-icon" class="button-icon">↻</span>同步</button>
+        <button id="import-btn" class="button primary"><span class="button-icon">＋</span>导入论文</button>
       </header>
 
       <section class="content">
         <div class="page-heading">
-          <div><p class="eyebrow">LIBRARY</p><h1 id="page-title">全部论文</h1><p id="result-count" class="muted"></p></div>
-          <div class="heading-actions"><button id="category-summary-btn" class="button ghost hidden">打开增量 Related Works</button><select id="sort-select" aria-label="排序方式">
-            <option value="added">最近添加</option><option value="published">最近发表</option><option value="title">标题</option>
-          </select></div>
+          <div class="heading-copy">
+            <p id="view-context" class="view-context">论文库</p>
+            <h1 id="page-title">全部论文</h1>
+            <p id="result-count" class="muted"></p>
+          </div>
+          <div class="heading-actions">
+            <button id="category-summary-btn" class="button secondary hidden">Related Works</button>
+            <label class="sort-control"><span>排序</span><select id="sort-select" aria-label="排序方式">
+              <option value="added">最近添加</option><option value="published">最近发表</option><option value="title">标题 A–Z</option>
+            </select></label>
+          </div>
         </div>
-        <div id="paper-grid" class="paper-grid"></div>
+
+        <div class="list-caption"><span>论文</span><span>状态与价值</span></div>
+        <div id="paper-grid" class="paper-list"></div>
         <div id="empty-state" class="empty-state hidden">
-          <div class="empty-illustration">⌁</div><h2>开始建立你的论文库</h2>
-          <p>粘贴 arXiv 链接或编号，标题、作者和摘要会自动归档。</p>
+          <div class="empty-illustration"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M11 8h20l6 6v26H11z"/><path d="M31 8v7h7M17 23h14M17 29h14M17 35h9"/></svg></div>
+          <h2>论文库还是空的</h2>
+          <p>粘贴 arXiv 链接或编号，元数据与 AI 解析会自动归档。</p>
           <button class="button primary" data-open-import>导入第一篇论文</button>
         </div>
       </section>
     </main>
   </div>
 
-  <dialog id="import-dialog">
+  <dialog id="import-dialog" class="compact-dialog">
     <form method="dialog" id="import-form">
       <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
-      <p class="eyebrow">QUICK IMPORT</p><h2>导入 arXiv 论文</h2>
-      <p class="muted">支持 arXiv 编号、abs 链接或 PDF 链接。</p>
+      <p class="dialog-kicker">快速导入</p><h2>添加 arXiv 论文</h2>
+      <p class="muted">支持论文编号、摘要页链接和 PDF 链接。</p>
       <label>arXiv 链接或编号<input id="arxiv-input" required placeholder="例如：2406.12345"></label>
-      <label>标签（可选）<input id="import-tags" placeholder="VLA, Diffusion, 必读"></label>
+      <label>标签 <span class="optional">可选</span><input id="import-tags" placeholder="VLA, Diffusion, 必读"></label>
       <label class="checkbox-row"><input id="download-pdf" type="checkbox" checked><span>同时下载 PDF 到本地论文库</span></label>
-      <div class="dialog-actions"><button value="cancel" class="button ghost">取消</button><button id="import-submit" value="default" class="button primary">导入论文</button></div>
+      <div class="dialog-actions"><button value="cancel" class="button secondary">取消</button><button id="import-submit" value="default" class="button primary">导入论文</button></div>
     </form>
   </dialog>
 
@@ -73,44 +117,52 @@
     <div id="detail-content"></div>
   </dialog>
 
-  <dialog id="settings-dialog">
+  <dialog id="settings-dialog" class="settings-dialog">
     <form method="dialog" id="settings-form">
-      <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
-      <p class="eyebrow">SETTINGS</p><h2>论文库与 GitHub</h2>
-      <label>本地论文库<div class="inline-field"><input id="settings-vault" readonly><button type="button" id="choose-vault" class="button ghost">选择</button></div></label>
-      <label>GitHub 仓库地址<input id="git-remote" placeholder="git@github.com:you/papers.git"></label>
-      <label>论文数据分支<input id="git-branch" value="vault"></label>
-      <label class="checkbox-row"><input id="auto-sync" type="checkbox" checked><span>自动同步（修改后推送，每 30 秒拉取）</span></label>
-      <div class="settings-divider"></div>
-      <p class="eyebrow">AI RESEARCH</p>
-      <label>AI 连接方式<select id="ai-provider"><option value="codex">ChatGPT 账号（复用 Codex 登录）</option><option value="openai">OpenAI API Key</option></select></label>
-      <label>文本模型<input id="ai-model" value="gpt-5.6-terra"></label>
-      <label id="api-key-row">OpenAI API Key<input id="api-key" type="password" placeholder="已安全保存则留空；输入新 Key 可替换"></label>
-      <label class="checkbox-row"><input id="auto-analyze" type="checkbox" checked><span>导入后自动分类并生成 HTML 深度解析</span></label>
-      <label class="checkbox-row"><input id="generate-images" type="checkbox" checked><span>关键论文调用 GPT Image 2 生成原理图（需 API Key）</span></label>
-      <button type="button" id="test-ai" class="button ghost wide-button">测试 AI 连接</button>
-      <div class="settings-divider"></div>
-      <p class="eyebrow">DAILY ARXIV · 09:00</p>
-      <label class="checkbox-row"><input id="daily-enabled" type="checkbox" checked><span>启用每日自动抓取（应用在后台运行）</span></label>
-      <label>关键词<textarea id="daily-keywords" class="settings-textarea" placeholder="vision language action, world model"></textarea></label>
-      <div class="two-fields"><label>时间<input id="daily-time" type="time" value="09:00"></label><label>每日上限<input id="daily-limit" type="number" min="1" max="5" value="5"></label></div>
-      <button type="button" id="run-daily" class="button ghost wide-button">立即运行一次每日抓取</button>
-      <div class="callout">建议使用私有仓库。PDF 较多时仓库会迅速变大，可取消导入时的 PDF 下载，仅同步元数据和笔记。</div>
-      <div id="git-state" class="git-state"></div>
-      <div class="dialog-actions"><button value="cancel" class="button ghost">取消</button><button id="save-settings" value="default" class="button primary">保存并连接</button></div>
+      <div class="dialog-header"><div><p class="dialog-kicker">偏好设置</p><h2>Paper Vault 设置</h2></div><button class="dialog-close" value="cancel" aria-label="关闭">×</button></div>
+
+      <section class="settings-group">
+        <div class="settings-group-title"><span>存储与同步</span><small>论文库通过 GitHub 的 vault 分支跨设备同步</small></div>
+        <label>本地论文库<div class="inline-field"><input id="settings-vault" readonly><button type="button" id="choose-vault" class="button secondary">选择</button></div></label>
+        <label>GitHub 仓库地址<input id="git-remote" placeholder="git@github.com:you/papers.git"></label>
+        <div class="two-fields"><label>论文数据分支<input id="git-branch" value="vault"></label><label class="checkbox-row setting-toggle"><input id="auto-sync" type="checkbox" checked><span>自动同步<br><small>约 30 秒刷新</small></span></label></div>
+        <div id="git-state" class="git-state"></div>
+      </section>
+
+      <section class="settings-group">
+        <div class="settings-group-title"><span>AI 研究助手</span><small>分类、价值评估、HTML 解析与原理图</small></div>
+        <label>AI 连接方式<select id="ai-provider"><option value="codex">ChatGPT 账号（复用 Codex 登录）</option><option value="openai">OpenAI API Key</option></select></label>
+        <label>文本模型<input id="ai-model" value="gpt-5.6-terra"></label>
+        <label id="api-key-row">OpenAI API Key<input id="api-key" type="password" placeholder="已保存则留空；输入新 Key 可替换"></label>
+        <label class="checkbox-row"><input id="auto-analyze" type="checkbox" checked><span>导入后自动分类并生成 HTML 解析</span></label>
+        <label class="checkbox-row"><input id="generate-images" type="checkbox" checked><span>关键论文使用 GPT Image 2 生成原理图</span></label>
+        <button type="button" id="test-ai" class="button secondary wide-button">测试 AI 连接</button>
+      </section>
+
+      <section class="settings-group">
+        <div class="settings-group-title"><span>每日 arXiv</span><small>定时筛选高价值新论文，最多 5 篇</small></div>
+        <label class="checkbox-row"><input id="daily-enabled" type="checkbox" checked><span>启用后台自动抓取</span></label>
+        <label>关键词<textarea id="daily-keywords" class="settings-textarea" placeholder="vision language action, world model"></textarea></label>
+        <div class="two-fields"><label>运行时间<input id="daily-time" type="time" value="09:00"></label><label>每日上限<input id="daily-limit" type="number" min="1" max="5" value="5"></label></div>
+        <button type="button" id="run-daily" class="button secondary wide-button">立即运行一次</button>
+      </section>
+
+      <div class="callout">建议使用私有仓库。PDF 较多时可关闭自动下载，只同步元数据、解析和笔记。</div>
+      <div class="dialog-actions sticky-actions"><button value="cancel" class="button secondary">取消</button><button id="save-settings" value="default" class="button primary">保存设置</button></div>
     </form>
   </dialog>
 
-  <dialog id="category-dialog">
+  <dialog id="category-dialog" class="compact-dialog">
     <form method="dialog" id="category-form">
-      <button class="dialog-close" value="cancel">×</button><p class="eyebrow">NEW CATEGORY</p><h2>新建论文分类</h2>
+      <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+      <p class="dialog-kicker">自定义分类</p><h2>新建论文分类</h2>
       <label>分类名称<input id="category-name" required placeholder="例如：端到端自动驾驶"></label>
-      <label>标记颜色<input id="category-color" type="color" value="#58756b"></label>
-      <div class="dialog-actions"><button value="cancel" class="button ghost">取消</button><button value="default" class="button primary">创建分类</button></div>
+      <label>标记颜色<input id="category-color" type="color" value="#2563eb"></label>
+      <div class="dialog-actions"><button value="cancel" class="button secondary">取消</button><button value="default" class="button primary">创建分类</button></div>
     </form>
   </dialog>
 
-  <div id="toast" class="toast"></div>
+  <div id="toast" class="toast" role="status"></div>
   <script src="demo-api.js"></script>
   <script src="app.js"></script>
 </body>

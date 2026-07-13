@@ -1,6 +1,6 @@
 {
   "name": "paper-vault",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Local-first arXiv paper library with GitHub sync",
   "main": "src/main.js",
   "author": {
