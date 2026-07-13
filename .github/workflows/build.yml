@@ -1,4 +1,4 @@
-name: Build Paper Vault
+name: Build Paper Orbit
 
 on:
   push:
@@ -28,10 +28,10 @@ jobs:
         include:
           - os: macos-14
             command: pnpm run dist:mac
-            artifact: paper-vault-macos
+            artifact: paper-orbit-macos
           - os: ubuntu-24.04
             command: pnpm run dist:linux
-            artifact: paper-vault-linux
+            artifact: paper-orbit-linux
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
