@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:">
+  <title>Paper Vault</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">P</span><span>Paper Vault</span></div>
+      <nav id="nav">
+        <button class="nav-item active" data-filter="all"><span>▦</span>全部论文 <b id="count-all">0</b></button>
+        <button class="nav-item" data-filter="unread"><span>○</span>待读</button>
+        <button class="nav-item" data-filter="reading"><span>◐</span>阅读中</button>
+        <button class="nav-item" data-filter="done"><span>●</span>已读</button>
+        <button class="nav-item" data-filter="favorite"><span>◇</span>收藏</button>
+      </nav>
+      <div class="sidebar-section">
+        <div class="section-label">标签</div>
+        <div id="tag-list" class="tag-list"></div>
+      </div>
+      <div class="sidebar-bottom">
+        <button id="settings-btn" class="nav-item"><span>⚙</span>设置与同步</button>
+        <div class="vault-path" id="vault-path" title="论文库目录"></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="toolbar">
+        <div class="search-wrap"><span>⌕</span><input id="search" placeholder="搜索标题、作者、摘要或标签…"></div>
+        <button id="sync-btn" class="button ghost"><span id="sync-icon">↻</span> 同步</button>
+        <button id="import-btn" class="button primary">＋ 导入 arXiv</button>
+      </header>
+
+      <section class="content">
+        <div class="page-heading">
+          <div><p class="eyebrow">LIBRARY</p><h1 id="page-title">全部论文</h1><p id="result-count" class="muted"></p></div>
+          <select id="sort-select" aria-label="排序方式">
+            <option value="added">最近添加</option>
+            <option value="published">最近发表</option>
+            <option value="title">标题</option>
+          </select>
+        </div>
+        <div id="paper-grid" class="paper-grid"></div>
+        <div id="empty-state" class="empty-state hidden">
+          <div class="empty-illustration">⌁</div><h2>开始建立你的论文库</h2>
+          <p>粘贴 arXiv 链接或编号，标题、作者和摘要会自动归档。</p>
+          <button class="button primary" data-open-import>导入第一篇论文</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="import-dialog">
+    <form method="dialog" id="import-form">
+      <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+      <p class="eyebrow">QUICK IMPORT</p><h2>导入 arXiv 论文</h2>
+      <p class="muted">支持 arXiv 编号、abs 链接或 PDF 链接。</p>
+      <label>arXiv 链接或编号<input id="arxiv-input" required placeholder="例如：2406.12345"></label>
+      <label>标签（可选）<input id="import-tags" placeholder="VLA, Diffusion, 必读"></label>
+      <label class="checkbox-row"><input id="download-pdf" type="checkbox" checked><span>同时下载 PDF 到本地论文库</span></label>
+      <div class="dialog-actions"><button value="cancel" class="button ghost">取消</button><button id="import-submit" value="default" class="button primary">导入论文</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="detail-dialog" class="detail-dialog">
+    <div id="detail-content"></div>
+  </dialog>
+
+  <dialog id="settings-dialog">
+    <form method="dialog" id="settings-form">
+      <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+      <p class="eyebrow">SETTINGS</p><h2>论文库与 GitHub</h2>
+      <label>本地论文库<div class="inline-field"><input id="settings-vault" readonly><button type="button" id="choose-vault" class="button ghost">选择</button></div></label>
+      <label>GitHub 仓库地址<input id="git-remote" placeholder="git@github.com:you/papers.git"></label>
+      <label>论文数据分支<input id="git-branch" value="vault"></label>
+      <label class="checkbox-row"><input id="auto-sync" type="checkbox" checked><span>自动同步（修改后推送，每 30 秒拉取）</span></label>
+      <div class="callout">建议使用私有仓库。PDF 较多时仓库会迅速变大，可取消导入时的 PDF 下载，仅同步元数据和笔记。</div>
+      <div id="git-state" class="git-state"></div>
+      <div class="dialog-actions"><button value="cancel" class="button ghost">取消</button><button id="save-settings" value="default" class="button primary">保存并连接</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast"></div>
+  <script src="demo-api.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

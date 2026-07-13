@@ -1,0 +1,35 @@
+{
+  "name": "paper-vault",
+  "version": "0.1.0",
+  "description": "Local-first arXiv paper library with GitHub sync",
+  "main": "src/main.js",
+  "author": "Paper Vault contributors",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux AppImage deb"
+  },
+  "devDependencies": {
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "dev.papervault.desktop",
+    "productName": "Paper Vault",
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": ["dmg", "zip"]
+    },
+    "linux": {
+      "category": "Office",
+      "target": ["AppImage", "deb"]
+    }
+  }
+}
