@@ -328,7 +328,7 @@ $('#category-form').addEventListener('submit', async (event) => {
   event.preventDefault(); if (event.submitter?.value === 'cancel') { $('#category-dialog').close(); return; }
   try {
     const category = await window.paperVault.createCategory({ name: $('#category-name').value.trim(), color: $('#category-color').value, kind: 'manual' });
-    state.categories.push(category); $('#category-form').reset(); $('#category-color').value = '#2563eb'; $('#category-dialog').close(); render(); scheduleAutoSync(); toast('分类已创建');
+    state.categories.push(category); $('#category-form').reset(); $('#category-color').value = '#0f766e'; $('#category-dialog').close(); render(); scheduleAutoSync(); toast('分类已创建');
   } catch (error) { toast(error.message, true); }
 });
 
