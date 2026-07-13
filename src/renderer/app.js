@@ -22,6 +22,16 @@ function toast(message, error = false) {
   toast.timer = setTimeout(() => { el.className = 'toast'; }, 2800);
 }
 
+function animateSelection(element) {
+  if (!element) return;
+  clearTimeout(element.selectionTimer);
+  element.classList.remove('selection-pulse');
+  requestAnimationFrame(() => {
+    element.classList.add('selection-pulse');
+    element.selectionTimer = setTimeout(() => element.classList.remove('selection-pulse'), 620);
+  });
+}
+
 function filteredPapers() {
   const query = state.query.trim().toLowerCase();
   const papers = state.papers.filter((paper) => {
@@ -108,7 +118,7 @@ function paperCard(paper) {
 
 function renderCategories() {
   const counts = new Map(); state.papers.forEach((paper) => { for (const id of [paper.categoryId, paper.dailyCategoryId].filter(Boolean)) counts.set(id, (counts.get(id) || 0) + 1); });
-  $('#category-list').innerHTML = state.categories.map((category) => `<button class="category-filter ${state.categoryId === category.id ? 'active' : ''}" data-category="${escapeHtml(category.id)}"><i class="category-color" style="background:${escapeHtml(category.color)}"></i><span>${escapeHtml(category.name)}</span><small class="category-count">${counts.get(category.id) || 0}</small></button>`).join('') || '<span class="vault-path">还没有分类</span>';
+  $('#category-list').innerHTML = state.categories.map((category) => `<button class="category-filter ${state.categoryId === category.id ? 'active' : ''}" data-category="${escapeHtml(category.id)}" style="--item-accent:${escapeHtml(category.color)}"><i class="category-color" style="background:${escapeHtml(category.color)}"></i><span>${escapeHtml(category.name)}</span><small class="category-count">${counts.get(category.id) || 0}</small></button>`).join('') || '<span class="vault-path">还没有分类</span>';
 }
 
 function renderTags() {
@@ -217,18 +227,21 @@ $('#nav').addEventListener('click', (event) => {
   const item = event.target.closest('[data-filter]'); if (!item) return;
   $$('.nav-item[data-filter]').forEach((node) => node.classList.toggle('active', node === item));
   state.filter = item.dataset.filter; state.tag = ''; state.categoryId = ''; render();
+  animateSelection(item);
 });
 $('#tag-list').addEventListener('click', (event) => {
   const item = event.target.closest('[data-tag]'); if (!item) return;
   state.tag = item.dataset.tag; state.categoryId = ''; state.filter = 'all';
   $$('.nav-item[data-filter]').forEach((node) => node.classList.remove('active'));
   render();
+  animateSelection($('#tag-list .tag-filter.active'));
 });
 $('#category-list').addEventListener('click', (event) => {
   const item = event.target.closest('[data-category]'); if (!item) return;
   state.categoryId = item.dataset.category; state.tag = ''; state.filter = 'all';
   $$('.nav-item[data-filter]').forEach((node) => node.classList.remove('active'));
   render();
+  animateSelection($('#category-list .category-filter.active'));
 });
 $('#category-summary-btn').onclick = () => window.paperVault.openCategorySummary(state.categoryId).catch((error) => toast(error.message, true));
 $('#search').addEventListener('input', (event) => { state.query = event.target.value; render(); });

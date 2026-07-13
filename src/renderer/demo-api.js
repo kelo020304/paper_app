@@ -59,7 +59,7 @@ if (!window.paperVault && ['127.0.0.1', 'localhost'].includes(location.hostname)
     ,openCategorySummary: async () => true
     ,updateCategorySummary: async () => true
     ,saveApiKey: async () => true
-    ,testAI: async () => 'Paper Vault AI 已连接。'
+    ,testAI: async () => 'Paper Orbit AI 已连接。'
     ,runDaily: async () => ({ imported: [], date: '2026-07-14' })
   };
 }

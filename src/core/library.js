@@ -34,7 +34,7 @@ async function ensureVault(vaultPath) {
   if (!(await pathExists(settingsPath))) await writeJsonAtomic(settingsPath, DEFAULT_SETTINGS);
   const readmePath = path.join(vaultPath, 'README.md');
   if (!(await pathExists(readmePath))) {
-    await fs.writeFile(readmePath, '# Paper Vault\n\n由 Paper Vault 管理的本地论文库。论文元数据和笔记适合用 Git 同步。\n', 'utf8');
+    await fs.writeFile(readmePath, '# Paper Orbit\n\n由 Paper Orbit 管理的本地论文库。论文元数据和笔记适合用 Git 同步。\n', 'utf8');
   }
   const gitignorePath = path.join(vaultPath, '.gitignore');
   if (!(await pathExists(gitignorePath))) {

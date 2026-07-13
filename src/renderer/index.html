@@ -4,35 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:">
-  <title>Paper Vault</title>
+  <title>Paper Orbit</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
       <div class="brand">
-        <span class="brand-mark">PV</span>
-        <span class="brand-copy"><strong>Paper Vault</strong><small>RESEARCH LIBRARY</small></span>
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="12"/><ellipse class="brand-orbit" cx="24" cy="25" rx="17" ry="10.5" transform="rotate(-17 24 25)"/><path class="brand-paper" d="M18 11h11l6 6v20H18z"/><path class="brand-fold" d="M29 11v6h6"/><path class="brand-lines" d="M22 23h9M22 28h9M22 33h6"/><path class="brand-orbit-front" d="M8.2 30.2c3.4 6.2 10.6 8.8 18.3 7.8 6.6-.8 12-3.8 15.1-7.7"/><circle cx="39.5" cy="15.8" r="3"/></svg>
+        </span>
+        <span class="brand-copy"><strong>Paper Orbit</strong><small>RESEARCH LIBRARY</small></span>
       </div>
 
       <nav id="nav" class="primary-nav" aria-label="论文筛选">
-        <button class="nav-item active" data-filter="all">
+        <button class="nav-item nav-all active" data-filter="all">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v13H4zM8 5.5v13M4 10h16"/></svg>
           <span>全部论文</span><b id="count-all">0</b>
         </button>
-        <button class="nav-item" data-filter="unread">
+        <button class="nav-item nav-unread" data-filter="unread">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/></svg>
           <span>待读</span><b id="count-unread">0</b>
         </button>
-        <button class="nav-item" data-filter="reading">
+        <button class="nav-item nav-reading" data-filter="reading">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><path d="M12 5v14M12 5a7 7 0 0 1 0 14"/></svg>
           <span>阅读中</span><b id="count-reading">0</b>
         </button>
-        <button class="nav-item" data-filter="done">
+        <button class="nav-item nav-done" data-filter="done">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><path d="m8.8 12 2.1 2.1 4.5-4.6"/></svg>
           <span>已读</span><b id="count-done">0</b>
         </button>
-        <button class="nav-item" data-filter="favorite">
+        <button class="nav-item nav-favorite" data-filter="favorite">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 4 2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8z"/></svg>
           <span>收藏</span><b id="count-favorite">0</b>
         </button>
@@ -119,7 +121,7 @@
 
   <dialog id="settings-dialog" class="settings-dialog">
     <form method="dialog" id="settings-form">
-      <div class="dialog-header"><div><p class="dialog-kicker">偏好设置</p><h2>Paper Vault 设置</h2></div><button class="dialog-close" value="cancel" aria-label="关闭">×</button></div>
+      <div class="dialog-header"><div><p class="dialog-kicker">偏好设置</p><h2>Paper Orbit 设置</h2></div><button class="dialog-close" value="cancel" aria-label="关闭">×</button></div>
 
       <section class="settings-group">
         <div class="settings-group-title"><span>存储与同步</span><small>论文库通过 GitHub 的 vault 分支跨设备同步</small></div>

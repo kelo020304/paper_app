@@ -69,7 +69,7 @@ function parseAtomEntry(xml, requestedId) {
 async function fetchArxivPaper(input, fetchImpl = globalThis.fetch) {
   const id = parseArxivId(input);
   const response = await fetchImpl(`https://export.arxiv.org/api/query?id_list=${encodeURIComponent(id)}`, {
-    headers: { 'User-Agent': 'PaperVault/0.1 (personal research library)' }
+    headers: { 'User-Agent': 'PaperOrbit/0.4 (personal research library)' }
   });
   if (!response.ok) throw new Error(`arXiv 请求失败（HTTP ${response.status}）`);
   return parseAtomEntry(await response.text(), id);
@@ -80,7 +80,7 @@ async function searchArxiv(keywords, maxResults = 25, fetchImpl = globalThis.fet
   if (!terms.length) throw new Error('请先设置每日抓取关键词');
   const query = terms.map((term) => `all:${JSON.stringify(term)}`).join(' OR ');
   const url = `https://export.arxiv.org/api/query?search_query=${encodeURIComponent(query)}&start=0&max_results=${Math.min(50, maxResults)}&sortBy=submittedDate&sortOrder=descending`;
-  const response = await fetchImpl(url, { headers: { 'User-Agent': 'PaperVault/0.2 (personal research library)' } });
+  const response = await fetchImpl(url, { headers: { 'User-Agent': 'PaperOrbit/0.4 (personal research library)' } });
   if (!response.ok) throw new Error(`arXiv 搜索失败（HTTP ${response.status}）`);
   return parseAtomEntries(await response.text());
 }

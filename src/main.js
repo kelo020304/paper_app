@@ -12,6 +12,10 @@ const git = require('./core/git');
 const ai = require('./core/ai');
 const research = require('./core/research');
 
+// Keep the existing Paper Vault settings, session data and encrypted API key after the product rename.
+app.setPath('userData', path.join(app.getPath('appData'), 'paper-vault'));
+app.setName('Paper Orbit');
+
 let mainWindow;
 let syncQueue = Promise.resolve();
 let dailyTimer;
@@ -83,7 +87,7 @@ function registerIpc() {
 
   handle('vault:choose', async () => {
     const result = await dialog.showOpenDialog(mainWindow, {
-      title: '选择 Paper Vault 文件夹', properties: ['openDirectory', 'createDirectory']
+      title: '选择 Paper Orbit 文件夹', properties: ['openDirectory', 'createDirectory']
     });
     if (result.canceled) return null;
     const vaultPath = result.filePaths[0];
@@ -157,7 +161,7 @@ function registerIpc() {
   handle('ai:save-key', async (key) => { await saveApiKey(key); return Boolean(key); });
   handle('ai:test', async () => {
     const settings = await library.getSettings(await currentVault());
-    return ai.askAI(settings, await getApiKey(), '只回复：Paper Vault AI 已连接。');
+    return ai.askAI(settings, await getApiKey(), '只回复：Paper Orbit AI 已连接。');
   });
   handle('daily:run', async () => runDaily(await currentVault(), true));
 
@@ -269,14 +273,14 @@ async function configureBackground(settings) {
     const dir = path.join(app.getPath('home'), '.config', 'autostart'); const file = path.join(dir, 'paper-vault.desktop');
     if (settings.daily?.enabled) {
       await fs.mkdir(dir, { recursive: true });
-      await fs.writeFile(file, `[Desktop Entry]\nType=Application\nName=Paper Vault\nExec=${process.execPath} --hidden\nX-GNOME-Autostart-enabled=true\n`, 'utf8');
+      await fs.writeFile(file, `[Desktop Entry]\nType=Application\nName=Paper Orbit\nExec=${process.execPath} --hidden\nX-GNOME-Autostart-enabled=true\n`, 'utf8');
     } else await fs.rm(file, { force: true });
   }
 }
 
 async function downloadPdf(vaultPath, paper) {
   const target = library.paperPaths(vaultPath, paper.key || paper.baseId || paper.id).pdf;
-  const response = await fetch(paper.pdfUrl, { headers: { 'User-Agent': 'PaperVault/0.1 (personal research library)' }, redirect: 'follow' });
+  const response = await fetch(paper.pdfUrl, { headers: { 'User-Agent': 'PaperOrbit/0.4 (personal research library)' }, redirect: 'follow' });
   if (!response.ok || !response.body) throw new Error(`PDF 下载失败（HTTP ${response.status}）`);
   const tmp = `${target}.tmp`;
   await pipeline(Readable.fromWeb(response.body), require('node:fs').createWriteStream(tmp));
@@ -290,7 +294,8 @@ function createWindow() {
     minWidth: 1040,
     minHeight: 680,
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
-    backgroundColor: '#f5f1e8',
+    backgroundColor: '#f4f5f5',
+    icon: path.join(__dirname, '..', 'assets', 'icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -307,11 +312,12 @@ function createWindow() {
 
 function createTray() {
   if (tray) return;
-  const icon = nativeImage.createFromDataURL('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAHklEQVQ4T2NkoBAwUqifYdQABhqG0YBhNAyjqRkNAAB9AAERoEQWAAAAAElFTkSuQmCC');
+  const traySize = process.platform === 'darwin' ? 18 : 20;
+  const icon = nativeImage.createFromPath(path.join(__dirname, '..', 'assets', 'icon.png')).resize({ width: traySize, height: traySize });
   tray = new Tray(icon);
-  tray.setToolTip('Paper Vault');
+  tray.setToolTip('Paper Orbit');
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: '打开 Paper Vault', click: () => { if (!mainWindow) createWindow(); mainWindow.show(); } },
+    { label: '打开 Paper Orbit', click: () => { if (!mainWindow) createWindow(); mainWindow.show(); } },
     { label: '立即运行每日抓取', click: async () => runDaily(await currentVault(), true).catch((error) => console.error(error)) },
     { type: 'separator' },
     { label: '退出', click: () => { isQuitting = true; app.quit(); } }

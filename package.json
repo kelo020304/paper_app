@@ -1,7 +1,7 @@
 {
   "name": "paper-vault",
-  "version": "0.3.1",
-  "description": "Local-first arXiv paper library with GitHub sync",
+  "version": "0.4.0",
+  "description": "Paper Orbit — a local-first arXiv research library with GitHub sync",
   "main": "src/main.js",
   "author": {
     "name": "kelo020304",
@@ -21,7 +21,7 @@
   },
   "build": {
     "appId": "dev.papervault.desktop",
-    "productName": "Paper Vault",
+    "productName": "Paper Orbit",
     "files": [
       "src/**/*",
       "assets/**/*",
@@ -29,10 +29,12 @@
     ],
     "mac": {
       "category": "public.app-category.productivity",
+      "icon": "assets/icon.icns",
       "target": ["dmg", "zip"]
     },
     "linux": {
       "category": "Office",
+      "icon": "assets/icon.png",
       "target": ["AppImage", "deb"]
     }
   }

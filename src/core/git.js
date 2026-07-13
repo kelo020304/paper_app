@@ -57,7 +57,7 @@ async function syncGit(vaultPath, branch = 'vault') {
   await runGit(vaultPath, ['add', '--all']);
   const staged = await runGit(vaultPath, ['diff', '--cached', '--quiet'], { allowFailure: true });
   if (staged.code !== 0) {
-    await runGit(vaultPath, ['commit', '-m', `Paper Vault sync ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`]);
+    await runGit(vaultPath, ['commit', '-m', `Paper Orbit sync ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`]);
   }
 
   if (remoteBranch.code === 0 && localHead.code === 0) {

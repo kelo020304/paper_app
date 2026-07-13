@@ -1,4 +1,4 @@
-# Paper Vault
+# Paper Orbit
 
 一个面向 arXiv 的本地优先 AI 论文工作台。macOS 和 Linux 使用同一套 Electron 代码，论文、分类、HTML 解析和 Related Works 通过 GitHub 仓库近实时同步。
 
@@ -52,7 +52,7 @@ npm test
 
 Git 同步属于近实时同步：本机写入后立即推送，另一端最长约 30 秒看到变化。若两台设备同时修改同一篇论文导致 Git 冲突，应用会停止自动合并、保留本地内容并显示错误，而不会静默覆盖。
 
-> GitHub 官方建议 HTTPS 用户使用 GitHub CLI 或 Git Credential Manager 保存凭据。Paper Vault 不读取或保存 token，而是复用系统 Git 的安全凭据。
+> GitHub 官方建议 HTTPS 用户使用 GitHub CLI 或 Git Credential Manager 保存凭据。Paper Orbit 不读取或保存 token，而是复用系统 Git 的安全凭据。
 
 ## 数据目录
 

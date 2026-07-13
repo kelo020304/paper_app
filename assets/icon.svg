@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Paper Orbit</title>
+  <desc id="desc">A research paper circled by a teal orbital path.</desc>
+  <defs>
+    <linearGradient id="surface" x1="168" y1="104" x2="850" y2="920" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#242B32"/>
+      <stop offset="1" stop-color="#12161B"/>
+    </linearGradient>
+    <linearGradient id="orbit" x1="193" y1="737" x2="864" y2="280" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17A99E"/>
+      <stop offset=".56" stop-color="#4FE1CF"/>
+      <stop offset="1" stop-color="#A0F5E8"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="365" y1="250" x2="674" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E8F0EF"/>
+    </linearGradient>
+    <filter id="shadow" x="190" y="150" width="650" height="720" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="38" stdDeviation="35" flood-color="#000000" flood-opacity=".36"/>
+    </filter>
+  </defs>
+  <rect x="32" y="32" width="960" height="960" rx="224" fill="url(#surface)"/>
+  <rect x="48" y="48" width="928" height="928" rx="208" fill="none" stroke="#FFFFFF" stroke-opacity=".08" stroke-width="8"/>
+  <ellipse cx="512" cy="520" rx="350" ry="224" transform="rotate(-17 512 520)" fill="none" stroke="url(#orbit)" stroke-width="54" opacity=".92"/>
+  <g filter="url(#shadow)">
+    <path d="M346 226h242l126 126v406c0 30-24 54-54 54H346c-30 0-54-24-54-54V280c0-30 24-54 54-54Z" fill="url(#paper)"/>
+    <path d="M588 226v91c0 25 20 45 45 45h81" fill="#C9DBD8"/>
+    <path d="M588 226v91c0 25 20 45 45 45h81" fill="none" stroke="#B7CCCA" stroke-width="15" stroke-linejoin="round"/>
+    <path d="M390 470h225M390 556h225M390 642h148" fill="none" stroke="#184D49" stroke-width="32" stroke-linecap="round" opacity=".9"/>
+  </g>
+  <path d="M185 625c48 109 178 170 328 164 127-5 252-58 326-137" fill="none" stroke="url(#orbit)" stroke-width="58" stroke-linecap="round"/>
+  <circle cx="823" cy="347" r="58" fill="#F2B84B"/>
+  <circle cx="823" cy="347" r="25" fill="#FFF2C8" opacity=".78"/>
+</svg>
