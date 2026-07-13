@@ -3,14 +3,17 @@
   "version": "0.2.0",
   "description": "Local-first arXiv paper library with GitHub sync",
   "main": "src/main.js",
-  "author": "Paper Vault contributors",
+  "author": {
+    "name": "kelo020304",
+    "email": "118870984+kelo020304@users.noreply.github.com"
+  },
   "license": "MIT",
   "packageManager": "pnpm@11.7.0",
   "scripts": {
     "start": "electron .",
     "test": "node --test",
-    "dist:mac": "electron-builder --mac",
-    "dist:linux": "electron-builder --linux AppImage deb"
+    "dist:mac": "electron-builder --mac --publish never",
+    "dist:linux": "electron-builder --linux AppImage deb --publish never"
   },
   "devDependencies": {
     "electron": "37.10.3",
