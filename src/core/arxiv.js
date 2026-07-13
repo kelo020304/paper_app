@@ -22,11 +22,9 @@ function textOf(xml, tag) {
   return match ? decodeXml(match[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()) : '';
 }
 
-function parseAtomEntry(xml, requestedId) {
-  const entry = xml.match(/<entry>([\s\S]*?)<\/entry>/i)?.[1];
+function parseEntryXml(entry, requestedId = '') {
   if (!entry) {
-    const message = textOf(xml, 'summary') || 'arXiv 没有返回这篇论文';
-    throw new Error(message);
+    throw new Error('arXiv 没有返回这篇论文');
   }
 
   const authors = [...entry.matchAll(/<author>[\s\S]*?<name>([\s\S]*?)<\/name>[\s\S]*?<\/author>/gi)]
@@ -55,6 +53,19 @@ function parseAtomEntry(xml, requestedId) {
   };
 }
 
+function parseAtomEntries(xml) {
+  return [...xml.matchAll(/<entry>([\s\S]*?)<\/entry>/gi)].map((match) => parseEntryXml(match[1]));
+}
+
+function parseAtomEntry(xml, requestedId) {
+  const entry = xml.match(/<entry>([\s\S]*?)<\/entry>/i)?.[1];
+  if (!entry) {
+    const message = textOf(xml, 'summary') || 'arXiv 没有返回这篇论文';
+    throw new Error(message);
+  }
+  return parseEntryXml(entry, requestedId);
+}
+
 async function fetchArxivPaper(input, fetchImpl = globalThis.fetch) {
   const id = parseArxivId(input);
   const response = await fetchImpl(`https://export.arxiv.org/api/query?id_list=${encodeURIComponent(id)}`, {
@@ -64,4 +75,14 @@ async function fetchArxivPaper(input, fetchImpl = globalThis.fetch) {
   return parseAtomEntry(await response.text(), id);
 }
 
-module.exports = { parseArxivId, parseAtomEntry, fetchArxivPaper };
+async function searchArxiv(keywords, maxResults = 25, fetchImpl = globalThis.fetch) {
+  const terms = String(keywords || '').split(/[,，\n]/).map((term) => term.trim()).filter(Boolean);
+  if (!terms.length) throw new Error('请先设置每日抓取关键词');
+  const query = terms.map((term) => `all:${JSON.stringify(term)}`).join(' OR ');
+  const url = `https://export.arxiv.org/api/query?search_query=${encodeURIComponent(query)}&start=0&max_results=${Math.min(50, maxResults)}&sortBy=submittedDate&sortOrder=descending`;
+  const response = await fetchImpl(url, { headers: { 'User-Agent': 'PaperVault/0.2 (personal research library)' } });
+  if (!response.ok) throw new Error(`arXiv 搜索失败（HTTP ${response.status}）`);
+  return parseAtomEntries(await response.text());
+}
+
+module.exports = { parseArxivId, parseAtomEntry, parseAtomEntries, fetchArxivPaper, searchArxiv };

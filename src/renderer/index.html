@@ -19,9 +19,14 @@
         <button class="nav-item" data-filter="favorite"><span>◇</span>收藏</button>
       </nav>
       <div class="sidebar-section">
+        <div class="section-label section-row"><span>分类</span><button id="add-category" title="新建分类">＋</button></div>
+        <div id="category-list" class="tag-list"></div>
+      </div>
+      <div class="sidebar-section compact-section">
         <div class="section-label">标签</div>
         <div id="tag-list" class="tag-list"></div>
       </div>
+      <div class="source-legend"><span><i class="source-dot manual"></i>人工加入</span><span><i class="source-dot daily"></i>每日抓取</span></div>
       <div class="sidebar-bottom">
         <button id="settings-btn" class="nav-item"><span>⚙</span>设置与同步</button>
         <div class="vault-path" id="vault-path" title="论文库目录"></div>
@@ -38,11 +43,9 @@
       <section class="content">
         <div class="page-heading">
           <div><p class="eyebrow">LIBRARY</p><h1 id="page-title">全部论文</h1><p id="result-count" class="muted"></p></div>
-          <select id="sort-select" aria-label="排序方式">
-            <option value="added">最近添加</option>
-            <option value="published">最近发表</option>
-            <option value="title">标题</option>
-          </select>
+          <div class="heading-actions"><button id="category-summary-btn" class="button ghost hidden">打开增量 Related Works</button><select id="sort-select" aria-label="排序方式">
+            <option value="added">最近添加</option><option value="published">最近发表</option><option value="title">标题</option>
+          </select></div>
         </div>
         <div id="paper-grid" class="paper-grid"></div>
         <div id="empty-state" class="empty-state hidden">
@@ -78,9 +81,32 @@
       <label>GitHub 仓库地址<input id="git-remote" placeholder="git@github.com:you/papers.git"></label>
       <label>论文数据分支<input id="git-branch" value="vault"></label>
       <label class="checkbox-row"><input id="auto-sync" type="checkbox" checked><span>自动同步（修改后推送，每 30 秒拉取）</span></label>
+      <div class="settings-divider"></div>
+      <p class="eyebrow">AI RESEARCH</p>
+      <label>AI 连接方式<select id="ai-provider"><option value="codex">ChatGPT 账号（复用 Codex 登录）</option><option value="openai">OpenAI API Key</option></select></label>
+      <label>文本模型<input id="ai-model" value="gpt-5.6-terra"></label>
+      <label id="api-key-row">OpenAI API Key<input id="api-key" type="password" placeholder="已安全保存则留空；输入新 Key 可替换"></label>
+      <label class="checkbox-row"><input id="auto-analyze" type="checkbox" checked><span>导入后自动分类并生成 HTML 深度解析</span></label>
+      <label class="checkbox-row"><input id="generate-images" type="checkbox" checked><span>关键论文调用 GPT Image 2 生成原理图（需 API Key）</span></label>
+      <button type="button" id="test-ai" class="button ghost wide-button">测试 AI 连接</button>
+      <div class="settings-divider"></div>
+      <p class="eyebrow">DAILY ARXIV · 09:00</p>
+      <label class="checkbox-row"><input id="daily-enabled" type="checkbox" checked><span>启用每日自动抓取（应用在后台运行）</span></label>
+      <label>关键词<textarea id="daily-keywords" class="settings-textarea" placeholder="vision language action, world model"></textarea></label>
+      <div class="two-fields"><label>时间<input id="daily-time" type="time" value="09:00"></label><label>每日上限<input id="daily-limit" type="number" min="1" max="5" value="5"></label></div>
+      <button type="button" id="run-daily" class="button ghost wide-button">立即运行一次每日抓取</button>
       <div class="callout">建议使用私有仓库。PDF 较多时仓库会迅速变大，可取消导入时的 PDF 下载，仅同步元数据和笔记。</div>
       <div id="git-state" class="git-state"></div>
       <div class="dialog-actions"><button value="cancel" class="button ghost">取消</button><button id="save-settings" value="default" class="button primary">保存并连接</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="category-dialog">
+    <form method="dialog" id="category-form">
+      <button class="dialog-close" value="cancel">×</button><p class="eyebrow">NEW CATEGORY</p><h2>新建论文分类</h2>
+      <label>分类名称<input id="category-name" required placeholder="例如：端到端自动驾驶"></label>
+      <label>标记颜色<input id="category-color" type="color" value="#58756b"></label>
+      <div class="dialog-actions"><button value="cancel" class="button ghost">取消</button><button value="default" class="button primary">创建分类</button></div>
     </form>
   </dialog>
 

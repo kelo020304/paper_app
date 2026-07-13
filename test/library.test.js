@@ -42,3 +42,18 @@ test('removePaper deletes the complete paper directory', async (t) => {
   await library.removePaper(root, '2406.12345');
   assert.deepEqual(await library.listPapers(root), []);
 });
+
+test('categories and generated analysis are stored as portable files', async (t) => {
+  const root = await tempVault(t);
+  const category = await library.createCategory(root, { name: 'Vision Language Action', color: '#123456' });
+  const paper = await library.upsertPaper(root, { id: '2406.12345', baseId: '2406.12345', title: 'Test' }, { categoryId: category.id });
+  const analysis = { valueScore: 9, valueReason: 'Novel', relatedWorks: 'Related work.' };
+  await library.saveAnalysis(root, paper.key, analysis, '<html>analysis</html>', Buffer.from('image'));
+  await library.saveCategorySummary(root, category, '# Related Works\n\nIncremental summary.', [paper.key]);
+  const [savedCategory] = await library.listCategories(root);
+  const [savedPaper] = await library.listPapers(root);
+  assert.equal(savedCategory.summaryPaperKeys[0], paper.key);
+  assert.match(savedCategory.relatedWorks, /Incremental summary/);
+  assert.equal(savedPaper.hasAnalysis, true);
+  assert.equal(savedPaper.hasPrincipleImage, true);
+});

@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { parseArxivId, parseAtomEntry } = require('../src/core/arxiv');
+const { parseArxivId, parseAtomEntry, parseAtomEntries, searchArxiv } = require('../src/core/arxiv');
 
 test('parseArxivId accepts modern ids and URLs', () => {
   assert.equal(parseArxivId('2406.12345'), '2406.12345');
@@ -30,4 +30,19 @@ test('parseAtomEntry extracts normalized metadata', () => {
   assert.deepEqual(paper.categories, ['cs.AI', 'cs.LG']);
   assert.equal(paper.baseId, '2406.12345');
   assert.equal(paper.primaryCategory, 'cs.AI');
+});
+
+test('parseAtomEntries and searchArxiv support daily keyword discovery', async () => {
+  const entries = [
+    '<entry><id>http://arxiv.org/abs/2607.00001v1</id><title>First Paper</title><summary>A</summary><author><name>Alice</name></author></entry>',
+    '<entry><id>http://arxiv.org/abs/2607.00002v1</id><title>Second Paper</title><summary>B</summary><author><name>Bob</name></author></entry>'
+  ].join('');
+  assert.equal(parseAtomEntries(`<feed>${entries}</feed>`).length, 2);
+  let requestedUrl = '';
+  const result = await searchArxiv('VLA, world model', 5, async (url) => {
+    requestedUrl = url; return { ok: true, text: async () => `<feed>${entries}</feed>` };
+  });
+  assert.equal(result.length, 2);
+  assert.match(decodeURIComponent(requestedUrl), /all:"VLA" OR all:"world model"/);
+  assert.match(requestedUrl, /max_results=5/);
 });
