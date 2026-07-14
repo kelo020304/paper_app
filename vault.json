@@ -15,7 +15,7 @@
     "time": "09:00",
     "keywords": "vision language action, autonomous driving, world model",
     "limit": 5,
-    "lastRunDate": ""
+    "lastRunDate": "2026-07-14"
   },
   "git": {
     "remote": "git@github.com:kelo020304/paper_app.git",
