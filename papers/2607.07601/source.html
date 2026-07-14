@@ -1,0 +1,1298 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis</title>
+<!--Generated on Wed Jul  8 16:17:24 2026 by LaTeXML (version 0.8.8) http://dlmf.nist.gov/LaTeXML/.-->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="/static/browse/0.3.4/css/arxiv-html-papers-20260131.css" type="text/css">
+<script src="/static/browse/0.3.4/js/arxiv-html-papers-20260131.js"></script>
+<script>
+  // Restore the saved color scheme preference, or
+  // enact the browser preference if "automatic", 
+  // without expecting DOM load to have completed.
+  //
+  // Also restore any saved readingmode and ToC display preferences.
+  function initializeReadingPreferences() {
+    let saved_theme = localStorage.getItem("ar5iv_theme") || "automatic";
+    if (saved_theme === "automatic") {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        saved_theme = "dark";
+      }
+    }
+    if (saved_theme == "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+
+    const tocDisplay = localStorage.getItem('arxiv_html_paper_toc_display');
+    if (tocDisplay) {
+      document.documentElement.setAttribute("data-toc-display", tocDisplay);
+    }
+    const readingMode = localStorage.getItem('arxiv_html_paper_reading_mode');
+    if (readingMode) {
+      document.documentElement.setAttribute("data-reading-mode", readingMode);
+    }
+    // Pre-apply spinout-banner dismissal here, before the banner paints, so it
+    // never flashes in only to be hidden later by the deferred arxiv-header.js.
+    // Key matches arxiv-header.js: "arxiv-banner-dismissed:" + data-banner-name.
+    if (localStorage.getItem('arxiv-banner-dismissed:spinout-nonprofit')) {
+      document.documentElement.setAttribute("data-banner-dismissed", "");
+    }
+  }
+  // Run as soon as JS starts, to minimize repainting
+  initializeReadingPreferences();
+</script>
+<link rel="apple-touch-icon" sizes="180x180"
+  href="/static/browse/0.3.4/images/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32"
+  href="/static/browse/0.3.4/images/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16"
+  href="/static/browse/0.3.4/images/icons/favicon-16x16.png">
+<link rel="manifest" href="/static/browse/0.3.4/images/icons/site.webmanifest">
+<link rel="mask-icon" href="/static/browse/0.3.4/images/icons/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="stylesheet" type="text/css" media="screen" href="https://use.typekit.net/utz6mli.css"><link rel="stylesheet" type="text/css" media="screen"
+  href="/static/base/1.0.1/css/arxiv-header-footer.css?v=20260626"><style>
+  /* Banner pre-dismissal (set above before paint -> no flash-then-hide) and
+     reading-mode chrome hiding. */
+  html[data-banner-dismissed] .ds-announcement { display: none; }
+  html[data-reading-mode="enabled"] .ds-announcement,
+  html[data-reading-mode="enabled"] .ds-site-footer { display: none; }
+  /* Keep the announcement text dark on the Open-Blue band in both colour themes
+     (otherwise it inherits the paper's warm-wash text in dark mode and washes out). */
+  .ds-announcement-text { color: var(--arxiv-ink, #1c1a17); }
+</style>
+<script defer src="/static/base/1.0.1/js/arxiv-header.js?v=20260626"></script>
+</head>
+<body>
+<dialog id="modal-form" aria-labelledby="modal-title" closedby="any">
+  <form id="modal-form-content" method="dialog" enctype="multipart/form-data">
+    <header class="modal-header">
+      <h5 id="modal-title" class="modal-title">Report GitHub Issue</h5>
+      <button type="submit" formnovalidate class="modal-close" aria-label="Close">×</button>
+    </header>
+
+    <div class="modal-body">
+      <label for="form_title">Title:</label>
+      <input class="form-control" id="form_title" name="form_title" required placeholder="Enter title">
+
+      <p id="selectedTextModalDescription" hidden>Content selection saved. Describe the issue below:</p>
+
+      <label for="description">Description:</label>
+      <textarea class="form-control" id="description" name="description" required maxlength="500"
+        placeholder="500 characters maximum"></textarea>
+    </div>
+
+    <footer class="modal-footer">
+      <button type="submit" value="internal-report" class="sr-only modal-submit">Submit without GitHub</button>
+      <button type="submit" value="github-report" class="modal-submit">Submit in GitHub</button>
+    </footer>
+  </form>
+</dialog><div class="ds-announcement" id="announcement-banner" role="region" aria-label="Announcement"
+    data-banner-name="spinout-nonprofit">
+    <img class="ds-announcement-glyph" src="/static/base/1.0.1/images/icons/smileybones-small.svg" alt="" aria-hidden="true">
+    <span class="ds-announcement-text">arXiv is now an independent nonprofit!</span>
+    <a class="ds-announcement-link" href="https://info.arxiv.org/about">Learn more</a>
+    <button type="button" class="ds-announcement-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+
+<header class="arxiv-html-header">
+  <div class="html-header-logo">
+    <a href="/"><img alt="arXiv logo" class="logo desktop-only" width="100"
+        src="/static/base/1.0.1/images/arxiv-logo-primary-light.svg">
+      <span class="sr-only">Back to arXiv</span>
+    </a>
+  </div>
+  <!--TOC, dark mode, links-->
+  <nav class="html-header-nav">
+    <a class="header-button hover-effect desktop-only" href="https://info.arxiv.org/about/accessible_HTML.html"
+      target="_blank">Why HTML?</a>
+    <a class="header-button" title="Report an Issue" href="#" title="Report an issue"
+      onclick="event.preventDefault(); showModalForm();">
+      <svg role="presentation" class="mobile-only toggle-icon" aria-hidden="true" height="1.25rem"
+        viewBox="0 0 640 640">
+        <path
+          d="M224 160C224 107 267 64 320 64C373 64 416 107 416 160L416 163.6C416 179.3 403.3 192 387.6 192L252.5 192C236.8 192 224.1 179.3 224.1 163.6L224.1 160zM569.6 172.8C580.2 186.9 577.3 207 563.2 217.6L465.4 290.9C470.7 299.8 474.7 309.6 477.2 320L576 320C593.7 320 608 334.3 608 352C608 369.7 593.7 384 576 384L480 384L480 416C480 418.6 479.9 421.3 479.8 423.9L563.2 486.4C577.3 497 580.2 517.1 569.6 531.2C559 545.3 538.9 548.2 524.8 537.6L461.7 490.3C438.5 534.5 395.2 566.5 344 574.2L344 344C344 330.7 333.3 320 320 320C306.7 320 296 330.7 296 344L296 574.2C244.8 566.5 201.5 534.5 178.3 490.3L115.2 537.6C101.1 548.2 81 545.3 70.4 531.2C59.8 517.1 62.7 497 76.8 486.4L160.2 423.9C160.1 421.3 160 418.7 160 416L160 384L64 384C46.3 384 32 369.7 32 352C32 334.3 46.3 320 64 320L162.8 320C165.3 309.6 169.3 299.8 174.6 290.9L76.8 217.6C62.7 207 59.8 186.9 70.4 172.8C81 158.7 101.1 155.8 115.2 166.4L224 248C236.3 242.9 249.8 240 264 240L376 240C390.2 240 403.7 242.8 416 248L524.8 166.4C538.9 155.8 559 158.7 569.6 172.8z" />
+      </svg>
+      <span class="desktop-only">Report Issue</span></a>
+    <!--back to abstract-->
+    <a class="header-button" title="Back to abstract page" aria-label="Back to abstract page"
+      href="/abs/2607.07601v1">
+      <svg class="mobile-only toggle-icon" role="presentation" height="1.25rem" viewBox="0 0 512 512" fill="#ffffff"
+        aria-hidden="true">
+        <path
+          d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z">
+        </path>
+      </svg>
+      <span class="desktop-only">Back to Abstract</span>
+    </a>
+    <!-- PDF download link -->
+    <a class="header-button" title="Download PDF" href="/pdf/2607.07601v1"
+      target="_blank">
+      <svg class="mobile-only toggle-icon" role="presentation" height="1.25rem" viewBox="0 0 576 542">
+        <path
+          d="M208 48L96 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l80 0 0 48-80 0c-35.3 0-64-28.7-64-64L32 64C32 28.7 60.7 0 96 0L229.5 0c17 0 33.3 6.7 45.3 18.7L397.3 141.3c12 12 18.7 28.3 18.7 45.3l0 149.5-48 0 0-128-88 0c-39.8 0-72-32.2-72-72l0-88zM348.1 160L256 67.9 256 136c0 13.3 10.7 24 24 24l68.1 0zM240 380l32 0c33.1 0 60 26.9 60 60s-26.9 60-60 60l-12 0 0 28c0 11-9 20-20 20s-20-9-20-20l0-128c0-11 9-20 20-20zm32 80c11 0 20-9 20-20s-9-20-20-20l-12 0 0 40 12 0zm96-80l32 0c28.7 0 52 23.3 52 52l0 64c0 28.7-23.3 52-52 52l-32 0c-11 0-20-9-20-20l0-128c0-11 9-20 20-20zm32 128c6.6 0 12-5.4 12-12l0-64c0-6.6-5.4-12-12-12l-12 0 0 88 12 0zm76-108c0-11 9-20 20-20l48 0c11 0 20 9 20 20s-9 20-20 20l-28 0 0 24 28 0c11 0 20 9 20 20s-9 20-20 20l-28 0 0 44c0 11-9 20-20 20s-20-9-20-20l0-128z" />
+      </svg>
+      <span class="desktop-only">Download PDF</span></a>
+    <!-- navigational table of contents toggle -->
+    <a class="header-button toggle-icon" href="javascript:toggleNavTOC();" title="Toggle navigation"
+      aria-label="Toggle navigation">
+      <svg height="1.25rem" role="presentation" viewBox="0 0 512 512">
+        <path
+          d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z">
+        </path>
+      </svg>
+    </a>
+    <!--- collapsable header / reading mode toggle -->
+    <a class="header-button toggle-icon" href="javascript:toggleReadingMode();"
+      title="Disable reading mode, show header and footer">
+      <svg role="presentation" height="1.25rem"
+        viewBox="0 0 448 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+        <path
+          d="M32 32C14.3 32 0 46.3 0 64l0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-64 64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 32zM64 352c0-17.7-14.3-32-32-32S0 334.3 0 352l0 96c0 17.7 14.3 32 32 32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0 0-64zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0 0 64c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96c0-17.7-14.3-32-32-32l-96 0zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 64-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l96 0c17.7 0 32-14.3 32-32l0-96z" />
+      </svg>
+    </a>
+    <!--- colored theme toggle -->
+    <button type="button" class="header-button color-tog" onclick="toggleColorScheme();" title="Toggle dark/light mode" aria-label="Toggle color scheme">
+      <span class="toggle-icon automatic-tog" aria-hidden="true">
+        <svg role="presentation" height="1.25rem" viewBox="0 0 24 24">
+          <path
+            d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z">
+          </path>
+        </svg>
+      </span>
+      <span class="toggle-icon light-tog" aria-hidden="true">
+        <svg role="presentation" height="1.25rem" viewBox="0 0 24 24">
+          <path
+            d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z">
+          </path>
+        </svg>
+      </span>
+      <span class="toggle-icon dark-tog" aria-hidden="true">
+        <svg role="presentation" height="1.25rem" viewBox="0 0 24 24">
+          <path
+            d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z">
+          </path>
+        </svg>
+      </span>
+    </button>
+  </nav>
+</header><nav class="ltx_page_navbar">
+<nav class="ltx_TOC">
+<ol class="ltx_toclist">
+<li class="ltx_tocentry ltx_tocentry_abstract"><a href="#abstract1" title="In CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title">Abstract</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section"><a href="#S1" title="In CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">I </span><span class="ltx_text ltx_font_smallcaps">INTRODUCTION</span></span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section">
+<a href="#S2" title="In CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">II </span><span class="ltx_text ltx_font_smallcaps">RELATED WORK</span></span></a>
+<ol class="ltx_toclist ltx_toclist_section">
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S2.SS1" title="In II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref"><span class="ltx_text">II-A</span> </span><span class="ltx_text ltx_font_italic">Autonomous Driving Scene Reconstruction and Corner-Case Generation</span></span></a></li>
+</ol>
+</li>
+<li class="ltx_tocentry ltx_tocentry_section">
+<a href="#S3" title="In CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">III </span><span class="ltx_text ltx_font_smallcaps">METHODOLOGY</span></span></a>
+<ol class="ltx_toclist ltx_toclist_section">
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S3.SS1" title="In III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref"><span class="ltx_text">III-A</span> </span><span class="ltx_text ltx_font_italic">Geometry-Consistent Driving Scenario Reconstruction</span></span></a></li>
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S3.SS2" title="In III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref"><span class="ltx_text">III-B</span> </span><span class="ltx_text ltx_font_italic">LLM-Driven Corner Case Analysis and Synthesis</span></span></a></li>
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S3.SS3" title="In III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref"><span class="ltx_text">III-C</span> </span><span class="ltx_text ltx_font_italic">Real-Sim-Real: Bridging CARLA and Gaussian Splatting</span></span></a></li>
+</ol>
+</li>
+<li class="ltx_tocentry ltx_tocentry_section">
+<a href="#S4" title="In CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">IV </span><span class="ltx_text ltx_font_smallcaps">EXPERIMENTS</span></span></a>
+<ol class="ltx_toclist ltx_toclist_section">
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S4.SS1" title="In IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref"><span class="ltx_text">IV-A</span> </span><span class="ltx_text ltx_font_italic">Experimental Setup</span></span></a></li>
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S4.SS2" title="In IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref"><span class="ltx_text">IV-B</span> </span><span class="ltx_text ltx_font_italic">Quantitative Evaluation</span></span></a></li>
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S4.SS3" title="In IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref"><span class="ltx_text">IV-C</span> </span><span class="ltx_text ltx_font_italic">Qualitative Results</span></span></a></li>
+</ol>
+</li>
+<li class="ltx_tocentry ltx_tocentry_section"><a href="#S5" title="In CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">V </span><span class="ltx_text ltx_font_smallcaps">Computational Cost Analysis</span></span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section"><a href="#S6" title="In CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">VI </span><span class="ltx_text ltx_font_smallcaps">CONCLUSIONS</span></span></a></li>
+<li class="ltx_tocentry ltx_tocentry_bibliography"><a href="#bib" title="In CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_title">References</span></a></li>
+</ol></nav>
+</nav>
+<div class="ltx_page_main">
+<div id="infobox" class="infobox">
+  <a id="license-tr" href="https://info.arxiv.org/help/license/index.html#licenses-available">
+    License: arXiv.org perpetual non-exclusive license
+  </a>
+  <div id="watermark-tr">
+arXiv:2607.07601v1 [cs.RO] 08 Jul 2026</div>
+</div><div class="ltx_page_content">
+<article class="ltx_document ltx_authors_1line">
+<h1 class="ltx_title ltx_font_bold ltx_title_document" style="font-size:173%;">CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis
+</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Kaicong Huang<sup id="id6.6.id1" class="ltx_sup"><span id="id6.6.id1.1" class="ltx_text ltx_font_italic">1</span></sup>, Meng Ma<sup id="id7.7.id2" class="ltx_sup"><span id="id7.7.id2.1" class="ltx_text ltx_font_italic">1</span></sup>, Ruimin Ke<sup id="id8.8.id3" class="ltx_sup"><span id="id8.8.id3.1" class="ltx_text ltx_font_italic">1∗</span></sup>
+</span><span class="ltx_author_notes"><sup id="id9.9.id1" class="ltx_sup"><span id="id9.9.id1.1" class="ltx_text ltx_font_italic">1</span></sup> Department of Civil and Environmental Engineering, Rensselaer Polytechnic Institute, 110 Eighth Street, Troy, NY USA 12180.<sup id="id10.10.id1" class="ltx_sup"><span id="id10.10.id1.1" class="ltx_text ltx_font_italic">∗</span></sup> Corresponding author. Email: <span id="id11.11.id2" class="ltx_text ltx_font_typewriter" style="font-size:90%;">ker@rpi.edu</span></span></span>
+</div>
+
+<div id="abstract1" class="ltx_abstract">
+<h6 class="ltx_title ltx_title_abstract">Abstract</h6>
+<p class="ltx_p">Safety evaluation for autonomous driving is dominated by rare, safety-critical interactions, motivating simulators that can deliberately synthesize corner cases with photorealistic observations. Corner-case generation is inherently a multi-source problem spanning visual representation, scene reasoning, and vehicle trajectory generation and control. Prior knowledge- and model-based approaches typically focus on scene or trajectory components in isolation, while diffusion-based methods attempt end-to-end generation but still struggle to ensure spatiotemporal consistency and physical realism.
+To unify these aspects within a single framework, we propose CARLA-GS, a modular corner-case synthesis pipeline that decouples visual representation, semantic reasoning, and physics-based execution while maintaining tight cross-module coupling. Starting from real driving data, we reconstruct an editable gaussian scene with additional geometry-consistent constraints. A multi-agent LLM then performs scene-level reasoning to identify risky interactions and generate intent-level waypoint trajectories, while the low-level motion control is delegated to CARLA, where a PID controller ensures kinematic and dynamic feasibility. The simulated vehicle states are finally re-projected into the gaussian scene for ego-centric rendering. This design enables high-level semantic reasoning, low-level physically executable motion, and photorealistic corner-case generation within a unified pipeline.
+Experiments on the Waymo Open Dataset show, both quantitatively and qualitatively, that our framework enables controllable corner-case generation and produces photorealistic, spatiotemporally consistent videos aligned with semantic intent and physically feasible motion.</p>
+</div>
+<figure id="S0.F1" class="ltx_figure"><img src="2607.07601v1/x1.png" id="S0.F1.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="660" height="289" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1: </span>Overall framework of CARLA-GS. We decouple scene representation, risk reasoning, and physics simulation to leverage the strengths of each module. Specifically, 3D Gaussian Splatting provides high-fidelity scene reconstruction and rendering, while vehicle states are fed to an LLM with chained <math id="S0.F1.5.m1" class="ltx_Math" alttext="&lt;" display="inline" intent=":literal"><semantics><mo>&lt;</mo><annotation encoding="application/x-tex">&lt;</annotation></semantics></math>Zone<math id="S0.F1.6.m2" class="ltx_Math" alttext="&gt;" display="inline" intent=":literal"><semantics><mo>&gt;</mo><annotation encoding="application/x-tex">&gt;</annotation></semantics></math> and <math id="S0.F1.7.m3" class="ltx_Math" alttext="&lt;" display="inline" intent=":literal"><semantics><mo>&lt;</mo><annotation encoding="application/x-tex">&lt;</annotation></semantics></math>Trajectory<math id="S0.F1.8.m4" class="ltx_Math" alttext="&gt;" display="inline" intent=":literal"><semantics><mo>&gt;</mo><annotation encoding="application/x-tex">&gt;</annotation></semantics></math> agents to synthesize risk-aware scenarios. The LLM outputs only target trajectories, and low-level control is handled in CARLA via a PID controller. Finally, simulated vehicle poses are re-projected into the Gaussian scene to render geometrically consistent and physically realistic corner-case videos. By replacing raw objects with priors generated by 3D foundation models, rendering artifacts under novel viewpoints can be further mitigated.</figcaption>
+</figure>
+<section id="S1" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">I </span><span id="S1.1.1" class="ltx_text ltx_font_smallcaps">INTRODUCTION</span>
+</h2>
+
+<div id="S1.p1" class="ltx_para">
+<p id="S1.p1.1" class="ltx_p">Autonomous driving (AD) operates in open-world traffic where safety evaluation is inherently a rare-event problem, known as the Curse of Rarity <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib21" title="Curse of rarity for autonomous vehicles" class="ltx_ref">15</a>]</cite>. This motivates simulation pipelines that intentionally expose corner cases. Meanwhile, camera-centric AD systems require simulators to provide not only trajectory rollouts but also photorealistic observations for reliable closed-loop evaluation <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib28" title="Omnidrive: a holistic vision-language dataset for autonomous driving with counterfactual reasoning" class="ltx_ref">23</a>]</cite>.</p>
+</div>
+<div id="S1.p2" class="ltx_para">
+<p id="S1.p2.1" class="ltx_p">This requirement has renewed interest in scalable driving-scene reconstruction for safety-oriented simulation. NeRF-based methods achieve high-fidelity view synthesis but remain expensive for large-scale optimization and rendering <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib17" title="Nerf: neural radiance field in 3d vision, a comprehensive review" class="ltx_ref">7</a>]</cite>, while diffusion-based world models provide strong generative diversity yet still struggle with physical plausibility and multi-view consistency under real-time constraints <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib41" title="Drivedreamer: towards real-world-drive world models for autonomous driving" class="ltx_ref">25</a>, <a href="#bib.bib24" title="Gaia-2: a controllable multi-view generative world model for autonomous driving" class="ltx_ref">20</a>]</cite>. In contrast, 3D/4D Gaussian Splatting (GS) <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib1" title="3d gaussian splatting for real-time radiance field rendering." class="ltx_ref">11</a>, <a href="#bib.bib30" title="4d gaussian splatting for real-time dynamic scene rendering" class="ltx_ref">28</a>]</cite> enables real-time differentiable rendering with explicit scene primitives, making it attractive for urban driving simulation <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib44" title="Drivinggaussian: composite gaussian splatting for surrounding dynamic autonomous driving scenes" class="ltx_ref">34</a>, <a href="#bib.bib34" title="Street gaussians: modeling dynamic urban scenes with gaussian splatting" class="ltx_ref">32</a>, <a href="#bib.bib33" title="Cruise: cooperative reconstruction and editing in v2x scenarios using gaussian splatting" class="ltx_ref">31</a>]</cite>. However, vanilla 3DGS is designed for photometric reconstruction, lacking instance-level control over traffic participants and remaining sensitive to reconstruction artifacts that may affect occlusion or collision outcomes <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib4" title="2d gaussian splatting for geometrically accurate radiance fields" class="ltx_ref">8</a>, <a href="#bib.bib5" title="Pgsr: planar-based gaussian splatting for efficient and high-fidelity surface reconstruction" class="ltx_ref">2</a>]</cite>.</p>
+</div>
+<div id="S1.p3" class="ltx_para">
+<p id="S1.p3.1" class="ltx_p">Moreover, corner-case generation is not purely a visual problem. It requires semantic reasoning over agent intent, interaction context, and future motion evolution. Prior work synthesizes corner cases through data-driven, knowledge-based, or learning-based pipelines <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib9" title="Drivegen: towards infinite diverse traffic scenarios with large models" class="ltx_ref">33</a>, <a href="#bib.bib10" title="Cc-sgg: corner case scenario generation using learned scene graphs" class="ltx_ref">5</a>, <a href="#bib.bib8" title="Realistic corner case generation for autonomous vehicles with multimodal large language model" class="ltx_ref">16</a>]</cite>. However, these approaches often lack semantic scene understanding and high-level decision reasoning for identifying plausible risky interactions, limiting their flexibility in generating targeted behaviors. Inspired by <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib7" title="Seeking to collide: online safety-critical scenario generation for autonomous driving with retrieval augmented large language models" class="ltx_ref">17</a>]</cite>, we adopt LLM-based reasoning as a semantic planning module for corner-case synthesis. LLMs provide macro-level scene understanding and prompt-driven behavioral control, enabling intent-level risk specification while automatically selecting interacting agents from the scene.</p>
+</div>
+<div id="S1.p4" class="ltx_para">
+<p id="S1.p4.1" class="ltx_p">After scene-level analysis, the next step is to generate vehicle trajectories and execute them under realistic kinematic and dynamic constraints. While LLMs are effective for high-level trajectory planning, they are not well suited to produce dynamically feasible control signals or guarantee collision-valid outcomes. Embedding physics directly into 3DGS is also challenging, as Gaussian primitives are unstructured and lack the rigid topology required by conventional dynamics solvers. Although recent works augment Gaussians with physical attributes <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib32" title="Physgaussian: physics-integrated 3d gaussians for generative dynamics" class="ltx_ref">29</a>, <a href="#bib.bib46" title="Real2Sim: a physics-driven and editable gaussian splatting framework for autonomous driving scenes" class="ltx_ref">9</a>, <a href="#bib.bib42" title="Vr-gs: a physical dynamics-aware interactive gaussian splatting system in virtual reality" class="ltx_ref">10</a>]</cite> or reconstruct simulation scenes via meshes <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib2" title="Vid2sim: realistic and interactive simulation from video for urban navigation" class="ltx_ref">30</a>, <a href="#bib.bib43" title="Vr-robo: a real-to-sim-to-real framework for visual robot navigation and locomotion" class="ltx_ref">35</a>]</cite>, faithful vehicle dynamics simulation remains limited. This motivates a modular design that delegates physics-consistent motion to dedicated simulators such as CARLA <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib15" title="CARLA: an open urban driving simulator" class="ltx_ref">4</a>]</cite>.</p>
+</div>
+<div id="S1.p5" class="ltx_para">
+<p id="S1.p5.1" class="ltx_p">To overcome the above limitations, we propose <span id="S1.p5.1.1" class="ltx_text ltx_font_bold">CARLA-GS</span>, a modular pipeline for safety-critical corner-case synthesis. The key idea is to <span id="S1.p5.1.2" class="ltx_text ltx_font_bold">decouple visual representation, semantic reasoning, and physics-based simulation</span> while preserving cross-module consistency.
+Specifically, we adopt Street Gaussians <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib34" title="Street gaussians: modeling dynamic urban scenes with gaussian splatting" class="ltx_ref">32</a>]</cite> as the backbone, whose object-background modeling strategy provides a strong foundation for instance-level vehicle editing. We further introduce geometry-consistent constraints to improve structural coherence of the reconstructed scene. In parallel, a multi-agent LLM performs semantic scene analysis to identify the collision zone around the ego vehicle and select a target adversarial vehicle, and then generates an intent-level corner-case trajectory in waypoint form. The resulting trajectories are then executed in CARLA, where a PID controller enforces kinematic and dynamic feasibility. Finally, the simulated vehicle states are re-injected into the geometry-consistent 3DGS scene, refined with a 3D foundation model, to render ego-centric photorealistic observations. The overall framework is shown in Fig. <a href="#S0.F1" title="Figure 1 ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">1</span></a>.
+This design leverages the complementary strengths of each module: Gaussian Splatting provides spatiotemporal consistency and high-fidelity visual representation, LLMs enable high-level semantic reasoning and flexible control, and CARLA ensures reliable vehicle physics, resulting in a controllable and scalable framework for corner-case generation.</p>
+</div>
+<div id="S1.p6" class="ltx_para">
+<p id="S1.p6.1" class="ltx_p">Our main contributions are summarized as follows:</p>
+<ul id="S1.I1" class="ltx_itemize">
+<li id="S1.I1.i1" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S1.I1.i1.p1" class="ltx_para">
+<p id="S1.I1.i1.p1.1" class="ltx_p">We present CARLA-GS, a modular framework for driving corner-case synthesis that decouples visual representation, semantic reasoning, and physics simulation, enabling spatiotemporally consistent video generation.</p>
+</div>
+</li>
+<li id="S1.I1.i2" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S1.I1.i2.p1" class="ltx_para">
+<p id="S1.I1.i2.p1.1" class="ltx_p">We design a multi-agent LLM reasoning module for semantic scene understanding and intent-level trajectory planning, enabling automatic discovery of risky interactions and flexible prompt-driven adversarial control.</p>
+</div>
+</li>
+<li id="S1.I1.i3" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S1.I1.i3.p1" class="ltx_para">
+<p id="S1.I1.i3.p1.1" class="ltx_p">We develop a plug-and-play CARLA-Gaussian integration through state re-projection, allowing physically simulated vehicle motions to be reflected in photorealistic renderings.</p>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section id="S2" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">II </span><span id="S2.1.1" class="ltx_text ltx_font_smallcaps">RELATED WORK</span>
+</h2>
+
+<section id="S2.SS1" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S2.SS1.4.1.1" class="ltx_text">II-A</span> </span><span id="S2.SS1.5.2" class="ltx_text ltx_font_italic">Autonomous Driving Scene Reconstruction and Corner-Case Generation</span>
+</h3>
+
+<div id="S2.SS1.p1" class="ltx_para">
+<p id="S2.SS1.p1.1" class="ltx_p">A practical autonomous driving simulator should provide realistic perception inputs and support spatio-temporal reasoning <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib16" title="Stsbench: a spatio-temporal scenario benchmark for multi-modal large language models in autonomous driving" class="ltx_ref">6</a>]</cite>. Neural scene representations enable photorealistic rendering from captured data, where NeRF models scenes as implicit radiance fields <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib22" title="Nerf: representing scenes as neural radiance fields for view synthesis" class="ltx_ref">18</a>, <a href="#bib.bib17" title="Nerf: neural radiance field in 3d vision, a comprehensive review" class="ltx_ref">7</a>]</cite> and can be enhanced with structured depth or scene priors for improved novel-view synthesis <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib20" title="Mine: towards continuous depth mpi with nerf for novel view synthesis" class="ltx_ref">13</a>, <a href="#bib.bib31" title="MapNeRF: incorporating map priors into neural radiance fields for driving view simulation" class="ltx_ref">27</a>, <a href="#bib.bib19" title="Lanesegnet: map learning with lane segment perception for autonomous driving" class="ltx_ref">14</a>]</cite>. Recently, diffusion-based world models have also been explored for scalable and controllable driving-scene generation <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib41" title="Drivedreamer: towards real-world-drive world models for autonomous driving" class="ltx_ref">25</a>, <a href="#bib.bib24" title="Gaia-2: a controllable multi-view generative world model for autonomous driving" class="ltx_ref">20</a>]</cite>. However, NeRF-based pipelines are often computationally expensive for large-scale simulation, while diffusion models may hallucinate structures and struggle to maintain strict geometric consistency and deterministic control.</p>
+</div>
+<div id="S2.SS1.p2" class="ltx_para">
+<p id="S2.SS1.p2.1" class="ltx_p">More recently, 3D Gaussian Splatting (3DGS) has emerged as an efficient alternative by representing scenes with explicit Gaussian primitives and enabling high-throughput rendering <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib38" title="3d gaussian splatting in robotics: a survey" class="ltx_ref">36</a>]</cite>. It has been extended to driving-scene synthesis, editing, dynamic modeling, real-time SLAM, and model alignment <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib44" title="Drivinggaussian: composite gaussian splatting for surrounding dynamic autonomous driving scenes" class="ltx_ref">34</a>, <a href="#bib.bib23" title="Desire-gs: 4d street gaussians for static-dynamic decomposition and surface reconstruction for urban driving scenes" class="ltx_ref">19</a>, <a href="#bib.bib33" title="Cruise: cooperative reconstruction and editing in v2x scenarios using gaussian splatting" class="ltx_ref">31</a>, <a href="#bib.bib18" title="LODGE: level-of-detail large-scale gaussian splatting with efficient rendering" class="ltx_ref">12</a>, <a href="#bib.bib30" title="4d gaussian splatting for real-time dynamic scene rendering" class="ltx_ref">28</a>, <a href="#bib.bib12" title="RP-slam: real-time photorealistic slam with efficient 3d gaussian splatting" class="ltx_ref">1</a>]</cite>. Nevertheless, for safety-oriented corner-case synthesis, vanilla 3DGS remains insufficient because it lacks guarantees on geometric stability, actionable semantics, and physically consistent interactions <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib4" title="2d gaussian splatting for geometrically accurate radiance fields" class="ltx_ref">8</a>, <a href="#bib.bib5" title="Pgsr: planar-based gaussian splatting for efficient and high-fidelity surface reconstruction" class="ltx_ref">2</a>]</cite>.</p>
+</div>
+<div id="S2.SS1.p3" class="ltx_para">
+<p id="S2.SS1.p3.1" class="ltx_p">Corner cases expose safety-critical behaviors that rarely appear in naturalistic driving data. Existing generation methods can be broadly divided into data-driven, knowledge-based, and LLM-based approaches. Data-driven methods synthesize realistic safety-critical scenarios from large-scale driving datasets <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib27" title="Deepaccident: a motion and accident prediction benchmark for v2x autonomous driving" class="ltx_ref">24</a>, <a href="#bib.bib29" title="TeraSim-world: worldwide safety-critical data synthesis for end-to-end autonomous driving" class="ltx_ref">22</a>, <a href="#bib.bib9" title="Drivegen: towards infinite diverse traffic scenarios with large models" class="ltx_ref">33</a>]</cite>, but often lack explicit control over failure modes and interaction intent. Knowledge-based methods transform common scenarios into corner cases using structured representations such as scene graphs <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib10" title="Cc-sgg: corner case scenario generation using learned scene graphs" class="ltx_ref">5</a>]</cite>, while their diversity and realism are limited by the coverage and correctness of symbolic rules. Recent LLM-based methods introduce high-level reasoning and multimodal understanding for generating risky scenarios or adversarial behaviors <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib8" title="Realistic corner case generation for autonomous vehicles with multimodal large language model" class="ltx_ref">16</a>, <a href="#bib.bib7" title="Seeking to collide: online safety-critical scenario generation for autonomous driving with retrieval augmented large language models" class="ltx_ref">17</a>]</cite>. However, translating semantic intent into dynamically feasible vehicle behaviors remains challenging. Our work addresses these limitations by grounding LLM-driven reasoning in CARLA’s physics-executable backend and integrating 3DGS-based visual reconstruction into a modular yet integrated pipeline for controllable and scalable corner-case generation.</p>
+</div>
+</section>
+</section>
+<section id="S3" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">III </span><span id="S3.1.1" class="ltx_text ltx_font_smallcaps">METHODOLOGY</span>
+</h2>
+
+<section id="S3.SS1" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S3.SS1.4.1.1" class="ltx_text">III-A</span> </span><span id="S3.SS1.5.2" class="ltx_text ltx_font_italic">Geometry-Consistent Driving Scenario Reconstruction</span>
+</h3>
+
+<div id="S3.SS1.p1" class="ltx_para">
+<p id="S3.SS1.p1.1" class="ltx_p">Due to the limited viewpoints of onboard driving cameras (typically 3-6 poses), vanilla 3DGS often produces geometrically inconsistent and bumpy surfaces <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib2" title="Vid2sim: realistic and interactive simulation from video for urban navigation" class="ltx_ref">30</a>, <a href="#bib.bib3" title="Scalability in perception for autonomous driving: waymo open dataset" class="ltx_ref">21</a>]</cite>. We therefore introduce geometry-consistent regularization to enforce surface continuity and smoothness.</p>
+</div>
+<div id="S3.SS1.p2" class="ltx_para">
+<p id="S3.SS1.p2.4" class="ltx_p"><span id="S3.SS1.p2.4.1" class="ltx_text ltx_font_bold">Flattening Constraints.</span>
+Following prior 2DGS and surface reconstruction works <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib4" title="2d gaussian splatting for geometrically accurate radiance fields" class="ltx_ref">8</a>, <a href="#bib.bib5" title="Pgsr: planar-based gaussian splatting for efficient and high-fidelity surface reconstruction" class="ltx_ref">2</a>, <a href="#bib.bib43" title="Vr-robo: a real-to-sim-to-real framework for visual robot navigation and locomotion" class="ltx_ref">35</a>]</cite>, we introduce a flattening regularization by constraining the anisotropic scaling of each Gaussian. The covariance of the <math id="S3.SS1.p2.1.m1" class="ltx_Math" alttext="i" display="inline" intent=":literal"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th Gaussian is parameterized by a diagonal scaling matrix <math id="S3.SS1.p2.2.m2" class="ltx_Math" alttext="\mathbf{S}_{i}=\mathrm{diag}(s_{i1},s_{i2},s_{i3})" display="inline" intent=":literal"><semantics><mrow><msub><mi>𝐒</mi><mi>i</mi></msub><mo>=</mo><mrow><mi>diag</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>i</mi><mo lspace="0em" rspace="0em">​</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>s</mi><mrow><mi>i</mi><mo lspace="0em" rspace="0em">​</mo><mn>2</mn></mrow></msub><mo>,</mo><msub><mi>s</mi><mrow><mi>i</mi><mo lspace="0em" rspace="0em">​</mo><mn>3</mn></mrow></msub><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathbf{S}_{i}=\mathrm{diag}(s_{i1},s_{i2},s_{i3})</annotation></semantics></math>, where <math id="S3.SS1.p2.3.m3" class="ltx_Math" alttext="s_{i1},s_{i2},s_{i3}&gt;0" display="inline" intent=":literal"><semantics><mrow><mrow><msub><mi>s</mi><mrow><mi>i</mi><mo lspace="0em" rspace="0em">​</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>s</mi><mrow><mi>i</mi><mo lspace="0em" rspace="0em">​</mo><mn>2</mn></mrow></msub><mo>,</mo><msub><mi>s</mi><mrow><mi>i</mi><mo lspace="0em" rspace="0em">​</mo><mn>3</mn></mrow></msub></mrow><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">s_{i1},s_{i2},s_{i3}&gt;0</annotation></semantics></math> denote the principal-axis scales and <math id="S3.SS1.p2.4.m4" class="ltx_Math" alttext="N" display="inline" intent=":literal"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math> is the total number of Gaussians. The flattening loss is defined as</p>
+<table id="S3.E1" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E1.m1" class="ltx_Math" alttext="\mathcal{L}_{\text{flat}}=\frac{1}{N}\sum_{i=1}^{N}\min\left(s_{i1},\,s_{i2},\,s_{i3}\right)" display="block" intent=":literal"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>flat</mtext></msub><mo>=</mo><mrow><mfrac><mn>1</mn><mi>N</mi></mfrac><mo lspace="0em" rspace="0em">​</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mrow><mi>min</mi><mo>⁡</mo><mrow><mo>(</mo><msub><mi>s</mi><mrow><mi>i</mi><mo lspace="0em" rspace="0em">​</mo><mn>1</mn></mrow></msub><mo rspace="0.337em">,</mo><msub><mi>s</mi><mrow><mi>i</mi><mo lspace="0em" rspace="0em">​</mo><mn>2</mn></mrow></msub><mo rspace="0.337em">,</mo><msub><mi>s</mi><mrow><mi>i</mi><mo lspace="0em" rspace="0em">​</mo><mn>3</mn></mrow></msub><mo>)</mo></mrow></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\text{flat}}=\frac{1}{N}\sum_{i=1}^{N}\min\left(s_{i1},\,s_{i2},\,s_{i3}\right)</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(1)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS1.p2.5" class="ltx_p">which encourages each Gaussian to collapse along its least significant axis and thus promotes locally smooth surface structures.</p>
+</div>
+<figure id="S3.F2" class="ltx_figure"><img src="2607.07601v1/x2.png" id="S3.F2.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="830" height="367" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2: </span>Construction of the supervision mask for geometry-consistent reconstruction. The raw image is processed by a depth foundation model to produce a reference depth map, from which a normal map is computed. The RANSAC-derived ground mask is fused with the preprocessed object mask to obtain the final supervision mask.</figcaption>
+</figure>
+<div id="S3.SS1.p3" class="ltx_para">
+<p id="S3.SS1.p3.3" class="ltx_p"><span id="S3.SS1.p3.3.1" class="ltx_text ltx_font_bold">Normal and Geometry Constraints.</span>
+To stabilize optimization in physically meaningful regions, we construct a supervision mask <math id="S3.SS1.p3.1.m1" class="ltx_Math" alttext="\mathbf{M}" display="inline" intent=":literal"><semantics><mi>𝐌</mi><annotation encoding="application/x-tex">\mathbf{M}</annotation></semantics></math> by combining foreground objects and planar ground regions. Detailed construction is illustrated in Fig. <a href="#S3.F2" title="Figure 2 ‣ III-A Geometry-Consistent Driving Scenario Reconstruction ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">2</span></a>. Given the rendered normals <math id="S3.SS1.p3.2.m2" class="ltx_Math" alttext="\mathbf{N}\in\mathbb{R}^{3\times H\times W}" display="inline" intent=":literal"><semantics><mrow><mi>𝐍</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mn>3</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mi>H</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>W</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{N}\in\mathbb{R}^{3\times H\times W}</annotation></semantics></math> and the depth-derived reference normals <math id="S3.SS1.p3.3.m3" class="ltx_Math" alttext="\mathbf{N}^{\ast}" display="inline" intent=":literal"><semantics><msup><mi>𝐍</mi><mo>∗</mo></msup><annotation encoding="application/x-tex">\mathbf{N}^{\ast}</annotation></semantics></math>, the normal constraint is defined via an angular loss</p>
+<table id="S3.E2" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E2.m1" class="ltx_Math" alttext="\mathcal{L}_{\text{normal}}=\frac{1}{|\mathbf{M}|}\sum_{\mathbf{x}}\mathbf{M}(\mathbf{x})\left(1-\left\langle\mathbf{N}(\mathbf{x}),\mathbf{N}^{\ast}(\mathbf{x})\right\rangle\right)" display="block" intent=":literal"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>normal</mtext></msub><mo>=</mo><mrow><mfrac><mn>1</mn><mrow><mo stretchy="false">|</mo><mi>𝐌</mi><mo stretchy="false">|</mo></mrow></mfrac><mo lspace="0em" rspace="0em">​</mo><mrow><munder><mo movablelimits="false">∑</mo><mi>𝐱</mi></munder><mrow><mi>𝐌</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>𝐱</mi><mo stretchy="false">)</mo></mrow><mo lspace="0em" rspace="0em">​</mo><mrow><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mrow><mo>⟨</mo><mrow><mi>𝐍</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>𝐱</mi><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><msup><mi>𝐍</mi><mo>∗</mo></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>𝐱</mi><mo stretchy="false">)</mo></mrow></mrow><mo>⟩</mo></mrow></mrow><mo>)</mo></mrow></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\text{normal}}=\frac{1}{|\mathbf{M}|}\sum_{\mathbf{x}}\mathbf{M}(\mathbf{x})\left(1-\left\langle\mathbf{N}(\mathbf{x}),\mathbf{N}^{\ast}(\mathbf{x})\right\rangle\right)</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(2)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS1.p3.6" class="ltx_p">where <math id="S3.SS1.p3.4.m1" class="ltx_Math" alttext="\mathbf{N}(\mathbf{x})" display="inline" intent=":literal"><semantics><mrow><mi>𝐍</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>𝐱</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{N}(\mathbf{x})</annotation></semantics></math> denotes the normal at pixel <math id="S3.SS1.p3.5.m2" class="ltx_Math" alttext="\mathbf{x}" display="inline" intent=":literal"><semantics><mi>𝐱</mi><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math>, and <math id="S3.SS1.p3.6.m3" class="ltx_Math" alttext="\langle\cdot,\cdot\rangle" display="inline" intent=":literal"><semantics><mrow><mo stretchy="false">⟨</mo><mo lspace="0em" rspace="0em">⋅</mo><mo rspace="0em">,</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">\langle\cdot,\cdot\rangle</annotation></semantics></math> represents the cosine similarity. This term enforces orientation consistency between rendered and geometry-induced normals.</p>
+</div>
+<div id="S3.SS1.p4" class="ltx_para">
+<p id="S3.SS1.p4.4" class="ltx_p">To further encourage local surface coherence, we introduce a geometry consistency loss inspired by <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib2" title="Vid2sim: realistic and interactive simulation from video for urban navigation" class="ltx_ref">30</a>]</cite>. Let <math id="S3.SS1.p4.1.m1" class="ltx_Math" alttext="D\in\mathbb{R}^{H\times W}" display="inline" intent=":literal"><semantics><mrow><mi>D</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>H</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>W</mi></mrow></msup></mrow><annotation encoding="application/x-tex">D\in\mathbb{R}^{H\times W}</annotation></semantics></math> be the rendered depth map. We compute its Sobel gradient magnitude and normalize it to obtain a smoothness weight <math id="S3.SS1.p4.2.m2" class="ltx_Math" alttext="\mathbf{W}_{g}\in[0,1]^{H\times W}" display="inline" intent=":literal"><semantics><mrow><msub><mi>𝐖</mi><mi>g</mi></msub><mo>∈</mo><msup><mrow><mo stretchy="false">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><mrow><mi>H</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>W</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{W}_{g}\in[0,1]^{H\times W}</annotation></semantics></math>. We then compare each predicted normal with the locally averaged normal <math id="S3.SS1.p4.3.m3" class="ltx_Math" alttext="\bar{\mathbf{N}}^{\ast}" display="inline" intent=":literal"><semantics><msup><mover accent="true"><mi>𝐍</mi><mo>¯</mo></mover><mo>∗</mo></msup><annotation encoding="application/x-tex">\bar{\mathbf{N}}^{\ast}</annotation></semantics></math> obtained via a <math id="S3.SS1.p4.4.m4" class="ltx_Math" alttext="3\times 3" display="inline" intent=":literal"><semantics><mrow><mn>3</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">3\times 3</annotation></semantics></math> mean filter:</p>
+<table id="S3.Ex1" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.Ex1.m1" class="ltx_Math" alttext="\mathcal{L}_{\text{geo}}=\frac{\sum_{\mathbf{x}}\mathbf{W}_{g}(\mathbf{x})\left(1-\left\langle\mathbf{N}(\mathbf{x}),\bar{\mathbf{N}}^{\ast}(\mathbf{x})\right\rangle\right)}{\sum_{\mathbf{x}}\mathbf{W}_{g}(\mathbf{x})}" display="block" intent=":literal"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mtext>geo</mtext></msub><mo>=</mo><mfrac><mrow><msub><mo>∑</mo><mi>𝐱</mi></msub><mrow><msub><mi>𝐖</mi><mi>g</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>𝐱</mi><mo stretchy="false">)</mo></mrow><mo lspace="0em" rspace="0em">​</mo><mrow><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mrow><mo>⟨</mo><mrow><mi>𝐍</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>𝐱</mi><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><msup><mover accent="true"><mi>𝐍</mi><mo>¯</mo></mover><mo>∗</mo></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>𝐱</mi><mo stretchy="false">)</mo></mrow></mrow><mo>⟩</mo></mrow></mrow><mo>)</mo></mrow></mrow></mrow><mrow><msub><mo>∑</mo><mi>𝐱</mi></msub><mrow><msub><mi>𝐖</mi><mi>g</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>𝐱</mi><mo stretchy="false">)</mo></mrow></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\text{geo}}=\frac{\sum_{\mathbf{x}}\mathbf{W}_{g}(\mathbf{x})\left(1-\left\langle\mathbf{N}(\mathbf{x}),\bar{\mathbf{N}}^{\ast}(\mathbf{x})\right\rangle\right)}{\sum_{\mathbf{x}}\mathbf{W}_{g}(\mathbf{x})}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S3.SS1.p5" class="ltx_para">
+<p id="S3.SS1.p5.1" class="ltx_p">By restricting supervision to mask <math id="S3.SS1.p5.1.m1" class="ltx_Math" alttext="\mathbf{M}" display="inline" intent=":literal"><semantics><mi>𝐌</mi><annotation encoding="application/x-tex">\mathbf{M}</annotation></semantics></math> and jointly enforcing normal alignment and local geometric smoothness, the proposed constraints significantly improve surface quality on vehicles and road regions.</p>
+</div>
+</section>
+<section id="S3.SS2" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S3.SS2.4.1.1" class="ltx_text">III-B</span> </span><span id="S3.SS2.5.2" class="ltx_text ltx_font_italic">LLM-Driven Corner Case Analysis and Synthesis</span>
+</h3>
+
+<div id="S3.SS2.p1" class="ltx_para">
+<p id="S3.SS2.p1.1" class="ltx_p">To automatically construct safety-critical scenarios beyond simple trajectory perturbation, we develop a multi-agent LLM-driven corner case generation framework (as shown in Fig. <a href="#S3.F3" title="Figure 3 ‣ III-B LLM-Driven Corner Case Analysis and Synthesis ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">3</span></a>) that explicitly targets collision-prone regions around the ego vehicle, enabling more controllable and spatially grounded safety-critical scenario synthesis. Given multi-vehicle tracking data and ego poses, we follow a chain-of-thought prompting paradigm <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib11" title="Chain-of-thought prompting elicits reasoning in large language models" class="ltx_ref">26</a>]</cite> and design a pipeline consisting of the following stages:</p>
+</div>
+<div id="S3.SS2.p2" class="ltx_para">
+<p id="S3.SS2.p2.3" class="ltx_p"><span id="S3.SS2.p2.3.1" class="ltx_text ltx_font_bold">Collision Zone Modeling.</span>
+We first define four rectangular collision zones tightly surrounding the ego vehicle in the ego-centric coordinate frame:</p>
+<table id="S3.E3" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E3.m1" class="ltx_Math" alttext="\mathcal{Z}=\{\text{front},\text{back},\text{left},\text{right}\}" display="block" intent=":literal"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒵</mi><mo>=</mo><mrow><mo stretchy="false">{</mo><mtext>front</mtext><mo>,</mo><mtext>back</mtext><mo>,</mo><mtext>left</mtext><mo>,</mo><mtext>right</mtext><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{Z}=\{\text{front},\text{back},\text{left},\text{right}\}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(3)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS2.p2.2" class="ltx_p">Each zone is parameterized by spatial bounds determined by the ego vehicle length <math id="S3.SS2.p2.1.m1" class="ltx_Math" alttext="L_{e}" display="inline" intent=":literal"><semantics><msub><mi>L</mi><mi>e</mi></msub><annotation encoding="application/x-tex">L_{e}</annotation></semantics></math> and width <math id="S3.SS2.p2.2.m2" class="ltx_Math" alttext="W_{e}" display="inline" intent=":literal"><semantics><msub><mi>W</mi><mi>e</mi></msub><annotation encoding="application/x-tex">W_{e}</annotation></semantics></math>. These zones serve as explicit spatial targets for risk maximization and provide structured guidance to the language model.</p>
+</div>
+<div id="S3.SS2.p3" class="ltx_para">
+<p id="S3.SS2.p3.1" class="ltx_p"><span id="S3.SS2.p3.1.1" class="ltx_text ltx_font_bold">Risk Analysis and Collision Zone Selection.</span>
+Given a user-specified dangerous behavior <math id="S3.SS2.p3.1.m1" class="ltx_Math" alttext="b^{\ast}" display="inline" intent=":literal"><semantics><msup><mi>b</mi><mo>∗</mo></msup><annotation encoding="application/x-tex">b^{\ast}</annotation></semantics></math> selected from a predefined behavior library, we employ a language model to perform scene-aware reasoning and identify both the most plausible adversarial vehicle and the most threatening collision region.</p>
+</div>
+<div id="S3.SS2.p4" class="ltx_para">
+<p id="S3.SS2.p4.2" class="ltx_p">Let the ego vehicle be located at the origin of the ego-centric coordinate frame, and let <math id="S3.SS2.p4.1.m1" class="ltx_Math" alttext="\mathcal{V}=\{1,\dots,N\}" display="inline" intent=":literal"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒱</mi><mo>=</mo><mrow><mo stretchy="false">{</mo><mn>1</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mi>N</mi><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{V}=\{1,\dots,N\}</annotation></semantics></math> denote the set of observed background vehicles in the scene. For each vehicle <math id="S3.SS2.p4.2.m2" class="ltx_Math" alttext="i\in\mathcal{V}" display="inline" intent=":literal"><semantics><mrow><mi>i</mi><mo>∈</mo><mi class="ltx_font_mathcaligraphic">𝒱</mi></mrow><annotation encoding="application/x-tex">i\in\mathcal{V}</annotation></semantics></math>, we construct its recent motion state</p>
+<table id="S3.E4" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E4.m1" class="ltx_Math" alttext="\mathbf{s}_{i}=\{(x_{t},y_{t},v_{t},\theta_{t})\}_{t=1}^{T}" display="block" intent=":literal"><semantics><mrow><msub><mi>𝐬</mi><mi>i</mi></msub><mo>=</mo><msubsup><mrow><mo stretchy="false">{</mo><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mi>t</mi></msub><mo>,</mo><msub><mi>y</mi><mi>t</mi></msub><mo>,</mo><msub><mi>v</mi><mi>t</mi></msub><mo>,</mo><msub><mi>θ</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><mo stretchy="false">}</mo></mrow><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></msubsup></mrow><annotation encoding="application/x-tex">\mathbf{s}_{i}=\{(x_{t},y_{t},v_{t},\theta_{t})\}_{t=1}^{T}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(4)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS2.p4.7" class="ltx_p">where <math id="S3.SS2.p4.3.m1" class="ltx_Math" alttext="(x_{t},y_{t})" display="inline" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mi>t</mi></msub><mo>,</mo><msub><mi>y</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x_{t},y_{t})</annotation></semantics></math> denotes the position in the ego-centric frame, <math id="S3.SS2.p4.4.m2" class="ltx_Math" alttext="v_{t}" display="inline" intent=":literal"><semantics><msub><mi>v</mi><mi>t</mi></msub><annotation encoding="application/x-tex">v_{t}</annotation></semantics></math> is the speed, and <math id="S3.SS2.p4.5.m3" class="ltx_Math" alttext="\theta_{t}" display="inline" intent=":literal"><semantics><msub><mi>θ</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\theta_{t}</annotation></semantics></math> is the heading over the past <math id="S3.SS2.p4.6.m4" class="ltx_Math" alttext="T" display="inline" intent=":literal"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math> frames. The ego vehicle state is constructed in the same form and denoted by <math id="S3.SS2.p4.7.m5" class="ltx_Math" alttext="\mathbf{s}_{\text{ego}}" display="inline" intent=":literal"><semantics><msub><mi>𝐬</mi><mtext>ego</mtext></msub><annotation encoding="application/x-tex">\mathbf{s}_{\text{ego}}</annotation></semantics></math>.</p>
+</div>
+<div id="S3.SS2.p5" class="ltx_para">
+<p id="S3.SS2.p5.7" class="ltx_p">The LLM agent then performs behavior-conditioned risk reasoning over all candidate vehicles. Formally, the decision process can be written as</p>
+<table id="S3.E5" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E5.m1" class="ltx_Math" alttext="(i^{\ast},\;z^{\ast},\;\mathrm{TTC},\;r)=\mathrm{Agent_{zone}}\!\left(\mathbf{s}_{\text{ego}},\{\mathbf{s}_{i}\}_{i\in\mathcal{V}},b^{\ast}\right)" display="block" intent=":literal"><semantics><mrow><mrow><mo stretchy="false">(</mo><msup><mi>i</mi><mo>∗</mo></msup><mo rspace="0.447em">,</mo><msup><mi>z</mi><mo>∗</mo></msup><mo rspace="0.447em">,</mo><mi>TTC</mi><mo rspace="0.447em">,</mo><mi>r</mi><mo stretchy="false">)</mo></mrow><mo>=</mo><mrow><msub><mi>Agent</mi><mi>zone</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo>(</mo><msub><mi>𝐬</mi><mtext>ego</mtext></msub><mo>,</mo><msub><mrow><mo stretchy="false">{</mo><msub><mi>𝐬</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><mrow><mi>i</mi><mo>∈</mo><mi class="ltx_font_mathcaligraphic">𝒱</mi></mrow></msub><mo>,</mo><msup><mi>b</mi><mo>∗</mo></msup><mo>)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">(i^{\ast},\;z^{\ast},\;\mathrm{TTC},\;r)=\mathrm{Agent_{zone}}\!\left(\mathbf{s}_{\text{ego}},\{\mathbf{s}_{i}\}_{i\in\mathcal{V}},b^{\ast}\right)</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(5)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS2.p5.6" class="ltx_p">where <math id="S3.SS2.p5.1.m1" class="ltx_Math" alttext="i^{\ast}\in\mathcal{V}" display="inline" intent=":literal"><semantics><mrow><msup><mi>i</mi><mo>∗</mo></msup><mo>∈</mo><mi class="ltx_font_mathcaligraphic">𝒱</mi></mrow><annotation encoding="application/x-tex">i^{\ast}\in\mathcal{V}</annotation></semantics></math> is the selected adversarial vehicle, <math id="S3.SS2.p5.2.m2" class="ltx_Math" alttext="z^{\ast}\in\mathcal{Z}" display="inline" intent=":literal"><semantics><mrow><msup><mi>z</mi><mo>∗</mo></msup><mo>∈</mo><mi class="ltx_font_mathcaligraphic">𝒵</mi></mrow><annotation encoding="application/x-tex">z^{\ast}\in\mathcal{Z}</annotation></semantics></math> is the predicted target collision zone chosen from the predefined zone set <math id="S3.SS2.p5.3.m3" class="ltx_Math" alttext="\mathcal{Z}" display="inline" intent=":literal"><semantics><mi class="ltx_font_mathcaligraphic">𝒵</mi><annotation encoding="application/x-tex">\mathcal{Z}</annotation></semantics></math> around the ego vehicle, <math id="S3.SS2.p5.4.m4" class="ltx_Math" alttext="\mathrm{TTC}" display="inline" intent=":literal"><semantics><mi>TTC</mi><annotation encoding="application/x-tex">\mathrm{TTC}</annotation></semantics></math> denotes the estimated time-to-collision in seconds assuming the dangerous behavior occurs, and <math id="S3.SS2.p5.5.m5" class="ltx_Math" alttext="r\in\{\text{Low},\text{Medium},\text{High},\text{Critical}\}" display="inline" intent=":literal"><semantics><mrow><mi>r</mi><mo>∈</mo><mrow><mo stretchy="false">{</mo><mtext>Low</mtext><mo>,</mo><mtext>Medium</mtext><mo>,</mo><mtext>High</mtext><mo>,</mo><mtext>Critical</mtext><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">r\in\{\text{Low},\text{Medium},\text{High},\text{Critical}\}</annotation></semantics></math> represents the risk level. In addition, the behavior <math id="S3.SS2.p5.6.m6" class="ltx_Math" alttext="b^{\ast}" display="inline" intent=":literal"><semantics><msup><mi>b</mi><mo>∗</mo></msup><annotation encoding="application/x-tex">b^{\ast}</annotation></semantics></math> can be either user-specified or automatically inferred by the LLM agent. Conditioning on a given behavior hypothesis narrows the reasoning space and improves generation controllability.</p>
+</div>
+<figure id="S3.F3" class="ltx_figure"><img src="2607.07601v1/x3.png" id="S3.F3.g1" class="ltx_graphics ltx_centering ltx_img_square" width="829" height="684" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3: </span>Overview of the LLM-driven corner-case generation pipeline. The system models ego-centric collision zones, performs risk analysis to select an adversarial vehicle and target zone, and synthesizes a waypoint-based collision-oriented trajectory that is later executed by CARLA for physically feasible simulation.</figcaption>
+</figure>
+<div id="S3.SS2.p6" class="ltx_para">
+<p id="S3.SS2.p6.1" class="ltx_p"><span id="S3.SS2.p6.1.1" class="ltx_text ltx_font_bold">Collision-Oriented Trajectory Synthesis.</span>
+Conditioned on the selected adversarial vehicle and target zone <math id="S3.SS2.p6.1.m1" class="ltx_Math" alttext="(i^{\ast},z^{\ast})" display="inline" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><msup><mi>i</mi><mo>∗</mo></msup><mo>,</mo><msup><mi>z</mi><mo>∗</mo></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(i^{\ast},z^{\ast})</annotation></semantics></math>, we generate a reference trajectory using the LLM. Instead of predicting dynamically feasible control signals, which lies outside the core competency of language models, we delegate low-level feasibility to a downstream controller and allow the LLM to focus on high-level waypoint generation.</p>
+</div>
+<div id="S3.SS2.p7" class="ltx_para">
+<p id="S3.SS2.p7.6" class="ltx_p">Let <math id="S3.SS2.p7.1.m1" class="ltx_Math" alttext="(x_{0},y_{0})" display="inline" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mn>0</mn></msub><mo>,</mo><msub><mi>y</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x_{0},y_{0})</annotation></semantics></math> denote the current position of vehicle <math id="S3.SS2.p7.2.m2" class="ltx_Math" alttext="i^{\ast}" display="inline" intent=":literal"><semantics><msup><mi>i</mi><mo>∗</mo></msup><annotation encoding="application/x-tex">i^{\ast}</annotation></semantics></math> in the ego-centric frame, and let <math id="S3.SS2.p7.3.m3" class="ltx_Math" alttext="\mathbf{s}_{i^{\ast}}" display="inline" intent=":literal"><semantics><msub><mi>𝐬</mi><msup><mi>i</mi><mo>∗</mo></msup></msub><annotation encoding="application/x-tex">\mathbf{s}_{i^{\ast}}</annotation></semantics></math> and <math id="S3.SS2.p7.4.m4" class="ltx_Math" alttext="\mathbf{s}_{\text{ego}}^{\text{future}}" display="inline" intent=":literal"><semantics><msubsup><mi>𝐬</mi><mtext>ego</mtext><mtext>future</mtext></msubsup><annotation encoding="application/x-tex">\mathbf{s}_{\text{ego}}^{\text{future}}</annotation></semantics></math> denote the historical trajectory of the adversarial vehicle and the predicted future ego trajectory, respectively. A collision target point <math id="S3.SS2.p7.5.m5" class="ltx_Math" alttext="(x^{\dagger},y^{\dagger})" display="inline" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><msup><mi>x</mi><mo>†</mo></msup><mo>,</mo><msup><mi>y</mi><mo>†</mo></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x^{\dagger},y^{\dagger})</annotation></semantics></math> is sampled within the selected zone <math id="S3.SS2.p7.6.m6" class="ltx_Math" alttext="z^{\ast}" display="inline" intent=":literal"><semantics><msup><mi>z</mi><mo>∗</mo></msup><annotation encoding="application/x-tex">z^{\ast}</annotation></semantics></math>. The waypoint generation process is formulated as</p>
+<table id="S3.E6" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E6.m1" class="ltx_Math" alttext="\mathcal{T}=\mathrm{Agent_{traj}}\!\left(\mathbf{s}_{i^{\ast}},\mathbf{s}_{\text{ego}}^{\text{future}},(x_{0},y_{0}),(x^{\dagger},y^{\dagger}),b^{\ast},\mathrm{TTC}\right)" display="block" intent=":literal"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒯</mi><mo>=</mo><mrow><msub><mi>Agent</mi><mi>traj</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo>(</mo><msub><mi>𝐬</mi><msup><mi>i</mi><mo>∗</mo></msup></msub><mo>,</mo><msubsup><mi>𝐬</mi><mtext>ego</mtext><mtext>future</mtext></msubsup><mo>,</mo><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mn>0</mn></msub><mo>,</mo><msub><mi>y</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow><mo>,</mo><mrow><mo stretchy="false">(</mo><msup><mi>x</mi><mo>†</mo></msup><mo>,</mo><msup><mi>y</mi><mo>†</mo></msup><mo stretchy="false">)</mo></mrow><mo>,</mo><msup><mi>b</mi><mo>∗</mo></msup><mo>,</mo><mi>TTC</mi><mo>)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathcal{T}=\mathrm{Agent_{traj}}\!\left(\mathbf{s}_{i^{\ast}},\mathbf{s}_{\text{ego}}^{\text{future}},(x_{0},y_{0}),(x^{\dagger},y^{\dagger}),b^{\ast},\mathrm{TTC}\right)</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(6)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS2.p7.7" class="ltx_p">where</p>
+<table id="S3.E7" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E7.m1" class="ltx_Math" alttext="\mathcal{T}=\{(t_{k},x_{k},y_{k})\}_{k=1}^{K}" display="block" intent=":literal"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒯</mi><mo>=</mo><msubsup><mrow><mo stretchy="false">{</mo><mrow><mo stretchy="false">(</mo><msub><mi>t</mi><mi>k</mi></msub><mo>,</mo><msub><mi>x</mi><mi>k</mi></msub><mo>,</mo><msub><mi>y</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow><mo stretchy="false">}</mo></mrow><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></msubsup></mrow><annotation encoding="application/x-tex">\mathcal{T}=\{(t_{k},x_{k},y_{k})\}_{k=1}^{K}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(7)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS2.p7.8" class="ltx_p">is the generated time-stamped waypoint sequence over the prediction horizon.
+The final waypoint is constrained to coincide with the sampled collision target. The resulting waypoint sequence can be directly interfaced with CARLA for vehicle kinematic simulation.</p>
+</div>
+</section>
+<section id="S3.SS3" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S3.SS3.4.1.1" class="ltx_text">III-C</span> </span><span id="S3.SS3.5.2" class="ltx_text ltx_font_italic">Real-Sim-Real: Bridging CARLA and Gaussian Splatting</span>
+</h3>
+
+<div id="S3.SS3.p1" class="ltx_para">
+<p id="S3.SS3.p1.1" class="ltx_p">To obtain physically consistent corner-case visualizations, we adopt a Real-Sim-Real pipeline that bridges the LLM-generated trajectory, CARLA vehicle dynamics, and Gaussian-based rendering.</p>
+</div>
+<div id="S3.SS3.p2" class="ltx_para">
+<p id="S3.SS3.p2.3" class="ltx_p"><span id="S3.SS3.p2.3.1" class="ltx_text ltx_font_bold">CARLA-based Kinematic Simulation.</span>
+Given the LLM-generated waypoint sequence <math id="S3.SS3.p2.1.m1" class="ltx_Math" alttext="\mathcal{T}" display="inline" intent=":literal"><semantics><mi class="ltx_font_mathcaligraphic">𝒯</mi><annotation encoding="application/x-tex">\mathcal{T}</annotation></semantics></math> from the last step, we first import the trajectory into CARLA as a reference path. Then we design a PID controller that tracks the reference waypoints in continuous time for the selected vehicle <math id="S3.SS3.p2.2.m2" class="ltx_Math" alttext="i^{\ast}" display="inline" intent=":literal"><semantics><msup><mi>i</mi><mo>∗</mo></msup><annotation encoding="application/x-tex">i^{\ast}</annotation></semantics></math>. Specifically, the control command at time <math id="S3.SS3.p2.3.m3" class="ltx_Math" alttext="t" display="inline" intent=":literal"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> is computed as</p>
+<table id="S3.E8" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E8.m1" class="ltx_Math" alttext="\mathbf{u}_{t}=\mathrm{PID}\big(\mathbf{p}_{t},\;\mathbf{p}_{t}^{\text{ref}}\big)" display="block" intent=":literal"><semantics><mrow><msub><mi>𝐮</mi><mi>t</mi></msub><mo>=</mo><mrow><mi>PID</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo maxsize="1.200em" minsize="1.200em">(</mo><msub><mi>𝐩</mi><mi>t</mi></msub><mo rspace="0.447em">,</mo><msubsup><mi>𝐩</mi><mi>t</mi><mtext>ref</mtext></msubsup><mo maxsize="1.200em" minsize="1.200em">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathbf{u}_{t}=\mathrm{PID}\big(\mathbf{p}_{t},\;\mathbf{p}_{t}^{\text{ref}}\big)</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(8)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS3.p2.5" class="ltx_p">where <math id="S3.SS3.p2.4.m1" class="ltx_Math" alttext="\mathbf{p}_{t}" display="inline" intent=":literal"><semantics><msub><mi>𝐩</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{p}_{t}</annotation></semantics></math> and <math id="S3.SS3.p2.5.m2" class="ltx_Math" alttext="\mathbf{p}_{t}^{\text{ref}}" display="inline" intent=":literal"><semantics><msubsup><mi>𝐩</mi><mi>t</mi><mtext>ref</mtext></msubsup><annotation encoding="application/x-tex">\mathbf{p}_{t}^{\text{ref}}</annotation></semantics></math> denote the current and reference vehicle poses, respectively. The simulator then evolves the vehicle state according to its internal kinematic model</p>
+<table id="S3.E9" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E9.m1" class="ltx_Math" alttext="\mathbf{x}_{t+1}=f_{\text{CARLA}}(\mathbf{x}_{t},\mathbf{u}_{t})" display="block" intent=":literal"><semantics><mrow><msub><mi>𝐱</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mrow><msub><mi>f</mi><mtext>CARLA</mtext></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msub><mi>𝐱</mi><mi>t</mi></msub><mo>,</mo><msub><mi>𝐮</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\mathbf{x}_{t+1}=f_{\text{CARLA}}(\mathbf{x}_{t},\mathbf{u}_{t})</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(9)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS3.p2.6" class="ltx_p">producing a physically feasible trajectory</p>
+<table id="S3.E10" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E10.m1" class="ltx_Math" alttext="\tilde{\mathcal{T}}=\{(t_{k},\tilde{x}_{k},\tilde{y}_{k},\tilde{\theta}_{k})\}_{k=1}^{K}" display="block" intent=":literal"><semantics><mrow><mover accent="true"><mi class="ltx_font_mathcaligraphic">𝒯</mi><mo>~</mo></mover><mo>=</mo><msubsup><mrow><mo stretchy="false">{</mo><mrow><mo stretchy="false">(</mo><msub><mi>t</mi><mi>k</mi></msub><mo>,</mo><msub><mover accent="true"><mi>x</mi><mo>~</mo></mover><mi>k</mi></msub><mo>,</mo><msub><mover accent="true"><mi>y</mi><mo>~</mo></mover><mi>k</mi></msub><mo>,</mo><msub><mover accent="true"><mi>θ</mi><mo>~</mo></mover><mi>k</mi></msub><mo stretchy="false">)</mo></mrow><mo stretchy="false">}</mo></mrow><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></msubsup></mrow><annotation encoding="application/x-tex">\tilde{\mathcal{T}}=\{(t_{k},\tilde{x}_{k},\tilde{y}_{k},\tilde{\theta}_{k})\}_{k=1}^{K}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(10)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS3.p2.7" class="ltx_p">This step ensures dynamic realism and smooth vehicle motion. In practice, we employ the built-in <span id="S3.SS3.p2.7.1" class="ltx_text ltx_font_typewriter">VehiclePIDController</span> to track the reference path.</p>
+</div>
+<div id="S3.SS3.p3" class="ltx_para">
+<p id="S3.SS3.p3.3" class="ltx_p"><span id="S3.SS3.p3.3.1" class="ltx_text ltx_font_bold">Back-Projection to Gaussian Space.</span>
+After simulation, the CARLA-generated trajectory <math id="S3.SS3.p3.1.m1" class="ltx_Math" alttext="\tilde{\mathcal{T}}" display="inline" intent=":literal"><semantics><mover accent="true"><mi class="ltx_font_mathcaligraphic">𝒯</mi><mo>~</mo></mover><annotation encoding="application/x-tex">\tilde{\mathcal{T}}</annotation></semantics></math> is mapped back to the Gaussian scene representation. For each timestamp, we update the pose of the corresponding Gaussian actor using the simulated position <math id="S3.SS3.p3.2.m2" class="ltx_Math" alttext="(\tilde{x}_{k},\tilde{y}_{k})" display="inline" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><msub><mover accent="true"><mi>x</mi><mo>~</mo></mover><mi>k</mi></msub><mo>,</mo><msub><mover accent="true"><mi>y</mi><mo>~</mo></mover><mi>k</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\tilde{x}_{k},\tilde{y}_{k})</annotation></semantics></math> and heading <math id="S3.SS3.p3.3.m3" class="ltx_Math" alttext="\tilde{\theta}_{k}" display="inline" intent=":literal"><semantics><msub><mover accent="true"><mi>θ</mi><mo>~</mo></mover><mi>k</mi></msub><annotation encoding="application/x-tex">\tilde{\theta}_{k}</annotation></semantics></math>. The modified Gaussian scene is finally rendered using the differentiable Gaussian renderer.</p>
+</div>
+<figure id="S3.F4" class="ltx_figure"><img src="2607.07601v1/x4.png" id="S3.F4.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="830" height="203" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4: </span>Vehicle replacement pipeline. We first select frames where the target vehicle is close to the camera, and reconstruct a 3D Gaussian model using SAM 3D. The reconstructed asset is aligned with the original vehicle geometry and replaces it.</figcaption>
+</figure>
+<figure id="S3.T1" class="ltx_table">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">TABLE I: </span>Ablation study on rendering quality and geometry consistency.</figcaption>
+<table id="S3.T1.8" class="ltx_tabular ltx_centering ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr id="S3.T1.5.5" class="ltx_tr">
+<th id="S3.T1.5.5.6" class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.5.5.6.1" class="ltx_text ltx_font_bold">Components</span></th>
+<th id="S3.T1.1.1.1" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.1.1.1.1" class="ltx_text ltx_font_bold">PSNR <math id="S3.T1.1.1.1.1.m1" class="ltx_Math" alttext="\uparrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></th>
+<th id="S3.T1.2.2.2" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.2.2.2.1" class="ltx_text ltx_font_bold">SSIM <math id="S3.T1.2.2.2.1.m1" class="ltx_Math" alttext="\uparrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></th>
+<th id="S3.T1.3.3.3" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.3.3.3.1" class="ltx_text ltx_font_bold">LPIPS <math id="S3.T1.3.3.3.1.m1" class="ltx_Math" alttext="\downarrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↓</mo><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math></span></th>
+<th id="S3.T1.4.4.4" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.4.4.4.1" class="ltx_text ltx_font_bold">Normal L1 MAE <math id="S3.T1.4.4.4.1.m1" class="ltx_Math" alttext="\downarrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↓</mo><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math></span></th>
+<th id="S3.T1.5.5.5" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.5.5.5.1" class="ltx_text ltx_font_bold">Normal Cos MAE <math id="S3.T1.5.5.5.1.m1" class="ltx_Math" alttext="\downarrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↓</mo><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math></span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr id="S3.T1.8.9.1" class="ltx_tr">
+<th id="S3.T1.8.9.1.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding-top:0.6pt;padding-bottom:0.6pt;">Baseline</th>
+<td id="S3.T1.8.9.1.2" class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.6pt;padding-bottom:0.6pt;">29.703</td>
+<td id="S3.T1.8.9.1.3" class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.907</td>
+<td id="S3.T1.8.9.1.4" class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.219</td>
+<td id="S3.T1.8.9.1.5" class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.682</td>
+<td id="S3.T1.8.9.1.6" class="ltx_td ltx_align_center ltx_border_t" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.984</td>
+</tr>
+<tr id="S3.T1.6.6" class="ltx_tr">
+<th id="S3.T1.6.6.1" class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-top:0.6pt;padding-bottom:0.6pt;">+<math id="S3.T1.6.6.1.m1" class="ltx_Math" alttext="\mathcal{L}_{\mathrm{flat}}" display="inline" intent=":literal"><semantics><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>flat</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{flat}}</annotation></semantics></math>
+</th>
+<td id="S3.T1.6.6.2" class="ltx_td ltx_align_center" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.6.6.2.1" class="ltx_text ltx_font_bold">29.828</span></td>
+<td id="S3.T1.6.6.3" class="ltx_td ltx_align_center" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.6.6.3.1" class="ltx_text ltx_font_bold">0.908</span></td>
+<td id="S3.T1.6.6.4" class="ltx_td ltx_align_center" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.6.6.4.1" class="ltx_text ltx_font_bold">0.215</span></td>
+<td id="S3.T1.6.6.5" class="ltx_td ltx_align_center" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.677</td>
+<td id="S3.T1.6.6.6" class="ltx_td ltx_align_center" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.957</td>
+</tr>
+<tr id="S3.T1.7.7" class="ltx_tr">
+<th id="S3.T1.7.7.1" class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding-top:0.6pt;padding-bottom:0.6pt;">+<math id="S3.T1.7.7.1.m1" class="ltx_Math" alttext="\mathcal{L}_{\mathrm{flat}}+\mathcal{L}_{\mathrm{normal}}" display="inline" intent=":literal"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>flat</mi></msub><mo>+</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>normal</mi></msub></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{flat}}+\mathcal{L}_{\mathrm{normal}}</annotation></semantics></math>
+</th>
+<td id="S3.T1.7.7.2" class="ltx_td ltx_align_center" style="padding-top:0.6pt;padding-bottom:0.6pt;">29.521</td>
+<td id="S3.T1.7.7.3" class="ltx_td ltx_align_center" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.906</td>
+<td id="S3.T1.7.7.4" class="ltx_td ltx_align_center" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.217</td>
+<td id="S3.T1.7.7.5" class="ltx_td ltx_align_center" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.361</td>
+<td id="S3.T1.7.7.6" class="ltx_td ltx_align_center" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.482</td>
+</tr>
+<tr id="S3.T1.8.8" class="ltx_tr">
+<th id="S3.T1.8.8.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb" style="padding-top:0.6pt;padding-bottom:0.6pt;">+<math id="S3.T1.8.8.1.m1" class="ltx_Math" alttext="\mathcal{L}_{\mathrm{flat}}+\mathcal{L}_{\mathrm{normal}}+\mathcal{L}_{\mathrm{geo}}" display="inline" intent=":literal"><semantics><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>flat</mi></msub><mo>+</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>normal</mi></msub><mo>+</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>geo</mi></msub></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{flat}}+\mathcal{L}_{\mathrm{normal}}+\mathcal{L}_{\mathrm{geo}}</annotation></semantics></math>
+</th>
+<td id="S3.T1.8.8.2" class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.6pt;padding-bottom:0.6pt;">29.027</td>
+<td id="S3.T1.8.8.3" class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.900</td>
+<td id="S3.T1.8.8.4" class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.6pt;padding-bottom:0.6pt;">0.223</td>
+<td id="S3.T1.8.8.5" class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.8.8.5.1" class="ltx_text ltx_font_bold">0.350</span></td>
+<td id="S3.T1.8.8.6" class="ltx_td ltx_align_center ltx_border_bb" style="padding-top:0.6pt;padding-bottom:0.6pt;"><span id="S3.T1.8.8.6.1" class="ltx_text ltx_font_bold">0.480</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure id="S3.F5" class="ltx_figure"><img src="2607.07601v1/x5.png" id="S3.F5.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="660" height="75" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 5: </span>Surface normal renderings. Our geometry-consistency constraints produce finer surface details and fewer artifacts than the baseline.</figcaption>
+</figure>
+<div id="S3.SS3.p4" class="ltx_para">
+<p id="S3.SS3.p4.1" class="ltx_p"><span id="S3.SS3.p4.1.1" class="ltx_text ltx_font_bold">Vehicle Replacement with 3D Foundation Models.</span>
+Since the Gaussian model is trained from limited camera views, rendering unseen viewpoints may introduce tearing artifacts, especially for near-field vehicles with insufficient observations (see Fig. <a href="#S4.F9" title="Figure 9 ‣ IV-C Qualitative Results ‣ IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">9</span></a>). To mitigate this, we replace such vehicles with high-quality assets reconstructed by SAM-3D <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib45" title="Sam 3d: 3dfy anything in images" class="ltx_ref">3</a>]</cite>, as shown in Fig. <a href="#S3.F4" title="Figure 4 ‣ III-C Real-Sim-Real: Bridging CARLA and Gaussian Splatting ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">4</span></a>.</p>
+</div>
+<div id="S3.SS3.p5" class="ltx_para">
+<p id="S3.SS3.p5.9" class="ltx_p">Specifically, we use SAM-3D <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib45" title="Sam 3d: 3dfy anything in images" class="ltx_ref">3</a>]</cite> to reconstruct a 3D Gaussian representation from close-range frames containing the target vehicle. To align the reconstructed asset with the original object, we denote the original and replacement point sets as <math id="S3.SS3.p5.1.m1" class="ltx_Math" alttext="\mathcal{P}_{o}" display="inline" intent=":literal"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mi>o</mi></msub><annotation encoding="application/x-tex">\mathcal{P}_{o}</annotation></semantics></math> and <math id="S3.SS3.p5.2.m2" class="ltx_Math" alttext="\mathcal{P}_{r}" display="inline" intent=":literal"><semantics><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mi>r</mi></msub><annotation encoding="application/x-tex">\mathcal{P}_{r}</annotation></semantics></math>. Both point clouds are first centered. Their yaw orientations <math id="S3.SS3.p5.3.m3" class="ltx_Math" alttext="\theta_{o}" display="inline" intent=":literal"><semantics><msub><mi>θ</mi><mi>o</mi></msub><annotation encoding="application/x-tex">\theta_{o}</annotation></semantics></math> and <math id="S3.SS3.p5.4.m4" class="ltx_Math" alttext="\theta_{r}" display="inline" intent=":literal"><semantics><msub><mi>θ</mi><mi>r</mi></msub><annotation encoding="application/x-tex">\theta_{r}</annotation></semantics></math> are estimated from the minimum-area bounding boxes of their XY projections, producing a relative yaw difference <math id="S3.SS3.p5.5.m5" class="ltx_Math" alttext="\Delta\theta=\theta_{o}-\theta_{r}" display="inline" intent=":literal"><semantics><mrow><mrow><mi mathvariant="normal">Δ</mi><mo lspace="0em" rspace="0em">​</mo><mi>θ</mi></mrow><mo>=</mo><mrow><msub><mi>θ</mi><mi>o</mi></msub><mo>−</mo><msub><mi>θ</mi><mi>r</mi></msub></mrow></mrow><annotation encoding="application/x-tex">\Delta\theta=\theta_{o}-\theta_{r}</annotation></semantics></math>. To account for symmetry ambiguity, we evaluate a small set of candidate rotations <math id="S3.SS3.p5.6.m6" class="ltx_Math" alttext="\Theta=\{\Delta\theta,\Delta\theta+\pi,\Delta\theta+\frac{\pi}{2},\Delta\theta-\frac{\pi}{2}\}" display="inline" intent=":literal"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo>=</mo><mrow><mo stretchy="false">{</mo><mrow><mi mathvariant="normal">Δ</mi><mo lspace="0em" rspace="0em">​</mo><mi>θ</mi></mrow><mo>,</mo><mrow><mrow><mi mathvariant="normal">Δ</mi><mo lspace="0em" rspace="0em">​</mo><mi>θ</mi></mrow><mo>+</mo><mi>π</mi></mrow><mo>,</mo><mrow><mrow><mi mathvariant="normal">Δ</mi><mo lspace="0em" rspace="0em">​</mo><mi>θ</mi></mrow><mo>+</mo><mfrac><mi>π</mi><mn>2</mn></mfrac></mrow><mo>,</mo><mrow><mrow><mi mathvariant="normal">Δ</mi><mo lspace="0em" rspace="0em">​</mo><mi>θ</mi></mrow><mo>−</mo><mfrac><mi>π</mi><mn>2</mn></mfrac></mrow><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">\Theta=\{\Delta\theta,\Delta\theta+\pi,\Delta\theta+\frac{\pi}{2},\Delta\theta-\frac{\pi}{2}\}</annotation></semantics></math>. The object scale is matched by comparing the bounding-box extents <math id="S3.SS3.p5.7.m7" class="ltx_Math" alttext="\mathbf{e}_{o}" display="inline" intent=":literal"><semantics><msub><mi>𝐞</mi><mi>o</mi></msub><annotation encoding="application/x-tex">\mathbf{e}_{o}</annotation></semantics></math> and <math id="S3.SS3.p5.8.m8" class="ltx_Math" alttext="\mathbf{e}_{r}" display="inline" intent=":literal"><semantics><msub><mi>𝐞</mi><mi>r</mi></msub><annotation encoding="application/x-tex">\mathbf{e}_{r}</annotation></semantics></math> and computing the scale factor <math id="S3.SS3.p5.9.m9" class="ltx_Math" alttext="\mathbf{s}=\mathbf{e}_{o}/\mathbf{e}_{r}" display="inline" intent=":literal"><semantics><mrow><mi>𝐬</mi><mo>=</mo><mrow><msub><mi>𝐞</mi><mi>o</mi></msub><mo>/</mo><msub><mi>𝐞</mi><mi>r</mi></msub></mrow></mrow><annotation encoding="application/x-tex">\mathbf{s}=\mathbf{e}_{o}/\mathbf{e}_{r}</annotation></semantics></math>. The final alignment is selected by minimizing</p>
+<table id="S3.E11" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E11.m1" class="ltx_Math" alttext="E(\theta)=\|\mathbf{e}(\hat{\mathcal{P}}_{r})-\mathbf{e}(\mathcal{P}_{o})\|_{2}+\lambda\,d_{\text{Chamfer}}(\hat{\mathcal{P}}_{r},\mathcal{P}_{o}),\theta\in\Theta" display="block" intent=":literal"><semantics><mrow><mrow><mrow><mi>E</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><msub><mrow><mo stretchy="false">‖</mo><mrow><mrow><mi>𝐞</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msub><mover accent="true"><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo>^</mo></mover><mi>r</mi></msub><mo stretchy="false">)</mo></mrow></mrow><mo>−</mo><mrow><mi>𝐞</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mi>o</mi></msub><mo stretchy="false">)</mo></mrow></mrow></mrow><mo stretchy="false">‖</mo></mrow><mn>2</mn></msub><mo>+</mo><mrow><mi>λ</mi><mo lspace="0.170em" rspace="0em">​</mo><msub><mi>d</mi><mtext>Chamfer</mtext></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msub><mover accent="true"><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo>^</mo></mover><mi>r</mi></msub><mo>,</mo><msub><mi class="ltx_font_mathcaligraphic">𝒫</mi><mi>o</mi></msub><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo>,</mo><mrow><mi>θ</mi><mo>∈</mo><mi mathvariant="normal">Θ</mi></mrow></mrow><annotation encoding="application/x-tex">E(\theta)=\|\mathbf{e}(\hat{\mathcal{P}}_{r})-\mathbf{e}(\mathcal{P}_{o})\|_{2}+\lambda\,d_{\text{Chamfer}}(\hat{\mathcal{P}}_{r},\mathcal{P}_{o}),\theta\in\Theta</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(11)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.SS3.p5.11" class="ltx_p">where <math id="S3.SS3.p5.10.m1" class="ltx_Math" alttext="\hat{\mathcal{P}}_{r}" display="inline" intent=":literal"><semantics><msub><mover accent="true"><mi class="ltx_font_mathcaligraphic">𝒫</mi><mo>^</mo></mover><mi>r</mi></msub><annotation encoding="application/x-tex">\hat{\mathcal{P}}_{r}</annotation></semantics></math> is the transformed replacement point set and <math id="S3.SS3.p5.11.m2" class="ltx_Math" alttext="d_{\text{Chamfer}}(\cdot)" display="inline" intent=":literal"><semantics><mrow><msub><mi>d</mi><mtext>Chamfer</mtext></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mo lspace="0em" rspace="0em">⋅</mo><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">d_{\text{Chamfer}}(\cdot)</annotation></semantics></math> denotes the bidirectional nearest-neighbor distance between the two point clouds. This procedure enables the reconstructed vehicle to replace the original object while preserving geometric consistency and visual realism.</p>
+</div>
+</section>
+</section>
+<section id="S4" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">IV </span><span id="S4.1.1" class="ltx_text ltx_font_smallcaps">EXPERIMENTS</span>
+</h2>
+
+<section id="S4.SS1" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S4.SS1.4.1.1" class="ltx_text">IV-A</span> </span><span id="S4.SS1.5.2" class="ltx_text ltx_font_italic">Experimental Setup</span>
+</h3>
+
+<div id="S4.SS1.p1" class="ltx_para">
+<p id="S4.SS1.p1.4" class="ltx_p">We adopt Street Gaussians <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib34" title="Street gaussians: modeling dynamic urban scenes with gaussian splatting" class="ltx_ref">32</a>]</cite> as our baseline, whose object-background modeling strategy provides a strong foundation for instance-level vehicle editing in our setting. We conduct experiments on the Waymo Open Dataset <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib3" title="Scalability in perception for autonomous driving: waymo open dataset" class="ltx_ref">21</a>]</cite>, selecting 8 sequences to synthesize 85 corner-case scenarios. For Gaussian training, we follow the training protocol of <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib34" title="Street gaussians: modeling dynamic urban scenes with gaussian splatting" class="ltx_ref">32</a>]</cite> for most settings, with a total of 50,000 iterations. To reduce training time, we only use three cameras, [front, front left, front right], and incorporate the three proposed geometric consistency loss terms, each weighted by 0.1. For LLM-based corner-case reference trajectory generation, we use the ChatGPT-5.2 API. Both Gaussian rendering and LLM trajectory planning are executed at 24 FPS. For vehicle physical simulation, we use CARLA 0.9.16, with the longitudinal and lateral PID gains set to <math id="S4.SS1.p1.1.m1" class="ltx_Math" alttext="k_{p}=2.0" display="inline" intent=":literal"><semantics><mrow><msub><mi>k</mi><mi>p</mi></msub><mo>=</mo><mn>2.0</mn></mrow><annotation encoding="application/x-tex">k_{p}=2.0</annotation></semantics></math>, <math id="S4.SS1.p1.2.m2" class="ltx_Math" alttext="k_{d}=0.2" display="inline" intent=":literal"><semantics><mrow><msub><mi>k</mi><mi>d</mi></msub><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">k_{d}=0.2</annotation></semantics></math>, <math id="S4.SS1.p1.3.m3" class="ltx_Math" alttext="k_{i}=0.0" display="inline" intent=":literal"><semantics><mrow><msub><mi>k</mi><mi>i</mi></msub><mo>=</mo><mn>0.0</mn></mrow><annotation encoding="application/x-tex">k_{i}=0.0</annotation></semantics></math>, and a simulation step size of <math id="S4.SS1.p1.4.m4" class="ltx_Math" alttext="\Delta t=0.2\text{s}" display="inline" intent=":literal"><semantics><mrow><mrow><mi mathvariant="normal">Δ</mi><mo lspace="0em" rspace="0em">​</mo><mi>t</mi></mrow><mo>=</mo><mrow><mn>0.2</mn><mo lspace="0em" rspace="0em">​</mo><mtext>s</mtext></mrow></mrow><annotation encoding="application/x-tex">\Delta t=0.2\text{s}</annotation></semantics></math>.</p>
+</div>
+</section>
+<section id="S4.SS2" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S4.SS2.4.1.1" class="ltx_text">IV-B</span> </span><span id="S4.SS2.5.2" class="ltx_text ltx_font_italic">Quantitative Evaluation</span>
+</h3>
+
+<div id="S4.SS2.p1" class="ltx_para">
+<p id="S4.SS2.p1.1" class="ltx_p"><span id="S4.SS2.p1.1.1" class="ltx_text ltx_font_bold">Corner-case Controllability and Success.</span>
+We evaluate the controllability and effectiveness of generated corner cases against rule-based and random trajectory baselines. The rule-based policy triggers predefined maneuvers from the initial relative vehicle positions, while the random policy uses stochastic perturbations without semantic reasoning. All methods use identical initial conditions and horizons. Since few existing methods closely match our task design and in-scene corner-case generation is inherently stochastic, direct comparison with other state-of-the-art methods is difficult.</p>
+</div>
+<div id="S4.SS2.p2" class="ltx_para">
+<p id="S4.SS2.p2.6" class="ltx_p">Table <a href="#S4.T2" title="TABLE II ‣ IV-B Quantitative Evaluation ‣ IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">II</span></a> reports three metrics: <em id="S4.SS2.p2.6.1" class="ltx_emph ltx_font_italic">Zone Hit</em> (whether the trajectory reaches the target collision zone), <em id="S4.SS2.p2.6.2" class="ltx_emph ltx_font_italic">Success</em> (whether a safety-critical interaction occurs with <math id="S4.SS2.p2.1.m1" class="ltx_Math" alttext="\text{TTC}&lt;1" display="inline" intent=":literal"><semantics><mrow><mtext>TTC</mtext><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\text{TTC}&lt;1</annotation></semantics></math> s), and <em id="S4.SS2.p2.6.3" class="ltx_emph ltx_font_italic">MinTTC</em> (the minimum time-to-collision in the scenario). Our method achieves the best controllability, with a Zone Hit rate of <math id="S4.SS2.p2.2.m2" class="ltx_Math" alttext="0.438" display="inline" intent=":literal"><semantics><mn>0.438</mn><annotation encoding="application/x-tex">0.438</annotation></semantics></math>, exceeding the rule-based (<math id="S4.SS2.p2.3.m3" class="ltx_Math" alttext="0.138" display="inline" intent=":literal"><semantics><mn>0.138</mn><annotation encoding="application/x-tex">0.138</annotation></semantics></math>) and random (<math id="S4.SS2.p2.4.m4" class="ltx_Math" alttext="0.063" display="inline" intent=":literal"><semantics><mn>0.063</mn><annotation encoding="application/x-tex">0.063</annotation></semantics></math>) baselines. It also produces the most critical interactions, achieving the highest Success rate (<math id="S4.SS2.p2.5.m5" class="ltx_Math" alttext="0.925" display="inline" intent=":literal"><semantics><mn>0.925</mn><annotation encoding="application/x-tex">0.925</annotation></semantics></math>) and lowest MinTTC (<math id="S4.SS2.p2.6.m6" class="ltx_Math" alttext="0.472" display="inline" intent=":literal"><semantics><mn>0.472</mn><annotation encoding="application/x-tex">0.472</annotation></semantics></math> s), demonstrating the effectiveness of the proposed multi-agent LLM framework.</p>
+</div>
+<div id="S4.SS2.p3" class="ltx_para">
+<p id="S4.SS2.p3.1" class="ltx_p">However, LLM instability can still limit planning reliability. As indicated by the zone hit rate and variance, the LLM may fail to reach the target zone under multiple constraints, even with explicit prompts, as shown in Case 3 of Fig. <a href="#S4.F6" title="Figure 6 ‣ IV-C Qualitative Results ‣ IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">6</span></a>. Manual inspection shows that 29.4% of LLM-generated outputs are valid.</p>
+</div>
+<figure id="S4.T2" class="ltx_table">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">TABLE II: </span>Corner-case controllability and success statistics. Results are reported as mean <math id="S4.T2.2.m1" class="ltx_Math" alttext="\pm" display="inline" intent=":literal"><semantics><mo>±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math> std.</figcaption>
+<div id="S4.T2.14" class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:59pt;vertical-align:-26.5pt;"><span class="ltx_transformed_inner" style="transform:translate(36.1pt,-4.9pt) scale(1.20009589712909,1.20009589712909) ;">
+<table id="S4.T2.14.12" class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr id="S4.T2.5.3.3" class="ltx_tr">
+<th id="S4.T2.5.3.3.4" class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding:0.6pt 5.0pt;"><span id="S4.T2.5.3.3.4.1" class="ltx_text ltx_font_bold">Method</span></th>
+<th id="S4.T2.3.1.1.1" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding:0.6pt 5.0pt;"><span id="S4.T2.3.1.1.1.1" class="ltx_text ltx_font_bold">Zone Hit <math id="S4.T2.3.1.1.1.1.m1" class="ltx_Math" alttext="\uparrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></th>
+<th id="S4.T2.4.2.2.2" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding:0.6pt 5.0pt;"><span id="S4.T2.4.2.2.2.1" class="ltx_text ltx_font_bold">Success <math id="S4.T2.4.2.2.2.1.m1" class="ltx_Math" alttext="\uparrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span></th>
+<th id="S4.T2.5.3.3.3" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding:0.6pt 5.0pt;"><span id="S4.T2.5.3.3.3.1" class="ltx_text ltx_font_bold">MinTTC (s) <math id="S4.T2.5.3.3.3.1.m1" class="ltx_Math" alttext="\downarrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↓</mo><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math></span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr id="S4.T2.8.6.6" class="ltx_tr">
+<th id="S4.T2.8.6.6.4" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding:0.6pt 5.0pt;">Rule-based</th>
+<td id="S4.T2.6.4.4.1" class="ltx_td ltx_align_center ltx_border_t" style="padding:0.6pt 5.0pt;"><math id="S4.T2.6.4.4.1.m1" class="ltx_Math" alttext="0.138\pm 0.347" display="inline" intent=":literal"><semantics><mrow><mn>0.138</mn><mo>±</mo><mn>0.347</mn></mrow><annotation encoding="application/x-tex">0.138\pm 0.347</annotation></semantics></math></td>
+<td id="S4.T2.7.5.5.2" class="ltx_td ltx_align_center ltx_border_t" style="padding:0.6pt 5.0pt;"><math id="S4.T2.7.5.5.2.m1" class="ltx_Math" alttext="0.613\pm 0.490" display="inline" intent=":literal"><semantics><mrow><mn>0.613</mn><mo>±</mo><mn>0.490</mn></mrow><annotation encoding="application/x-tex">0.613\pm 0.490</annotation></semantics></math></td>
+<td id="S4.T2.8.6.6.3" class="ltx_td ltx_align_center ltx_border_t" style="padding:0.6pt 5.0pt;"><math id="S4.T2.8.6.6.3.m1" class="ltx_Math" alttext="1.483\pm 1.794" display="inline" intent=":literal"><semantics><mrow><mn>1.483</mn><mo>±</mo><mn>1.794</mn></mrow><annotation encoding="application/x-tex">1.483\pm 1.794</annotation></semantics></math></td>
+</tr>
+<tr id="S4.T2.11.9.9" class="ltx_tr">
+<th id="S4.T2.11.9.9.4" class="ltx_td ltx_align_left ltx_th ltx_th_row" style="padding:0.6pt 5.0pt;">Random</th>
+<td id="S4.T2.9.7.7.1" class="ltx_td ltx_align_center" style="padding:0.6pt 5.0pt;"><math id="S4.T2.9.7.7.1.m1" class="ltx_Math" alttext="0.063\pm 0.244" display="inline" intent=":literal"><semantics><mrow><mn>0.063</mn><mo>±</mo><mn>0.244</mn></mrow><annotation encoding="application/x-tex">0.063\pm 0.244</annotation></semantics></math></td>
+<td id="S4.T2.10.8.8.2" class="ltx_td ltx_align_center" style="padding:0.6pt 5.0pt;"><math id="S4.T2.10.8.8.2.m1" class="ltx_Math" alttext="0.738\pm 0.443" display="inline" intent=":literal"><semantics><mrow><mn>0.738</mn><mo>±</mo><mn>0.443</mn></mrow><annotation encoding="application/x-tex">0.738\pm 0.443</annotation></semantics></math></td>
+<td id="S4.T2.11.9.9.3" class="ltx_td ltx_align_center" style="padding:0.6pt 5.0pt;"><math id="S4.T2.11.9.9.3.m1" class="ltx_Math" alttext="1.095\pm 1.560" display="inline" intent=":literal"><semantics><mrow><mn>1.095</mn><mo>±</mo><mn>1.560</mn></mrow><annotation encoding="application/x-tex">1.095\pm 1.560</annotation></semantics></math></td>
+</tr>
+<tr id="S4.T2.14.12.12" class="ltx_tr">
+<th id="S4.T2.14.12.12.4" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb" style="padding:0.6pt 5.0pt;"><span id="S4.T2.14.12.12.4.1" class="ltx_text ltx_font_bold">Ours (Multi-agent LLM)</span></th>
+<td id="S4.T2.12.10.10.1" class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.6pt 5.0pt;"><math id="S4.T2.12.10.10.1.m1" class="ltx_Math" alttext="\mathbf{0.438\pm 0.499}" display="inline" intent=":literal"><semantics><mrow><mn class="ltx_mathvariant_bold" mathvariant="bold">0.438</mn><mo>±</mo><mn class="ltx_mathvariant_bold" mathvariant="bold">0.499</mn></mrow><annotation encoding="application/x-tex">\mathbf{0.438\pm 0.499}</annotation></semantics></math></td>
+<td id="S4.T2.13.11.11.2" class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.6pt 5.0pt;"><math id="S4.T2.13.11.11.2.m1" class="ltx_Math" alttext="\mathbf{0.925\pm 0.265}" display="inline" intent=":literal"><semantics><mrow><mn class="ltx_mathvariant_bold" mathvariant="bold">0.925</mn><mo>±</mo><mn class="ltx_mathvariant_bold" mathvariant="bold">0.265</mn></mrow><annotation encoding="application/x-tex">\mathbf{0.925\pm 0.265}</annotation></semantics></math></td>
+<td id="S4.T2.14.12.12.3" class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.6pt 5.0pt;"><math id="S4.T2.14.12.12.3.m1" class="ltx_Math" alttext="\mathbf{0.472\pm 1.215}" display="inline" intent=":literal"><semantics><mrow><mn class="ltx_mathvariant_bold" mathvariant="bold">0.472</mn><mo>±</mo><mn class="ltx_mathvariant_bold" mathvariant="bold">1.215</mn></mrow><annotation encoding="application/x-tex">\mathbf{0.472\pm 1.215}</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+</span></div>
+</figure>
+<figure id="S4.T3" class="ltx_table">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">TABLE III: </span>Feasibility and ride-comfort metrics.</figcaption>
+<div id="S4.T3.13" class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:433.6pt;height:41.3pt;vertical-align:-17.9pt;"><span class="ltx_transformed_inner" style="transform:translate(21.2pt,-2.0pt) scale(1.10854730851634,1.10854730851634) ;">
+<table id="S4.T3.13.13" class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr id="S4.T3.7.7.7" class="ltx_tr">
+<th id="S4.T3.7.7.7.8" class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt" style="padding:0.6pt 4.0pt;"><span id="S4.T3.7.7.7.8.1" class="ltx_text ltx_font_bold">Method</span></th>
+<th id="S4.T3.3.3.3.3" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding:0.6pt 4.0pt;">
+<math id="S4.T3.1.1.1.1.m1" class="ltx_Math" alttext="\boldsymbol{|a^{\mathrm{lat}}|_{95}}" display="inline" intent=":literal"><semantics><msub><mrow><mo class="ltx_mathvariant_bold" mathvariant="bold" stretchy="false">|</mo><msup><mi>𝒂</mi><mi>𝐥𝐚𝐭</mi></msup><mo class="ltx_mathvariant_bold" mathvariant="bold" stretchy="false">|</mo></mrow><mn>𝟗𝟓</mn></msub><annotation encoding="application/x-tex">\boldsymbol{|a^{\mathrm{lat}}|_{95}}</annotation></semantics></math> <math id="S4.T3.2.2.2.2.m2" class="ltx_Math" alttext="\mathbf{(m/s^{2})}" display="inline" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><mrow><mi>𝐦</mi><mo>/</mo><msup><mi>𝐬</mi><mn>𝟐</mn></msup></mrow><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{(m/s^{2})}</annotation></semantics></math> <math id="S4.T3.3.3.3.3.m3" class="ltx_Math" alttext="\downarrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↓</mo><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math>
+</th>
+<th id="S4.T3.6.6.6.6" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding:0.6pt 4.0pt;">
+<math id="S4.T3.4.4.4.4.m1" class="ltx_Math" alttext="\boldsymbol{|\dot{\kappa}|_{95}}" display="inline" intent=":literal"><semantics><msub><mrow><mo class="ltx_mathvariant_bold" mathvariant="bold" stretchy="false">|</mo><mover accent="true"><mi>𝜿</mi><mo class="ltx_mathvariant_bold" mathvariant="bold">˙</mo></mover><mo class="ltx_mathvariant_bold" mathvariant="bold" stretchy="false">|</mo></mrow><mn>𝟗𝟓</mn></msub><annotation encoding="application/x-tex">\boldsymbol{|\dot{\kappa}|_{95}}</annotation></semantics></math> <math id="S4.T3.5.5.5.5.m2" class="ltx_Math" alttext="\mathbf{(1/(m\cdot s))}" display="inline" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><mrow><mn>𝟏</mn><mo>/</mo><mrow><mo stretchy="false">(</mo><mrow><mi>𝐦</mi><mo lspace="0.222em" rspace="0.222em">⋅</mo><mi>𝐬</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{(1/(m\cdot s))}</annotation></semantics></math> <math id="S4.T3.6.6.6.6.m3" class="ltx_Math" alttext="\downarrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↓</mo><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math>
+</th>
+<th id="S4.T3.7.7.7.7" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" style="padding:0.6pt 4.0pt;"><span id="S4.T3.7.7.7.7.1" class="ltx_text ltx_font_bold">ComfortViol (%) <math id="S4.T3.7.7.7.7.1.m1" class="ltx_Math" alttext="\downarrow" display="inline" intent=":literal"><semantics><mo stretchy="false">↓</mo><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math></span></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr id="S4.T3.10.10.10" class="ltx_tr">
+<th id="S4.T3.10.10.10.4" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t" style="padding:0.6pt 4.0pt;">LLM-only</th>
+<td id="S4.T3.8.8.8.1" class="ltx_td ltx_align_center ltx_border_t" style="padding:0.6pt 4.0pt;"><math id="S4.T3.8.8.8.1.m1" class="ltx_Math" alttext="2.66\pm 5.17" display="inline" intent=":literal"><semantics><mrow><mn>2.66</mn><mo>±</mo><mn>5.17</mn></mrow><annotation encoding="application/x-tex">2.66\pm 5.17</annotation></semantics></math></td>
+<td id="S4.T3.9.9.9.2" class="ltx_td ltx_align_center ltx_border_t" style="padding:0.6pt 4.0pt;"><math id="S4.T3.9.9.9.2.m1" class="ltx_Math" alttext="1.02\pm 4.05" display="inline" intent=":literal"><semantics><mrow><mn>1.02</mn><mo>±</mo><mn>4.05</mn></mrow><annotation encoding="application/x-tex">1.02\pm 4.05</annotation></semantics></math></td>
+<td id="S4.T3.10.10.10.3" class="ltx_td ltx_align_center ltx_border_t" style="padding:0.6pt 4.0pt;"><math id="S4.T3.10.10.10.3.m1" class="ltx_Math" alttext="9.62\pm 19.15" display="inline" intent=":literal"><semantics><mrow><mn>9.62</mn><mo>±</mo><mn>19.15</mn></mrow><annotation encoding="application/x-tex">9.62\pm 19.15</annotation></semantics></math></td>
+</tr>
+<tr id="S4.T3.13.13.13" class="ltx_tr">
+<th id="S4.T3.13.13.13.4" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb" style="padding:0.6pt 4.0pt;"><span id="S4.T3.13.13.13.4.1" class="ltx_text ltx_font_bold">Ours (LLM+CARLA)</span></th>
+<td id="S4.T3.11.11.11.1" class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.6pt 4.0pt;"><math id="S4.T3.11.11.11.1.m1" class="ltx_Math" alttext="\mathbf{2.02\pm 3.35}" display="inline" intent=":literal"><semantics><mrow><mn class="ltx_mathvariant_bold" mathvariant="bold">2.02</mn><mo>±</mo><mn class="ltx_mathvariant_bold" mathvariant="bold">3.35</mn></mrow><annotation encoding="application/x-tex">\mathbf{2.02\pm 3.35}</annotation></semantics></math></td>
+<td id="S4.T3.12.12.12.2" class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.6pt 4.0pt;"><math id="S4.T3.12.12.12.2.m1" class="ltx_Math" alttext="\mathbf{0.43\pm 0.97}" display="inline" intent=":literal"><semantics><mrow><mn class="ltx_mathvariant_bold" mathvariant="bold">0.43</mn><mo>±</mo><mn class="ltx_mathvariant_bold" mathvariant="bold">0.97</mn></mrow><annotation encoding="application/x-tex">\mathbf{0.43\pm 0.97}</annotation></semantics></math></td>
+<td id="S4.T3.13.13.13.3" class="ltx_td ltx_align_center ltx_border_bb" style="padding:0.6pt 4.0pt;"><math id="S4.T3.13.13.13.3.m1" class="ltx_Math" alttext="\mathbf{9.39\pm 21.45}" display="inline" intent=":literal"><semantics><mrow><mn class="ltx_mathvariant_bold" mathvariant="bold">9.39</mn><mo>±</mo><mn class="ltx_mathvariant_bold" mathvariant="bold">21.45</mn></mrow><annotation encoding="application/x-tex">\mathbf{9.39\pm 21.45}</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+</span></div>
+</figure>
+<div id="S4.SS2.p4" class="ltx_para">
+<p id="S4.SS2.p4.10" class="ltx_p"><span id="S4.SS2.p4.10.1" class="ltx_text ltx_font_bold">Trajectory Feasibility and Ride Comfort.</span>
+We further evaluate the physical feasibility and ride comfort of generated trajectories.
+Three commonly used kinematic indicators are computed from time-resampled trajectories:
+the <math id="S4.SS2.p4.1.m1" class="ltx_Math" alttext="95" display="inline" intent=":literal"><semantics><mn>95</mn><annotation encoding="application/x-tex">95</annotation></semantics></math>-percentile lateral acceleration <math id="S4.SS2.p4.2.m2" class="ltx_Math" alttext="|a^{lat}|_{95}" display="inline" intent=":literal"><semantics><msub><mrow><mo stretchy="false">|</mo><msup><mi>a</mi><mrow><mi>l</mi><mo lspace="0em" rspace="0em">​</mo><mi>a</mi><mo lspace="0em" rspace="0em">​</mo><mi>t</mi></mrow></msup><mo stretchy="false">|</mo></mrow><mn>95</mn></msub><annotation encoding="application/x-tex">|a^{lat}|_{95}</annotation></semantics></math>, the <math id="S4.SS2.p4.3.m3" class="ltx_Math" alttext="95" display="inline" intent=":literal"><semantics><mn>95</mn><annotation encoding="application/x-tex">95</annotation></semantics></math>-percentile curvature-rate <math id="S4.SS2.p4.4.m4" class="ltx_Math" alttext="|\dot{\kappa}|_{95}" display="inline" intent=":literal"><semantics><msub><mrow><mo stretchy="false">|</mo><mover accent="true"><mi>κ</mi><mo>˙</mo></mover><mo stretchy="false">|</mo></mrow><mn>95</mn></msub><annotation encoding="application/x-tex">|\dot{\kappa}|_{95}</annotation></semantics></math> measuring steering smoothness, and the percentage of comfort violations (ComfortViol) where <math id="S4.SS2.p4.5.m5" class="ltx_Math" alttext="|a^{lat}|&gt;3" display="inline" intent=":literal"><semantics><mrow><mrow><mo stretchy="false">|</mo><msup><mi>a</mi><mrow><mi>l</mi><mo lspace="0em" rspace="0em">​</mo><mi>a</mi><mo lspace="0em" rspace="0em">​</mo><mi>t</mi></mrow></msup><mo stretchy="false">|</mo></mrow><mo>&gt;</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">|a^{lat}|&gt;3</annotation></semantics></math> m/s<sup id="S4.SS2.p4.10.2" class="ltx_sup">2</sup>.
+Table <a href="#S4.T3" title="TABLE III ‣ IV-B Quantitative Evaluation ‣ IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">III</span></a> compares trajectories generated directly by the LLM and those executed through CARLA. By delegating motion execution to CARLA, the proposed pipeline improves all metrics, reducing <math id="S4.SS2.p4.7.m7" class="ltx_Math" alttext="|a^{lat}|_{95}" display="inline" intent=":literal"><semantics><msub><mrow><mo stretchy="false">|</mo><msup><mi>a</mi><mrow><mi>l</mi><mo lspace="0em" rspace="0em">​</mo><mi>a</mi><mo lspace="0em" rspace="0em">​</mo><mi>t</mi></mrow></msup><mo stretchy="false">|</mo></mrow><mn>95</mn></msub><annotation encoding="application/x-tex">|a^{lat}|_{95}</annotation></semantics></math> (<math id="S4.SS2.p4.8.m8" class="ltx_Math" alttext="2.66\rightarrow 2.02" display="inline" intent=":literal"><semantics><mrow><mn>2.66</mn><mo stretchy="false">→</mo><mn>2.02</mn></mrow><annotation encoding="application/x-tex">2.66\rightarrow 2.02</annotation></semantics></math>) and <math id="S4.SS2.p4.9.m9" class="ltx_Math" alttext="|\dot{\kappa}|_{95}" display="inline" intent=":literal"><semantics><msub><mrow><mo stretchy="false">|</mo><mover accent="true"><mi>κ</mi><mo>˙</mo></mover><mo stretchy="false">|</mo></mrow><mn>95</mn></msub><annotation encoding="application/x-tex">|\dot{\kappa}|_{95}</annotation></semantics></math> (<math id="S4.SS2.p4.10.m10" class="ltx_Math" alttext="1.02\rightarrow 0.43" display="inline" intent=":literal"><semantics><mrow><mn>1.02</mn><mo stretchy="false">→</mo><mn>0.43</mn></mrow><annotation encoding="application/x-tex">1.02\rightarrow 0.43</annotation></semantics></math>), and slightly decreasing comfort violations. This indicates that physics-based control effectively regularizes LLM-generated trajectories and yields smoother and more feasible vehicle behaviors.</p>
+</div>
+</section>
+<section id="S4.SS3" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S4.SS3.4.1.1" class="ltx_text">IV-C</span> </span><span id="S4.SS3.5.2" class="ltx_text ltx_font_italic">Qualitative Results</span>
+</h3>
+
+<div id="S4.SS3.p1" class="ltx_para">
+<p id="S4.SS3.p1.1" class="ltx_p"><span id="S4.SS3.p1.1.1" class="ltx_text ltx_font_bold">Reconstruction Evaluation.</span>
+Fig. <a href="#S3.F5" title="Figure 5 ‣ III-C Real-Sim-Real: Bridging CARLA and Gaussian Splatting ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">5</span></a> shows that the geometric consistency constraint produces smoother surfaces and normals closer to the ground truth. Table <a href="#S3.T1" title="TABLE I ‣ III-C Real-Sim-Real: Bridging CARLA and Gaussian Splatting ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">I</span></a> further reports PSNR, SSIM, LPIPS, Normal L1 MAE, and Normal Cos MAE under different constraints. Compared with the baseline, the proposed constraints substantially reduce normal errors while causing only negligible changes in rendering quality, demonstrating improved geometric consistency without sacrificing photometric fidelity.</p>
+</div>
+<figure id="S4.F6" class="ltx_figure"><img src="2607.07601v1/x6.png" id="S4.F6.g1" class="ltx_graphics ltx_centering ltx_img_square" width="830" height="985" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 6: </span>Visualization of LLM-driven corner-case trajectory generation. Left: historical and predicted trajectories of the ego vehicle and the selected vehicle. Green and light-green points denote the ego vehicle’s past and future trajectories, while blue and color-gradient points denote the selected vehicle’s past and LLM-generated future trajectories. The green cross indicates the collision target point. Right: corresponding 3D scene snapshots over time, where the red box highlights the selected vehicle. The generated trajectories exhibit representative corner-case behaviors (sudden brake, cut-in, and lane drift), providing reference motion cues for downstream CARLA-based kinematic simulation.</figcaption>
+</figure>
+<figure id="S4.F7" class="ltx_figure"><img src="2607.07601v1/x7.png" id="S4.F7.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="830" height="470" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 7: </span>CARLA-based realization of LLM-generated trajectories. Left: PID tracking performance along x (front) and y (left). Right: CARLA simulation. The ego trajectory is shown in green, and the selected vehicle follows the red reference points under continuous PID control.</figcaption>
+</figure>
+<div id="S4.SS3.p2" class="ltx_para">
+<p id="S4.SS3.p2.1" class="ltx_p"><span id="S4.SS3.p2.1.1" class="ltx_text ltx_font_bold">LLM Corner Case Generation.</span></p>
+</div>
+<figure id="S4.F8" class="ltx_figure"><img src="2607.07601v1/x8.png" id="S4.F8.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="830" height="174" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 8: </span>Behavior risk analysis results produced by the LLM agent. Given the starting analysis frame and scene context, the Agent <math id="S4.F8.3.m1" class="ltx_Math" alttext="&lt;" display="inline" intent=":literal"><semantics><mo>&lt;</mo><annotation encoding="application/x-tex">&lt;</annotation></semantics></math>Zone<math id="S4.F8.4.m2" class="ltx_Math" alttext="&gt;" display="inline" intent=":literal"><semantics><mo>&gt;</mo><annotation encoding="application/x-tex">&gt;</annotation></semantics></math> outputs the target vehicle, collision zone, risk level, and TTC.</figcaption>
+</figure>
+<div id="S4.SS3.p3" class="ltx_para">
+<p id="S4.SS3.p3.4" class="ltx_p">We manually define three corner-case types, sudden brake, cut-in, and lane drift, and provide them to the LLM to analyze the scene and generate reference trajectories. Fig. <a href="#S4.F8" title="Figure 8 ‣ IV-C Qualitative Results ‣ IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">8</span></a> shows the outputs of Agent <math id="S4.SS3.p3.1.m1" class="ltx_Math" alttext="&lt;" display="inline" intent=":literal"><semantics><mo>&lt;</mo><annotation encoding="application/x-tex">&lt;</annotation></semantics></math>Zone<math id="S4.SS3.p3.2.m2" class="ltx_Math" alttext="&gt;" display="inline" intent=":literal"><semantics><mo>&gt;</mo><annotation encoding="application/x-tex">&gt;</annotation></semantics></math>, while Fig. <a href="#S4.F6" title="Figure 6 ‣ IV-C Qualitative Results ‣ IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">6</span></a> visualizes the past and predicted trajectories of the ego vehicle and the selected vehicle produced by Agent <math id="S4.SS3.p3.3.m3" class="ltx_Math" alttext="&lt;" display="inline" intent=":literal"><semantics><mo>&lt;</mo><annotation encoding="application/x-tex">&lt;</annotation></semantics></math>Trajectory<math id="S4.SS3.p3.4.m4" class="ltx_Math" alttext="&gt;" display="inline" intent=":literal"><semantics><mo>&gt;</mo><annotation encoding="application/x-tex">&gt;</annotation></semantics></math>.</p>
+</div>
+<div id="S4.SS3.p4" class="ltx_para">
+<p id="S4.SS3.p4.4" class="ltx_p"><span id="S4.SS3.p4.4.1" class="ltx_text ltx_font_italic">Case 1.</span> Starting from frame 60, Agent <math id="S4.SS3.p4.1.m1" class="ltx_Math" alttext="&lt;" display="inline" intent=":literal"><semantics><mo>&lt;</mo><annotation encoding="application/x-tex">&lt;</annotation></semantics></math>Zone<math id="S4.SS3.p4.2.m2" class="ltx_Math" alttext="&gt;" display="inline" intent=":literal"><semantics><mo>&gt;</mo><annotation encoding="application/x-tex">&gt;</annotation></semantics></math> identifies vehicle 6 ahead of the ego vehicle, selects the collision zone as “front”, and estimates TTC as 1.0 s. Agent <math id="S4.SS3.p4.3.m3" class="ltx_Math" alttext="&lt;" display="inline" intent=":literal"><semantics><mo>&lt;</mo><annotation encoding="application/x-tex">&lt;</annotation></semantics></math>Trajectory<math id="S4.SS3.p4.4.m4" class="ltx_Math" alttext="&gt;" display="inline" intent=":literal"><semantics><mo>&gt;</mo><annotation encoding="application/x-tex">&gt;</annotation></semantics></math> then generates a braking trajectory toward the collision target point, producing a near rear-end interaction compared with the safe headway observed in the original trajectory. <span id="S4.SS3.p4.4.2" class="ltx_text ltx_font_italic">Case 2 and Case 3.</span> The remaining cases illustrate cut-in and lane-drift behaviors: vehicle 4 performs a rapid lane change under short headway, and oncoming vehicle 84 crosses the lane toward the ego vehicle. These examples show that the LLM agents can identify risky participants and generate behavior-consistent trajectories for subsequent simulation in CARLA.</p>
+</div>
+<figure id="S4.F9" class="ltx_figure"><img src="2607.07601v1/x9.png" id="S4.F9.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="660" height="388" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 9: </span>Final Gaussian renderings of the three synthesized corner cases. Left: raw input frames. Right: edited renderings after LLM-driven reasoning and CARLA-based physical simulation. For one case, we show both the vanilla version and the result after replacing the vehicle with a 3D asset reconstructed by SAM-3D. The results demonstrate that the proposed pipeline can generate realistic and semantically consistent corner-case scenarios, while model replacement further improves the geometric and visual consistency of the rendered vehicles.</figcaption>
+</figure>
+<div id="S4.SS3.p5" class="ltx_para">
+<p id="S4.SS3.p5.1" class="ltx_p"><span id="S4.SS3.p5.1.1" class="ltx_text ltx_font_bold">CARLA Simulation.</span>
+We feed the LLM-generated reference waypoints into CARLA and enforce physically plausible vehicle motion using a PID controller. Specifically, we implement a frame-by-frame tracking controller that drives the selected vehicle to follow the reference trajectory. Fig. <a href="#S4.F7" title="Figure 7 ‣ IV-C Qualitative Results ‣ IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">7</span></a> illustrates this process. The left plot shows PID tracking performance, while the right panel presents the corresponding CARLA snapshots. The results demonstrate that CARLA can reproduce the LLM-generated trajectory while providing physically realistic motion through its physics engine.</p>
+</div>
+<div id="S4.SS3.p6" class="ltx_para">
+<p id="S4.SS3.p6.1" class="ltx_p">Due to the inherent limitations of PID control, a small tracking gap exists between the executed and reference trajectories. This discrepancy does not affect the validity of the simulation, since the goal of our framework is to synthesize previously unseen corner cases from real-world data. To further reduce tracking error, PID tracking is initialized from frame 0 rather than the LLM input start frame, allowing the controller to stabilize before the corner-case generation interval.</p>
+</div>
+<div id="S4.SS3.p7" class="ltx_para">
+<p id="S4.SS3.p7.1" class="ltx_p"><span id="S4.SS3.p7.1.1" class="ltx_text ltx_font_bold">Sim-to-Real: From CARLA to Gaussian Splatting.</span>
+After obtaining the simulated trajectories and poses from CARLA, we re-project them into the Gaussian representation. Owing to the independent vehicle modeling, the simulated states can be seamlessly injected by replacing the selected vehicle’s data. Fig. <a href="#S4.F9" title="Figure 9 ‣ IV-C Qualitative Results ‣ IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">9</span></a> shows the final Gaussian renderings for all three cases, demonstrating faithful alignment with both the LLM reasoning outcomes and the CARLA-based physically consistent motions, resulting in high-fidelity and semantically consistent corner-case scenarios. The replacement of vehicles with SAM-3D reconstructed models further improves the geometric and visual consistency of the rendered vehicles.</p>
+</div>
+</section>
+</section>
+<section id="S5" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">V </span><span id="S5.1.1" class="ltx_text ltx_font_smallcaps">Computational Cost Analysis</span>
+</h2>
+
+<div id="S5.p1" class="ltx_para">
+<p id="S5.p1.1" class="ltx_p">The CARLA-GS pipeline consists of several stages. To evaluate its practical feasibility, we summarize the computational cost of each component here. Prior information, such as depth, normal, and mask maps, is prepared in advance and excluded from the online deployment time. The main bottleneck is 3DGS reconstruction, which takes about 2 hours for a 100-frame, 3-camera scene on a single RTX 4090 GPU. LLM calls require about 40–50 seconds for scene reasoning and 10 seconds for trajectory generation. CARLA simulation time depends on the synthesized trajectory length and vehicle kinematic settings, but a single PID-controlled rollout usually takes less than 60 seconds. Backprojection and SAM-3D replacement are excluded since 3DGS rendering is fast and the 3D asset library is pre-built.</p>
+</div>
+<div id="S5.p2" class="ltx_para">
+<p id="S5.p2.1" class="ltx_p">Overall, 3DGS training dominates the cost but can be accelerated by recent fast 3DGS pipelines. Other stages are lightweight, and multiple corner cases can be synthesized per scene, making CARLA-GS safer and more time-efficient than real-world data collection.</p>
+</div>
+</section>
+<section id="S6" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">VI </span><span id="S6.1.1" class="ltx_text ltx_font_smallcaps">CONCLUSIONS</span>
+</h2>
+
+<div id="S6.p1" class="ltx_para">
+<p id="S6.p1.1" class="ltx_p">This paper presented CARLA-GS, a modular framework for safety-critical corner-case synthesis that tightly integrates Gaussian-based visual reconstruction, LLM-driven semantic reasoning, and physics-consistent execution in CARLA. By explicitly decoupling representation, reasoning, and dynamics while preserving cross-module consistency, the proposed pipeline enables controllable and physically valid generation of rare but safety-critical traffic interactions from real-world data. Experiments on the Waymo Open Dataset demonstrate that CARLA-GS can reliably synthesize diverse corner cases, while maintaining photorealistic rendering quality and kinematic feasibility. The results highlight the effectiveness of leveraging complementary strengths of neural rendering, large language models, and mature vehicle simulators within a unified framework.</p>
+</div>
+<div id="S6.p2" class="ltx_para">
+<p id="S6.p2.1" class="ltx_p">Future work will explore stronger view-consistency constraints under sparse camera settings, closed-loop verification of LLM reasoning, large-scale automatic mining of high-risk scenarios from long-horizon traffic data, and evaluation on downstream tasks.</p>
+</div>
+</section>
+<section id="bib" class="ltx_bibliography">
+<h2 class="ltx_title ltx_title_bibliography">References</h2>
+
+<ul id="bib.L1" class="ltx_biblist">
+<li id="bib.bib12" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[1]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">L. Bai, C. Tian, J. Yang, S. Zhang, M. Suganuma, and T. Okatani</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">RP-slam: real-time photorealistic slam with efficient 3d gaussian splatting</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">IEEE Transactions on Visualization and Computer Graphics</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p2.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib5" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[2]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">D. Chen, H. Li, W. Ye, Y. Wang, W. Xie, S. Zhai, N. Wang, H. Liu, H. Bao, and G. Zhang</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Pgsr: planar-based gaussian splatting for efficient and high-fidelity surface reconstruction</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">IEEE Transactions on Visualization and Computer Graphics</span> <span class="ltx_text ltx_bib_volume">31</span> (<span class="ltx_text ltx_bib_number">9</span>), <span class="ltx_text ltx_bib_pages"> pp. 6100–6111</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p2.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>,
+<a href="#S3.SS1.p2.4" title="III-A Geometry-Consistent Driving Scenario Reconstruction ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">III-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib45" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[3]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">X. Chen, F. Chu, P. Gleize, K. J. Liang, A. Sax, H. Tang, W. Wang, M. Guo, T. Hardin, X. Li, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Sam 3d: 3dfy anything in images</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2511.16624</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S3.SS3.p4.1" title="III-C Real-Sim-Real: Bridging CARLA and Gaussian Splatting ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">III-C</span></span></a>,
+<a href="#S3.SS3.p5.9" title="III-C Real-Sim-Real: Bridging CARLA and Gaussian Splatting ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">III-C</span></span></a>.
+</span>
+</li>
+<li id="bib.bib15" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[4]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">A. Dosovitskiy, G. Ros, F. Codevilla, A. Lopez, and V. Koltun</span><span class="ltx_text ltx_bib_year"> (2017)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">CARLA: an open urban driving simulator</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Conference on robot learning</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1–16</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p4.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>.
+</span>
+</li>
+<li id="bib.bib10" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[5]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">G. Drayson, E. Panagiotaki, D. Omeiza, and L. Kunze</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Cc-sgg: corner case scenario generation using learned scene graphs</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2309.09844</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p3.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p3.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib16" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[6]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">C. Fruhwirth-Reisinger, D. Malić, W. Lin, D. Schinagl, S. Schulter, and H. Possegger</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Stsbench: a spatio-temporal scenario benchmark for multi-modal large language models in autonomous driving</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2506.06218</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib17" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[7]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">K. Gao, Y. Gao, H. He, D. Lu, L. Xu, and J. Li</span><span class="ltx_text ltx_bib_year"> (2022)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Nerf: neural radiance field in 3d vision, a comprehensive review</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2210.00379</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p1.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib4" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[8]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">B. Huang, Z. Yu, A. Chen, A. Geiger, and S. Gao</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">2d gaussian splatting for geometrically accurate radiance fields</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">ACM SIGGRAPH 2024 conference papers</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1–11</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p2.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>,
+<a href="#S3.SS1.p2.4" title="III-A Geometry-Consistent Driving Scenario Reconstruction ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">III-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib46" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[9]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">K. Huang, T. Azfar, W. Shi, and R. Ke</span><span class="ltx_text ltx_bib_year"> (2026)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Real2Sim: a physics-driven and editable gaussian splatting framework for autonomous driving scenes</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2605.13591</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p4.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>.
+</span>
+</li>
+<li id="bib.bib42" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[10]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">Y. Jiang, C. Yu, T. Xie, X. Li, Y. Feng, H. Wang, M. Li, H. Lau, F. Gao, Y. Yang, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Vr-gs: a physical dynamics-aware interactive gaussian splatting system in virtual reality</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">ACM SIGGRAPH 2024 conference papers</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1–1</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p4.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>.
+</span>
+</li>
+<li id="bib.bib1" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[11]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">B. Kerbl, G. Kopanas, T. Leimkühler, G. Drettakis, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">3d gaussian splatting for real-time radiance field rendering.</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">ACM Trans. Graph.</span> <span class="ltx_text ltx_bib_volume">42</span> (<span class="ltx_text ltx_bib_number">4</span>), <span class="ltx_text ltx_bib_pages"> pp. 139–1</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>.
+</span>
+</li>
+<li id="bib.bib18" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[12]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">J. Kulhanek, M. Rakotosaona, F. Manhardt, C. Tsalicoglou, M. Niemeyer, T. Sattler, S. Peng, and F. Tombari</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">LODGE: level-of-detail large-scale gaussian splatting with efficient rendering</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2505.23158</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p2.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib20" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[13]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">J. Li, Z. Feng, Q. She, H. Ding, C. Wang, and G. H. Lee</span><span class="ltx_text ltx_bib_year"> (2021)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Mine: towards continuous depth mpi with nerf for novel view synthesis</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF International Conference on Computer Vision</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 12578–12588</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib19" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[14]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">T. Li, P. Jia, B. Wang, L. Chen, K. Jiang, J. Yan, and H. Li</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Lanesegnet: map learning with lane segment perception for autonomous driving</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2312.16108</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib21" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[15]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">H. X. Liu and S. Feng</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Curse of rarity for autonomous vehicles</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">nature communications</span> <span class="ltx_text ltx_bib_volume">15</span> (<span class="ltx_text ltx_bib_number">1</span>), <span class="ltx_text ltx_bib_pages"> pp. 4808</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p1.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>.
+</span>
+</li>
+<li id="bib.bib8" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[16]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">Q. Lu, M. Ma, X. Dai, X. Wang, and S. Feng</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Realistic corner case generation for autonomous vehicles with multimodal large language model</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2412.00243</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p3.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p3.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib7" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[17]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">Y. Mei, T. Nie, J. Sun, and Y. Tian</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Seeking to collide: online safety-critical scenario generation for autonomous driving with retrieval augmented large language models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2505.00972</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p3.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p3.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib22" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[18]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">B. Mildenhall, P. P. Srinivasan, M. Tancik, J. T. Barron, R. Ramamoorthi, and R. Ng</span><span class="ltx_text ltx_bib_year"> (2021)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Nerf: representing scenes as neural radiance fields for view synthesis</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Communications of the ACM</span> <span class="ltx_text ltx_bib_volume">65</span> (<span class="ltx_text ltx_bib_number">1</span>), <span class="ltx_text ltx_bib_pages"> pp. 99–106</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib23" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[19]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">C. Peng, C. Zhang, Y. Wang, C. Xu, Y. Xie, W. Zheng, K. Keutzer, M. Tomizuka, and W. Zhan</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Desire-gs: 4d street gaussians for static-dynamic decomposition and surface reconstruction for urban driving scenes</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the Computer Vision and Pattern Recognition Conference</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 6782–6791</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p2.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib24" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[20]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">L. Russell, A. Hu, L. Bertoni, G. Fedoseev, J. Shotton, E. Arani, and G. Corrado</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Gaia-2: a controllable multi-view generative world model for autonomous driving</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2503.20523</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p1.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib3" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[21]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">P. Sun, H. Kretzschmar, X. Dotiwalla, A. Chouard, V. Patnaik, P. Tsui, J. Guo, Y. Zhou, Y. Chai, B. Caine, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2020)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Scalability in perception for autonomous driving: waymo open dataset</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF conference on computer vision and pattern recognition</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 2446–2454</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S3.SS1.p1.1" title="III-A Geometry-Consistent Driving Scenario Reconstruction ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">III-A</span></span></a>,
+<a href="#S4.SS1.p1.4" title="IV-A Experimental Setup ‣ IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">IV-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib29" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[22]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">J. Wang, H. Sun, X. Yan, S. Feng, J. Gao, and H. X. Liu</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">TeraSim-world: worldwide safety-critical data synthesis for end-to-end autonomous driving</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2509.13164</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p3.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib28" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[23]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">S. Wang, Z. Yu, X. Jiang, S. Lan, M. Shi, N. Chang, J. Kautz, Y. Li, and J. M. Alvarez</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Omnidrive: a holistic vision-language dataset for autonomous driving with counterfactual reasoning</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the computer vision and pattern recognition conference</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 22442–22452</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p1.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>.
+</span>
+</li>
+<li id="bib.bib27" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[24]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">T. Wang, S. Kim, J. Wenxuan, E. Xie, C. Ge, J. Chen, Z. Li, and P. Luo</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Deepaccident: a motion and accident prediction benchmark for v2x autonomous driving</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the AAAI Conference on Artificial Intelligence</span>,
+</span>
+<span class="ltx_bibblock">Vol. <span class="ltx_text ltx_bib_volume">38</span>, <span class="ltx_text ltx_bib_pages"> pp. 5599–5606</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p3.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib41" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[25]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">X. Wang, Z. Zhu, G. Huang, X. Chen, J. Zhu, and J. Lu</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Drivedreamer: towards real-world-drive world models for autonomous driving</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">European conference on computer vision</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 55–72</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p1.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib11" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[26]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">J. Wei, X. Wang, D. Schuurmans, M. Bosma, F. Xia, E. Chi, Q. V. Le, D. Zhou, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2022)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Chain-of-thought prompting elicits reasoning in large language models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in neural information processing systems</span> <span class="ltx_text ltx_bib_volume">35</span>, <span class="ltx_text ltx_bib_pages"> pp. 24824–24837</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S3.SS2.p1.1" title="III-B LLM-Driven Corner Case Analysis and Synthesis ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">III-B</span></span></a>.
+</span>
+</li>
+<li id="bib.bib31" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[27]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">C. Wu, J. Sun, Z. Shen, and L. Zhang</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">MapNeRF: incorporating map priors into neural radiance fields for driving view simulation</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 7082–7088</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib30" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[28]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">G. Wu, T. Yi, J. Fang, L. Xie, X. Zhang, W. Wei, W. Liu, Q. Tian, and X. Wang</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">4d gaussian splatting for real-time dynamic scene rendering</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF conference on computer vision and pattern recognition</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 20310–20320</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p2.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib32" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[29]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">T. Xie, Z. Zong, Y. Qiu, X. Li, Y. Feng, Y. Yang, and C. Jiang</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Physgaussian: physics-integrated 3d gaussians for generative dynamics</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 4389–4398</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p4.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>.
+</span>
+</li>
+<li id="bib.bib2" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[30]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">Z. Xie, Z. Liu, Z. Peng, W. Wu, and B. Zhou</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Vid2sim: realistic and interactive simulation from video for urban navigation</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the Computer Vision and Pattern Recognition Conference</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1581–1591</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p4.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S3.SS1.p1.1" title="III-A Geometry-Consistent Driving Scenario Reconstruction ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">III-A</span></span></a>,
+<a href="#S3.SS1.p4.4" title="III-A Geometry-Consistent Driving Scenario Reconstruction ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">III-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib33" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[31]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">H. Xu, S. Zhang, P. Li, B. Ye, X. Chen, H. Gao, J. Zheng, X. Song, Z. Peng, R. Miao, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Cruise: cooperative reconstruction and editing in v2x scenarios using gaussian splatting</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 12518–12525</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p2.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib34" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[32]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">Y. Yan, H. Lin, C. Zhou, W. Wang, H. Sun, K. Zhan, X. Lang, X. Zhou, and S. Peng</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Street gaussians: modeling dynamic urban scenes with gaussian splatting</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">European Conference on Computer Vision</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 156–173</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S1.p5.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S4.SS1.p1.4" title="IV-A Experimental Setup ‣ IV EXPERIMENTS ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">IV-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib9" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[33]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">S. Zhang, J. Tian, Z. Zhu, S. Huang, J. Yang, and W. Zhang</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Drivegen: towards infinite diverse traffic scenarios with large models</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 10100–10107</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p3.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p3.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib44" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[34]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">X. Zhou, Z. Lin, X. Shan, Y. Wang, D. Sun, and M. Yang</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Drivinggaussian: composite gaussian splatting for surrounding dynamic autonomous driving scenes</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF conference on computer vision and pattern recognition</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 21634–21643</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S2.SS1.p2.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib43" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[35]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">S. Zhu, L. Mou, D. Li, B. Ye, R. Huang, and H. Zhao</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Vr-robo: a real-to-sim-to-real framework for visual robot navigation and locomotion</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">IEEE Robotics and Automation Letters</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p4.1" title="I INTRODUCTION ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§I</span></a>,
+<a href="#S3.SS1.p2.4" title="III-A Geometry-Consistent Driving Scenario Reconstruction ‣ III METHODOLOGY ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">III-A</span></span></a>.
+</span>
+</li>
+<li id="bib.bib38" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[36]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">S. Zhu, G. Wang, X. Kong, D. Kong, and H. Wang</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">3d gaussian splatting in robotics: a survey</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2410.12262</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p2.1" title="II-A Autonomous Driving Scene Reconstruction and Corner-Case Generation ‣ II RELATED WORK ‣ CARLA-GS: Decoupling Representation, Reasoning, and Physics Simulation for Autonomous Driving Corner-Case Synthesis" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§<span class="ltx_text">II-A</span></span></a>.
+</span>
+</li>
+</ul>
+</section>
+</article>
+</div>
+</div>
+<footer class="arxiv-html-footer">
+  <div class="ltx_page_logo">
+    Experimental support, please
+    <a href="./2607.07601v1/__stdout.txt" class="ltx_ref"
+    target="_blank" rel="nofollow">view the build logs</a>
+    for errors. Generated by
+    <a href="https://math.nist.gov/~BMiller/LaTeXML/" target="_blank" class="ltx_ref ltx_LaTeXML_logo">
+      <span style="letter-spacing: -0.2em; margin-right: 0.1em;">
+        L
+        <span style="font-size: 70%; position: relative; bottom: 2.2pt;">A</span>
+        T
+        <span style="position: relative; bottom: -0.4ex;">E</span>
+      </span>
+      <span class="ltx_font_smallcaps">xml</span>
+      <img alt="[LOGO]"
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAOCAYAAAD5YeaVAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wKExQZLWTEaOUAAAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAdpJREFUKM9tkL+L2nAARz9fPZNCKFapUn8kyI0e4iRHSR1Kb8ng0lJw6FYHFwv2LwhOpcWxTjeUunYqOmqd6hEoRDhtDWdA8ApRYsSUCDHNt5ul13vz4w0vWCgUnnEc975arX6ORqN3VqtVZbfbTQC4uEHANM3jSqXymFI6yWazP2KxWAXAL9zCUa1Wy2tXVxheKA9YNoR8Pt+aTqe4FVVVvz05O6MBhqUIBGk8Hn8HAOVy+T+XLJfLS4ZhTiRJgqIoVBRFIoric47jPnmeB1mW/9rr9ZpSSn3Lsmir1fJZlqWlUonKsvwWwD8ymc/nXwVBeLjf7xEKhdBut9Hr9WgmkyGEkJwsy5eHG5vN5g0AKIoCAEgkEkin0wQAfN9/cXPdheu6P33fBwB4ngcAcByHJpPJl+fn54mD3Gg0NrquXxeLRQAAwzAYj8cwTZPwPH9/sVg8PXweDAauqqr2cDjEer1GJBLBZDJBs9mE4zjwfZ85lAGg2+06hmGgXq+j3+/DsixYlgVN03a9Xu8jgCNCyIegIAgx13Vfd7vdu+FweG8YRkjXdWy329+dTgeSJD3ieZ7RNO0VAXAPwDEAO5VKndi2fWrb9jWl9Esul6PZbDY9Go1OZ7PZ9z/lyuD3OozU2wAAAABJRU5ErkJggg==">
+    </a>.
+  </div>
+  <div class="keyboard-glossary">
+    <h2>Instructions for reporting errors</h2>
+    <p>We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+      support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+      methods listed below:</p>
+    <ul>
+      <li>Click the "Report Issue" <span class="mobile-only">(<svg role="presentation"
+            style="display: inline-block; vertical-align: middle; fill: var(--text-color);" aria-hidden="true"
+            height="1em" viewBox="0 0 640 640">
+            <path
+              d="M224 160C224 107 267 64 320 64C373 64 416 107 416 160L416 163.6C416 179.3 403.3 192 387.6 192L252.5 192C236.8 192 224.1 179.3 224.1 163.6L224.1 160zM569.6 172.8C580.2 186.9 577.3 207 563.2 217.6L465.4 290.9C470.7 299.8 474.7 309.6 477.2 320L576 320C593.7 320 608 334.3 608 352C608 369.7 593.7 384 576 384L480 384L480 416C480 418.6 479.9 421.3 479.8 423.9L563.2 486.4C577.3 497 580.2 517.1 569.6 531.2C559 545.3 538.9 548.2 524.8 537.6L461.7 490.3C438.5 534.5 395.2 566.5 344 574.2L344 344C344 330.7 333.3 320 320 320C306.7 320 296 330.7 296 344L296 574.2C244.8 566.5 201.5 534.5 178.3 490.3L115.2 537.6C101.1 548.2 81 545.3 70.4 531.2C59.8 517.1 62.7 497 76.8 486.4L160.2 423.9C160.1 421.3 160 418.7 160 416L160 384L64 384C46.3 384 32 369.7 32 352C32 334.3 46.3 320 64 320L162.8 320C165.3 309.6 169.3 299.8 174.6 290.9L76.8 217.6C62.7 207 59.8 186.9 70.4 172.8C81 158.7 101.1 155.8 115.2 166.4L224 248C236.3 242.9 249.8 240 264 240L376 240C390.2 240 403.7 242.8 416 248L524.8 166.4C538.9 155.8 559 158.7 569.6 172.8z" />
+          </svg>)</span> button, located in the page header.</li>
+    </ul>
+    <p><strong>Tip:</strong> You can select the relevant text first, to include it in your report.</p>
+    <p>Our team has already identified <a class="ltx_ref" href="https://github.com/arXiv/html_feedback/issues"
+        target="_blank">the following issues</a>. We appreciate your time reviewing and reporting rendering errors we
+      may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+      should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+      all.</p>
+    <p>Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a <a
+        class="ltx_ref" href="https://github.com/brucemiller/LaTeXML/wiki/Porting-LaTeX-packages-for-LaTeXML"
+        target="_blank">list of packages that need conversion</a>, and welcome <a class="ltx_ref"
+        href="https://github.com/brucemiller/LaTeXML/issues" target="_blank">developer contributions</a>.</p>
+  </div>
+</footer><footer class="ds-site-footer">
+  <div class="ds-site-footer-grid">
+    <div class="ds-site-footer-main">
+      <div class="ds-site-footer-ack">
+        We gratefully acknowledge support from
+        our <strong>major funders</strong>,
+        <a href="https://info.arxiv.org/about/ourmembers.html"><strong>member institutions</strong></a><span class="ack-member-inline" hidden>, <strong></strong></span>,
+        and all contributors.
+      </div>
+      <nav class="ds-site-footer-links" aria-label="Site navigation">
+        <a href="https://info.arxiv.org/about">About</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help">Help</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help/contact.html">Contact</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help/subscribe">Subscribe</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help/license/index.html">Copyright</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help/policies/privacy_policy.html">Privacy</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help/web_accessibility.html">Accessibility</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://status.arxiv.org" target="_blank" rel="noopener noreferrer">Operational Status<span class="is-sr-only"> (opens in new tab)</span></a>
+      </nav>
+    </div>
+
+    <div class="ds-site-footer-funders" aria-label="Major funders">
+      <div class="ds-site-footer-funders-label">Major funding support from</div>
+      <div class="ds-site-footer-funders-logos">
+        <a class="ds-funder-link" href="https://www.simonsfoundation.org/" target="_blank" rel="noopener noreferrer">
+          <img class="ds-funder-logo" src="/static/base/1.0.1/images/funders/simons-foundation.png" alt="Simons Foundation">
+        </a>
+        <a class="ds-funder-link" href="https://www.sfi.org.bm/" target="_blank" rel="noopener noreferrer">
+          <img class="ds-funder-logo" src="/static/base/1.0.1/images/funders/simons-foundation-international.png" alt="Simons Foundation International">
+        </a>
+        <a class="ds-funder-link" href="https://www.schmidtsciences.org/" target="_blank" rel="noopener noreferrer">
+          <img class="ds-funder-logo" src="/static/base/1.0.1/images/funders/schmidt-sciences.png" alt="Schmidt Sciences">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><div id="fixed-buttons-container">
+  <a id="disable-reading-mode-btn" class="header-button" href="javascript:toggleReadingMode();"
+    title="Disable reading mode, show header and footer">
+    <svg role="presentation" height="1.25rem"
+      viewBox="0 0 448 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+      <path
+        d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z" />
+    </svg>
+  </a>
+</div></body>
+</html>
