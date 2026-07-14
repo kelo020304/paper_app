@@ -22,16 +22,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.07601v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-14",
-  "valueScore": 8,
-  "valueReason": "面向安全关键 corner case 的可控合成，将高斯场景、LLM 场景推理和 CARLA 物理执行解耦并重新渲染。虽不是严格意义的 VLA 世界模型，但提供了可用于世界模型/VLA 训练与验证的物理可执行、视觉逼真的数据生成路径。",
+  "valueScore": 7,
+  "valueReason": "论文的系统整合价值明确：把高斯重建、LLM 语义决策和成熟仿真执行分别交给适合的模块，并通过状态回投形成可视化闭环；消融和轨迹指标也支持几何约束与 CARLA 执行的局部收益。不过证据仍偏初步：数据规模小、外部 SOTA 对比不足、LLM 有效输出比例较低，且“物理真实/碰撞有效”的验证主要是运动学与舒适性指标，而不是闭环驾驶安全收益或碰撞动力学验证。",
   "tags": [
     "每日精选:2026-07-14"
   ],
   "key": "2607.07601",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-14",
   "addedAt": "2026-07-14T01:12:16.369Z",
-  "modifiedAt": "2026-07-14T01:12:16.371Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-14T01:15:11.157Z",
+  "analysisStatus": "ready"
 }
