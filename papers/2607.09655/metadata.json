@@ -1,0 +1,51 @@
+{
+  "id": "2607.09655v1",
+  "baseId": "2607.09655",
+  "title": "OpenLongTail: Generative Scaling of Long-Tail Driving Data",
+  "authors": [
+    "Lulin Liu",
+    "Nuo Chen",
+    "Yan Wang",
+    "Bangya Liu",
+    "Wenyan Cong",
+    "Hezhen Hu",
+    "Boris Ivanovic",
+    "Hao Wang",
+    "Ziyao Zeng",
+    "Xinyu Gong",
+    "Yang Zhou",
+    "Zixiang Xiong",
+    "Dilin Wang",
+    "Zhangyang Wang",
+    "Weisong Shi",
+    "Ruohan Zhang",
+    "Marco Pavone",
+    "Zhiwen Fan"
+  ],
+  "abstract": "Scaling robust driving policies is fundamentally bottlenecked by the scarcity of edge cases in curated datasets. While the real world continuously captures these critical events, such long-tail events remain underutilized when collected from heterogeneous sources. Specifically, diverse but valuable in-the-wild long-tail videos lack the full view coverage required for training policy models, often missing multi-view poses or originating solely from monocular dash cameras. This modality gap prevents these ubiquitous observations from being converted into scalable training data for long-tail generalization. We introduce OpenLongTail, an open-source generative data engine for scaling autonomous driving policies under long-tail events. To transform heterogeneous data sources into view-aligned and temporally coherent multi-view assets that are useful for policy learning, we develop a pose-informed extrapolative view synthesis pipeline that generates the missing views. We further enhance cross-view consistency and the temporal alignment for the newly generated views by injecting Plücker ray geometry into the scalable generation engine. By synthesizing heterogeneous long-tail data, we observe a significant improvement in closed-loop driving robustness in handling long-tail events. By measuring the extrapolative view synthesis and pose metrics, we validate the effectiveness of OpenLongTail in visual fidelity, cross-view consistency, and ego-trajectory recovery.",
+  "published": "2026-07-10T17:54:14Z",
+  "updated": "2026-07-10T17:54:14Z",
+  "categories": [
+    "cs.CV"
+  ],
+  "primaryCategory": "cs.CV",
+  "comment": "Project page: https://openlongtail.github.io/",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.09655v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.09655v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-14",
+  "valueScore": 9,
+  "valueReason": "直击自动驾驶策略的长尾数据瓶颈。以位姿约束的外推视角生成把异构单目/缺视角视频转成时空一致多视角训练资产，并报告闭环鲁棒性改善；对 VLA/驾驶策略的可扩展训练数据很有价值。",
+  "tags": [
+    "每日精选:2026-07-14"
+  ],
+  "key": "2607.09655",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "",
+  "addedAt": "2026-07-14T01:07:10.662Z",
+  "modifiedAt": "2026-07-14T01:07:10.664Z",
+  "analysisStatus": "analyzing"
+}
