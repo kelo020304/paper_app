@@ -28,16 +28,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.09661v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-14",
-  "valueScore": 7,
-  "valueReason": "在真实全景视频世界模型中处理长程记忆与几何一致性，并新建含真实与仿真片段的 World360。驾驶相关性较间接（以全景 UAV 为主），但对自车多相机/360°世界建模的表征和记忆设计具有较强迁移参考价值。",
+  "valueScore": 8,
+  "valueReason": "论文把全景 ERP 的旋转等变性落实为“旋转显式处理、平移逐射线学习”的具体设计，并将运动条件与记忆检索置于同一几何编码空间；同时提供规模较大的真实+仿真航拍基准和较完整的消融/速度结果。局限在于结果集中于自建基准、部分评测与数据描述存在不一致，且论文为 2026 年 7 月 arXiv v1，代码与数据在文中仅承诺将公开，尚不能据此判断可复现性与广泛泛化。",
   "tags": [
     "每日精选:2026-07-14"
   ],
   "key": "2607.09661",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-14",
   "addedAt": "2026-07-14T01:17:42.647Z",
-  "modifiedAt": "2026-07-14T01:17:42.648Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-14T01:20:46.706Z",
+  "analysisStatus": "ready"
 }
