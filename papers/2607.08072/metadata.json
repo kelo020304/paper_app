@@ -30,16 +30,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.08072v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-14",
-  "valueScore": 6,
-  "valueReason": "不是新方法论文，但对“自动驾驶 VLA 如何超越模仿学习并做后训练”提供系统框架，覆盖安全、舒适和闭环误差累积等核心问题。适合在精读前四篇前后用作路线图和文献索引。",
+  "valueScore": 8,
+  "valueReason": "对“后训练”这一快速增长但术语和方法分散的方向给出清晰、可操作的分类，并把算法讨论延伸到奖励、采样、闭环评测与车载效率，适合作为研究选题和综述组织框架。其价值主要是综合与框架化，而非提出经独立实验验证的新方法。",
   "tags": [
     "每日精选:2026-07-14"
   ],
   "key": "2607.08072",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-14",
   "addedAt": "2026-07-14T01:21:53.895Z",
-  "modifiedAt": "2026-07-14T01:21:53.896Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-14T01:24:37.658Z",
+  "analysisStatus": "ready"
 }
