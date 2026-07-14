@@ -36,16 +36,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.09655v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-14",
-  "valueScore": 9,
-  "valueReason": "直击自动驾驶策略的长尾数据瓶颈。以位姿约束的外推视角生成把异构单目/缺视角视频转成时空一致多视角训练资产，并报告闭环鲁棒性改善；对 VLA/驾驶策略的可扩展训练数据很有价值。",
+  "valueScore": 8,
+  "valueReason": "论文把长尾自动驾驶的关键瓶颈具体化为“异构单目事件无法进入多视角策略训练管线”，并给出从位姿恢复、几何受控外推生成到闭环 VLA 验证的完整链路。相对只报生成质量的工作，其闭环数据价值验证尤其重要；但结果目前基于预印本、特定 AlpaSim/Alpamayo-R1 配置与有限 53 个事件，且真实道路安全性、不同 rig 泛化及推理成本仍待独立复现验证。",
   "tags": [
     "每日精选:2026-07-14"
   ],
   "key": "2607.09655",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-14",
   "addedAt": "2026-07-14T01:07:10.662Z",
-  "modifiedAt": "2026-07-14T01:07:10.664Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-14T01:09:53.635Z",
+  "analysisStatus": "ready"
 }
