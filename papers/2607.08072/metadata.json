@@ -1,0 +1,45 @@
+{
+  "id": "2607.08072v1",
+  "baseId": "2607.08072",
+  "title": "Post-Training in End-to-End Autonomous Driving",
+  "authors": [
+    "Ruining Yang",
+    "Muxing Wang",
+    "Yixiao Chen",
+    "Tongfei Guo",
+    "Yi Xu",
+    "Can Cui",
+    "Zichong Yang",
+    "Yitian Zhang",
+    "Ziran Wang",
+    "Yun Fu",
+    "Lili Su"
+  ],
+  "abstract": "End-to-end models that map multimodal inputs directly to future trajectories/maneuvers have emerged as an increasingly prominent research paradigm in autonomous driving. This class of models includes both Vision-Language-Action models and trajectory-generative planners. Unlike classic machine learning applications, autonomous vehicles operate in safety-critical and interaction-intensive environments where traditional open-loop imitation of expert demonstrations is not sufficient to ensure reliability. In particular, small execution errors can accumulate over time, while recovery behaviors are scarce in training data. In addition, long-horizon objectives such as safety and driving comfort are not captured by pointwise labels either. These limitations have motivated a shift toward post-training techniques, which further refine driving policies beyond pure imitation. This survey presents a unified view of post-training for autonomous driving by defining its scope and organizing the existing literature into four major families based on the form of supervision they use. For each family, we discuss its capabilities, limitations, and open challenges. We aim to facilitate a systematic understanding of this emerging area and stimulate future research on reliable and efficient post-training for autonomous driving.",
+  "published": "2026-07-09T03:00:47Z",
+  "updated": "2026-07-09T03:00:47Z",
+  "categories": [
+    "cs.CV",
+    "cs.RO"
+  ],
+  "primaryCategory": "cs.CV",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.08072v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.08072v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-14",
+  "valueScore": 6,
+  "valueReason": "不是新方法论文，但对“自动驾驶 VLA 如何超越模仿学习并做后训练”提供系统框架，覆盖安全、舒适和闭环误差累积等核心问题。适合在精读前四篇前后用作路线图和文献索引。",
+  "tags": [
+    "每日精选:2026-07-14"
+  ],
+  "key": "2607.08072",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "",
+  "addedAt": "2026-07-14T01:21:53.895Z",
+  "modifiedAt": "2026-07-14T01:21:53.896Z",
+  "analysisStatus": "analyzing"
+}
