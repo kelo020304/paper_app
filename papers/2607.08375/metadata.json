@@ -27,16 +27,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.08375v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-14",
-  "valueScore": 10,
-  "valueReason": "三关键词唯一高度交集：把端到端自动驾驶 VLA 与语义世界预测、生成式多智能体轨迹世界模型结合，并在 NAVSIM 给出闭环规划指标。方法链条完整、潜在影响最大；精读时重点核查 PDMS=92.9 的比较设置、消融和推理延迟。",
+  "valueScore": 8,
+  "valueReason": "该工作在问题设定上将VLA推理、3D对象级表示和多智能体生成式预测整合得较完整，并提供了针对训练阶段、双层认知、ADDT、数据与3D感知的消融，且NAVSIM成绩有明确增益。分数未更高的原因是证据仍局限于单一基准体系及作者报告，Game-CoT自动标注和GT动作提示可能影响推理评估解释，且缺少所给内容之外的复现与真实世界验证。",
   "tags": [
     "每日精选:2026-07-14"
   ],
   "key": "2607.08375",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-14",
   "addedAt": "2026-07-14T01:02:17.841Z",
-  "modifiedAt": "2026-07-14T01:02:17.843Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-14T01:04:58.134Z",
+  "analysisStatus": "ready"
 }
