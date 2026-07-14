@@ -13,7 +13,7 @@
   "daily": {
     "enabled": true,
     "time": "09:00",
-    "keywords": "vision language action, autonomous driving, world model",
+    "keywords": "vision language action model , robot manipulation， robot VLA， autonomous driving, world model",
     "limit": 5,
     "lastRunDate": "2026-07-14"
   },
