@@ -34,16 +34,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.11397v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-15",
-  "valueScore": 10,
-  "valueReason": "最均衡的精读首选：把无动作视频的动力学监督与可执行机器人动作统一到 latent action / latent world model 中，直接击中 VLA 数据规模瓶颈；同时有 RoboTwin、RoboCasa SOTA（75.2%）和真实机器人泛化，证据链最完整。",
+  "valueScore": 8,
+  "valueReason": "论文针对机器人数据标注瓶颈提出了清晰、可部署的训练接口，并给出模拟数据缩放、组件消融和真实机器人低标签实验。RoboCasa的75.2%及真实人类视频增益具有较强实证价值；但预训练数据规模、统一对比条件和分布外真实迁移仍缺少更全面验证，且论文为2026年7月arXiv v1，结论应视为待复现结果。",
   "tags": [
     "每日精选:2026-07-15"
   ],
   "key": "2607.11397",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-15",
   "addedAt": "2026-07-15T01:02:08.688Z",
-  "modifiedAt": "2026-07-15T01:02:08.689Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-15T01:04:55.148Z",
+  "analysisStatus": "ready"
 }
