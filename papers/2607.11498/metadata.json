@@ -26,15 +26,15 @@
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-15",
   "valueScore": 8,
-  "valueReason": "方法简洁但针对 VLA 的关键痛点：以机器人坐标系 pointmap 消除视觉观测与动作定义的坐标失配，且可低成本接入现有2D VLA。RoboCasa 双模型和真实相机位移实验使其结论相对可信，工程可迁移性很强。",
+  "valueReason": "问题定义清晰，方法实现直接且与现有二维VLA兼容；受控实验、两种预训练VLA、随机视角评测和实机未见相机位置共同支持其核心主张。价值主要在于将“先把几何变换到动作坐标系”落实为可复用的输入设计；但当前证据受限于校准RGB-D设置、有限实机任务和未报告多种子统计。",
   "tags": [
     "每日精选:2026-07-15"
   ],
   "key": "2607.11498",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-15",
   "addedAt": "2026-07-15T01:14:20.313Z",
-  "modifiedAt": "2026-07-15T01:14:20.315Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-15T01:17:04.229Z",
+  "analysisStatus": "ready"
 }
