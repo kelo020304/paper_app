@@ -25,16 +25,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.10630v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-15",
-  "valueScore": 7,
-  "valueReason": "自动驾驶 world model 中较有实质内容的一篇：将世界模型转成角色条件对手，结合约束 min-max、自博弈和反事实归因来增强长尾交互鲁棒性；nuPlan 与 InterPlan 闭环评测加理论分析，优先级高于仅开环或纯生成类工作。",
+  "valueScore": 8,
+  "valueReason": "该工作针对自回归规划器的长尾交互鲁棒性提出了较完整的端到端机制：对手建模、联盟信用分配、风险度量、名义性能保持和安全约束彼此衔接，且给出了多基准、跨规划器压力测试和训练范式消融。价值扣分在于论文为 2026 年 arXiv v1，实验与理论尚缺独立验证；对手只覆盖至多两车联盟，真实性与真实安全性仍不能由现有结果完全确证。",
   "tags": [
     "每日精选:2026-07-15"
   ],
   "key": "2607.10630",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-15",
   "addedAt": "2026-07-15T01:19:59.918Z",
-  "modifiedAt": "2026-07-15T01:19:59.920Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-15T01:22:43.627Z",
+  "analysisStatus": "ready"
 }
