@@ -1,0 +1,40 @@
+{
+  "id": "2607.11498v1",
+  "baseId": "2607.11498",
+  "title": "See like a Robot: Robot-Centric Pointmaps for Vision-Language-Action Models",
+  "authors": [
+    "Byungkun Lee",
+    "Dongyoon Hwang",
+    "Dongjin Kim",
+    "Hojoon Lee",
+    "Minho Park",
+    "Jaegul Choo"
+  ],
+  "abstract": "Vision-language-action (VLA) models predict robot actions from visual observations and language instructions. These actions are defined in the robot's own 3D coordinate frame, yet most VLAs observe the scene in the camera frame, creating a frame mismatch between where the scene is observed and where actions are defined. The mismatch is benign under a fixed viewpoint, where the policy can memorize a single observation-to-action mapping, but grows harder as large-scale datasets aggregate demonstrations across diverse camera setups and the policy must generalize this mapping across viewpoints. We address this mismatch with robot-centric pointmaps, images whose pixels store the 3D coordinates of scene points in the robot frame. Pointmaps provide robot-frame 3D geometry while preserving the dense H x W grid expected by pretrained 2D VLAs, so they integrate into existing VLAs with minimal architectural change. On RoboCasa, pointmaps improve both pi0.5 and SmolVLA and outperform representative camera-viewpoint and 3D-aware baselines. In real-robot experiments, their advantage over an RGB-only policy widens when the camera is moved to a placement unseen during training.",
+  "published": "2026-07-13T12:50:32Z",
+  "updated": "2026-07-13T12:50:32Z",
+  "categories": [
+    "cs.RO",
+    "cs.AI"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "Project page: https://davian-robotics.github.io/pointmap/",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.11498v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.11498v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-15",
+  "valueScore": 8,
+  "valueReason": "方法简洁但针对 VLA 的关键痛点：以机器人坐标系 pointmap 消除视觉观测与动作定义的坐标失配，且可低成本接入现有2D VLA。RoboCasa 双模型和真实相机位移实验使其结论相对可信，工程可迁移性很强。",
+  "tags": [
+    "每日精选:2026-07-15"
+  ],
+  "key": "2607.11498",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "",
+  "addedAt": "2026-07-15T01:14:20.313Z",
+  "modifiedAt": "2026-07-15T01:14:20.315Z",
+  "analysisStatus": "analyzing"
+}
