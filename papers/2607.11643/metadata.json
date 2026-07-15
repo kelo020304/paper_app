@@ -43,16 +43,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.11643v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-15",
-  "valueScore": 8,
-  "valueReason": "高潜在影响的“世界模型兼数据引擎”路线：38B 统一多视角、具身生成与迁移，并报告 pi_0.5 真实操作 OOD 成功率从36.9%升至63.2%。值得精读其数据构造、因果闭环及大模型增益是否可复现。",
+  "valueScore": 9,
+  "valueReason": "这是具身生成中较有代表性的“大基础生成模型 + 多视角机器人约束 + 合成数据用于真实策略”的统一尝试：任务覆盖广、模型与数据流程描述充分，并同时给出迁移自动指标、WorldArena 排名和真实机器人增强实验。其价值仍应结合后续独立复现判断：核心场景生成评估依赖自建提示/人工比较，真实机器人样本规模与成功率明细有限，且含专有数据。",
   "tags": [
     "每日精选:2026-07-15"
   ],
   "key": "2607.11643",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-15",
   "addedAt": "2026-07-15T01:12:01.393Z",
-  "modifiedAt": "2026-07-15T01:12:01.394Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-15T01:13:17.773Z",
+  "analysisStatus": "ready"
 }
