@@ -1,0 +1,43 @@
+{
+  "id": "2607.11270v1",
+  "baseId": "2607.11270",
+  "title": "Towards Predictive, Aligned, and Scalable Robot Learning",
+  "authors": [
+    "Peijun Tang",
+    "Shangjin Xie",
+    "Baifu Huang",
+    "Binyan Sun",
+    "Haotian Yang",
+    "Kuncheng Luo",
+    "Weiqi Jin",
+    "Shilin Fang",
+    "Jianan Wang"
+  ],
+  "abstract": "Learning, at its core, extends beyond memorization to the ability to reason and solve novel problems by navigating a space of possibilities. We introduce Lumo-2, a latent world-action model that generates actions by reasoning over world dynamics in latent space. The learned latent world dynamics capture physically grounded visual transitions, naturally encoding future possibilities and providing a unified substrate for cross-modal alignment. This formulation enables predictive reasoning akin to world modelling while remaining lightweight and focused on physical dynamics relevant to control. Central to our approach is the hypothesis that action generation quality is governed by the geometry of the latent space. We observe that standard reconstruction-based action tokenization objectives induce representations biased toward low-level signal fidelity, leading to misalignment between reconstruction quality and downstream control performance. To address this limitation, we propose a multi-stage modality pre-alignment strategy in which action representations are progressively aligned with latent world dynamics, vision, and language. This process enforces cross-modal consistency, promotes abstraction, and induces a structured latent space for predictive reasoning. We provide a systematic empirical study of latent world modelling and modality alignment, analyzing their roles in scaling laws and out-of-distribution generalization. Results show that Lumo-2 consistently outperforms strong vision-language-action (VLA) and world-action model (WAM) baselines, with gains on challenging real-world tasks requiring temporal reasoning, physical understanding, or high control complexity, including long-horizon and dexterous manipulation. These findings suggest that structured multimodal alignment and predictive reasoning are fundamental principles for advancing embodied intelligence.",
+  "published": "2026-07-13T08:53:34Z",
+  "updated": "2026-07-13T08:53:34Z",
+  "categories": [
+    "cs.RO",
+    "cs.AI"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.11270v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.11270v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-15",
+  "valueScore": 9,
+  "valueReason": "与“world model + VLA”核心问题高度契合：用预测性 latent world-action space 重构动作生成，并系统讨论模态对齐、扩展规律和 OOD 泛化。若论文实验细节经得起审查，可能是比单点技巧更具范式价值的工作。",
+  "tags": [
+    "每日精选:2026-07-15"
+  ],
+  "key": "2607.11270",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "",
+  "addedAt": "2026-07-15T01:07:22.502Z",
+  "modifiedAt": "2026-07-15T01:07:22.504Z",
+  "analysisStatus": "analyzing"
+}
