@@ -28,16 +28,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.11270v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-15",
-  "valueScore": 9,
-  "valueReason": "与“world model + VLA”核心问题高度契合：用预测性 latent world-action space 重构动作生成，并系统讨论模态对齐、扩展规律和 OOD 泛化。若论文实验细节经得起审查，可能是比单点技巧更具范式价值的工作。",
+  "valueScore": 8,
+  "valueReason": "论文将动作表征的跨模态对齐、预测性潜变量、时序上下文和实时解码合到一个可评估的机器人学习框架中，且给出了较多消融与真实任务证据；其价值较高。分数未更高的原因是评估主要为自有平台、若干关键图表数值缺失，且核心“潜在动力学”的因果与泛化主张仍需要独立复现验证。",
   "tags": [
     "每日精选:2026-07-15"
   ],
   "key": "2607.11270",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-15",
   "addedAt": "2026-07-15T01:07:22.502Z",
-  "modifiedAt": "2026-07-15T01:07:22.504Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-15T01:10:10.494Z",
+  "analysisStatus": "ready"
 }
