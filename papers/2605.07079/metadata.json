@@ -1,0 +1,46 @@
+{
+  "id": "2605.07079v1",
+  "baseId": "2605.07079",
+  "title": "Learning Visual Feature-Based World Models via Residual Latent Action",
+  "authors": [
+    "Xinyu Zhang",
+    "Zhengtong Xu",
+    "Yutian Tao",
+    "Yeping Wang",
+    "Yu She",
+    "Abdeslam Boularias"
+  ],
+  "abstract": "World models predict future transitions from observations and actions. Existing works predominantly focus on image generation only. Visual feature-based world models, on the other hand, predict future visual features instead of raw video pixels, offering a promising alternative that is more efficient and less prone to hallucination. However, current feature-based approaches rely on direct regression, which leads to blurry or collapsed predictions in complex interactions, while generative modeling in high-dimensional feature spaces still remains challenging. In this work, we discover that a new type of latent action representation, which we refer to as *Residual Latent Action* (RLA), can be easily learned from DINO residuals. We also show that RLA is predictive, generalizable, and encodes temporal progression. Building on RLA, we propose *RLA World Model* (RLA-WM), which predicts RLA values via flow matching. RLA-WM outperforms both state-of-the-art feature-based and video-diffusion world models on simulation and real-world datasets, while being orders of magnitude faster than video diffusion. Furthermore, we develop two robot learning techniques that use RLA-WM to improve policy learning. The first one is a minimalist world action model with RLA that learns from actionless demonstration videos. The second one is the first visual RL framework trained entirely inside a world model learned from offline videos only, using a video-aligned reward and no online interactions or handcrafted rewards. Project page: https://mlzxy.github.io/rla-wm",
+  "published": "2026-05-08T00:00:00Z",
+  "updated": "2026-05-08T00:00:00Z",
+  "categories": [
+    "cs.CV",
+    "cs.AI",
+    "cs.LG",
+    "cs.RO"
+  ],
+  "primaryCategory": "cs.CV",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2605.07079v1",
+  "pdfUrl": "https://arxiv.org/pdf/2605.07079",
+  "tags": [
+    "Latent-WM",
+    "DINO特征",
+    "Latent-Action",
+    "核心必读",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2605.07079",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:35:26.318Z",
+  "modifiedAt": "2026-07-16T02:36:14.226Z",
+  "valueScore": 8,
+  "valueReason": "方法抓住了高维视觉特征生成与直接回归之间的关键矛盾，并用紧凑残差潜空间把生成建模下沉到较低维；预测、无动作模仿和模型内 RL 三组实验形成完整应用链条。主要扣分在于数据与任务规模有限、关键 RL 收益不覆盖 Panda、若干比较基线为作者适配/重实现，以及尚无独立复现。"
+}

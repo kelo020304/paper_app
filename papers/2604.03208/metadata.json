@@ -1,0 +1,48 @@
+{
+  "id": "2604.03208v2",
+  "baseId": "2604.03208",
+  "title": "Hierarchical Planning with Latent World Models",
+  "authors": [
+    "Wancong Zhang",
+    "Basile Terver",
+    "Artem Zholus",
+    "Soham Chitnis",
+    "Harsh Sutaria",
+    "Mido Assran",
+    "Randall Balestriero",
+    "Amir Bar",
+    "Adrien Bardes",
+    "Yann LeCun",
+    "Nicolas Ballas"
+  ],
+  "abstract": "World models are a promising path to zero-shot embodied control through planning. However, existing world model planners struggle on long-horizon, multi-stage tasks: prediction errors compound and naive search is exponential in the planning horizon. Hierarchy mitigates both by decomposing tasks into shorter, tractable subproblems; yet prior hierarchical approaches either amortize control into task-specific policies (hierarchical RL) or assume low-dimensional states and known dynamics (classical hierarchical MPC). We present Hierarchical Planning with Latent World Models (HWM), an architecture and planning paradigm for hierarchical model predictive control (MPC) directly on visual world models trained solely via next-latent prediction. HWM learns world models at multiple temporal scales within a shared latent space, so predictions from the long-horizon model serve as subgoals for the short-horizon model via latent matching, without task-specific rewards, skill learning, or hierarchical policies. To keep long-horizon search tractable, HWM learns an action encoder that compresses primitive action chunks into latent macro-actions. On real-world Franka manipulation, HWM solves pick-and-place from a single goal image at 70% success vs. 0% for single-level planning. Across simulated push manipulation and maze navigation, HWM consistently improves performance on long-horizon tasks while requiring up to 3x less planning compute.",
+  "published": "2026-04-03T00:00:00Z",
+  "updated": "2026-04-03T00:00:00Z",
+  "categories": [
+    "cs.LG"
+  ],
+  "primaryCategory": "cs.LG",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2604.03208v2",
+  "pdfUrl": "https://arxiv.org/pdf/2604.03208",
+  "tags": [
+    "Latent-WM",
+    "JEPA",
+    "规划",
+    "核心必读",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2604.03208",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:36:13.699Z",
+  "modifiedAt": "2026-07-16T02:36:58.579Z",
+  "valueScore": 8,
+  "valueReason": "论文把“仅用视觉离线轨迹预训练世界模型、测试时零样本MPC”与显式时间层级结合，并在三个不同骨干上做了任务与容量消融；真实机器人非贪婪取放以及人工子目标对照尤其有说服力。分数未更高的原因是，真实机器人样本规模较小（每个取放对象50次），高低层的模型容量/规划预算并非天然完全等价，且与VLA的目标接口和传感器输入不同，不能据此作严格横向优劣结论。"
+}

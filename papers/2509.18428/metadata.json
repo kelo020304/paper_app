@@ -1,0 +1,42 @@
+{
+  "id": "2509.18428v2",
+  "baseId": "2509.18428",
+  "title": "Latent Action Pretraining Through World Modeling",
+  "authors": [
+    "Bahey Tharwat",
+    "Yara Nasser",
+    "Ali Abouzeid",
+    "Ian Reid"
+  ],
+  "abstract": "Vision-Language-Action (VLA) models have gained popularity for learning robotic manipulation tasks that follow language instructions. State-of-the-art VLAs, such as OpenVLA and $\\pi_{0}$, were trained on large-scale, manually labeled action datasets collected through teleoperation. More recent approaches, including LAPA and villa-X, introduce latent action representations that enable unsupervised pretraining on unlabeled datasets by modeling abstract visual changes between frames. Although these methods have shown strong results, their large model sizes make deployment in real-world settings challenging. In this work, we propose LAWM, a model-agnostic framework to pretrain imitation learning models in a self-supervised way, by learning latent action representations from unlabeled video data through world modeling. These videos can be sourced from robot recordings or videos of humans performing actions with everyday objects. Our framework is able to transfer learned knowledge across tasks, environments, and embodiments. It outperforms models pretrained with ground-truth robot actions and other similar pretraining methods on the LIBERO benchmark and real-world setup, while being efficient and practical for real-world settings.",
+  "published": "2025-09-22T00:00:00Z",
+  "updated": "2025-09-22T00:00:00Z",
+  "categories": [
+    "cs.RO",
+    "cs.CV"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2509.18428v2",
+  "pdfUrl": "https://arxiv.org/pdf/2509.18428",
+  "tags": [
+    "Latent-WM",
+    "Latent-Action",
+    "WAM",
+    "机器人",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2509.18428",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:36:28.525Z",
+  "modifiedAt": "2026-07-16T02:37:14.972Z",
+  "valueScore": 7,
+  "valueReason": "论文抓住了“未标注视频预训练轻量机器人策略”的实际问题，方法清晰、可插拔，且给出了人类视频到真实机器人、LIBERO和真实环境的证据。价值主要在于把潜在动作预训练与RSSM世界模型联合化，并展示小策略上的收益；但当前为arXiv预印本，结果增幅普遍不大且缺少方差、算力/时延、消融与统一复现的横向对比，结论应保持审慎。"
+}

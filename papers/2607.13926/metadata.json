@@ -1,0 +1,39 @@
+{
+  "id": "2607.13926v1",
+  "baseId": "2607.13926",
+  "title": "S-squared-VLA: Decoupling Semantic and Spatial Streams in Vision-Language-Action Models for Autonomous Driving",
+  "authors": [
+    "Jianguo Yu",
+    "Rukang Wang",
+    "Duanfeng Chu",
+    "Chen Wang",
+    "Renju Feng",
+    "Liping Lu"
+  ],
+  "abstract": "Vision-Language Models (VLMs) have demonstrated remarkable potential for high-level reasoning in autonomous driving, yet they fundamentally struggle to generate precise, low-level control actions. This limitation is rooted in a semantic-physical gap caused by the inherent mismatch between discrete language tokens and continuous trajectory planning. While Vision-Language-Action (VLA) architectures attempt to bridge this gap by unifying perception and control into a single policy, this entanglement creates a new bottleneck. Standard VLAs experience a severe spatial representation collapse, which irreversibly degrades the fine-grained spatial and geometric priors essential for safe, boundary-aware navigation. To address this limitation, we propose the S-squared-VLA, which explicitly decouples the semantic and spatial streams in Vision-Language-Action models. The semantic stream leverages hierarchical bridging to extract multi-scale VLM features for robust intent reasoning. In parallel, an independent spatial stream bypasses the autoregressive language bottleneck, directly preserving uncompressed spatial features from the visual encoder. By integrating auxiliary perception supervision, this stream explicitly equips the model with rich spatial and geometric priors. Finally, a dual-stream planning adapter fuses high-level semantic intent with precise spatial constraints via cascaded attention mechanisms. Evaluations on the NAVSIM closed-loop benchmark show that S-squared-VLA achieves a Predictive Driver Model Score (PDMS) of 87.1, establishing a new state-of-the-art for VLA models under a purely supervised fine-tuning (SFT) setting. By mitigating the spatial representation collapse of traditional VLMs, our framework significantly outperforms baselines, achieving the highest No Collision (NC) rate of 98.4 among all evaluated methods.",
+  "published": "2026-07-15T15:07:02Z",
+  "updated": "2026-07-15T15:07:02Z",
+  "categories": [
+    "cs.RO"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.13926v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.13926v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-17",
+  "valueScore": 7,
+  "valueReason": "问题定位清晰，双流解耦、空间辅助监督与级联融合形成完整且可消融验证的设计；在表内纯 SFT VLA 中结果强，且单目方案接近部分 LiDAR 方法。不过论文为 2026-07 的 arXiv v1，实验集中于单一 NAVSIM 基准，缺少计算成本、跨域和真实道路验证；“空间表示坍塌”的机制解释目前主要由性能与定性案例间接支持。",
+  "tags": [
+    "每日精选:2026-07-17"
+  ],
+  "key": "2607.13926",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "addedAt": "2026-07-17T01:04:35.299Z",
+  "modifiedAt": "2026-07-17T01:05:17.579Z",
+  "analysisStatus": "ready"
+}

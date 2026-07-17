@@ -1,0 +1,1377 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Latent Action Pretraining Through World Modeling</title>
+<!--Generated on Sat Jun 13 22:49:25 2026 by LaTeXML (version 0.8.8) http://dlmf.nist.gov/LaTeXML/.-->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="/static/browse/0.3.4/css/arxiv-html-papers-20260131.css" type="text/css">
+<script src="/static/browse/0.3.4/js/arxiv-html-papers-20260131.js"></script>
+<script>
+  // Restore the saved color scheme preference, or
+  // enact the browser preference if "automatic", 
+  // without expecting DOM load to have completed.
+  //
+  // Also restore any saved readingmode and ToC display preferences.
+  function initializeReadingPreferences() {
+    let saved_theme = localStorage.getItem("ar5iv_theme") || "automatic";
+    if (saved_theme === "automatic") {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        saved_theme = "dark";
+      }
+    }
+    if (saved_theme == "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+
+    const tocDisplay = localStorage.getItem('arxiv_html_paper_toc_display');
+    if (tocDisplay) {
+      document.documentElement.setAttribute("data-toc-display", tocDisplay);
+    }
+    const readingMode = localStorage.getItem('arxiv_html_paper_reading_mode');
+    if (readingMode) {
+      document.documentElement.setAttribute("data-reading-mode", readingMode);
+    }
+    // Pre-apply spinout-banner dismissal here, before the banner paints, so it
+    // never flashes in only to be hidden later by the deferred arxiv-header.js.
+    // Key matches arxiv-header.js: "arxiv-banner-dismissed:" + data-banner-name.
+    if (localStorage.getItem('arxiv-banner-dismissed:spinout-nonprofit')) {
+      document.documentElement.setAttribute("data-banner-dismissed", "");
+    }
+  }
+  // Run as soon as JS starts, to minimize repainting
+  initializeReadingPreferences();
+</script>
+<link rel="apple-touch-icon" sizes="180x180"
+  href="/static/browse/0.3.4/images/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32"
+  href="/static/browse/0.3.4/images/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16"
+  href="/static/browse/0.3.4/images/icons/favicon-16x16.png">
+<link rel="manifest" href="/static/browse/0.3.4/images/icons/site.webmanifest">
+<link rel="mask-icon" href="/static/browse/0.3.4/images/icons/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="stylesheet" type="text/css" media="screen" href="https://use.typekit.net/utz6mli.css"><link rel="stylesheet" type="text/css" media="screen"
+  href="/static/base/1.0.1/css/arxiv-header-footer.css?v=20260626"><style>
+  /* Banner pre-dismissal (set above before paint -> no flash-then-hide) and
+     reading-mode chrome hiding. */
+  html[data-banner-dismissed] .ds-announcement { display: none; }
+  html[data-reading-mode="enabled"] .ds-announcement,
+  html[data-reading-mode="enabled"] .ds-site-footer { display: none; }
+  /* Keep the announcement text dark on the Open-Blue band in both colour themes
+     (otherwise it inherits the paper's warm-wash text in dark mode and washes out). */
+  .ds-announcement-text { color: var(--arxiv-ink, #1c1a17); }
+</style>
+<script defer src="/static/base/1.0.1/js/arxiv-header.js?v=20260626"></script>
+</head>
+<body>
+<dialog id="modal-form" aria-labelledby="modal-title" closedby="any">
+  <form id="modal-form-content" method="dialog" enctype="multipart/form-data">
+    <header class="modal-header">
+      <h5 id="modal-title" class="modal-title">Report GitHub Issue</h5>
+      <button type="submit" formnovalidate class="modal-close" aria-label="Close">×</button>
+    </header>
+
+    <div class="modal-body">
+      <label for="form_title">Title:</label>
+      <input class="form-control" id="form_title" name="form_title" required placeholder="Enter title">
+
+      <p id="selectedTextModalDescription" hidden>Content selection saved. Describe the issue below:</p>
+
+      <label for="description">Description:</label>
+      <textarea class="form-control" id="description" name="description" required maxlength="500"
+        placeholder="500 characters maximum"></textarea>
+    </div>
+
+    <footer class="modal-footer">
+      <button type="submit" value="internal-report" class="sr-only modal-submit">Submit without GitHub</button>
+      <button type="submit" value="github-report" class="modal-submit">Submit in GitHub</button>
+    </footer>
+  </form>
+</dialog><div class="ds-announcement" id="announcement-banner" role="region" aria-label="Announcement"
+    data-banner-name="spinout-nonprofit">
+    <img class="ds-announcement-glyph" src="/static/base/1.0.1/images/icons/smileybones-small.svg" alt="" aria-hidden="true">
+    <span class="ds-announcement-text">arXiv is now an independent nonprofit!</span>
+    <a class="ds-announcement-link" href="https://info.arxiv.org/about">Learn more</a>
+    <button type="button" class="ds-announcement-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+
+<header class="arxiv-html-header">
+  <div class="html-header-logo">
+    <a href="/"><img alt="arXiv logo" class="logo desktop-only" width="100"
+        src="/static/base/1.0.1/images/arxiv-logo-primary-light.svg">
+      <span class="sr-only">Back to arXiv</span>
+    </a>
+  </div>
+  <!--TOC, dark mode, links-->
+  <nav class="html-header-nav">
+    <a class="header-button hover-effect desktop-only" href="https://info.arxiv.org/about/accessible_HTML.html"
+      target="_blank">Why HTML?</a>
+    <a class="header-button" title="Report an Issue" href="#" title="Report an issue"
+      onclick="event.preventDefault(); showModalForm();">
+      <svg role="presentation" class="mobile-only toggle-icon" aria-hidden="true" height="1.25rem"
+        viewBox="0 0 640 640">
+        <path
+          d="M224 160C224 107 267 64 320 64C373 64 416 107 416 160L416 163.6C416 179.3 403.3 192 387.6 192L252.5 192C236.8 192 224.1 179.3 224.1 163.6L224.1 160zM569.6 172.8C580.2 186.9 577.3 207 563.2 217.6L465.4 290.9C470.7 299.8 474.7 309.6 477.2 320L576 320C593.7 320 608 334.3 608 352C608 369.7 593.7 384 576 384L480 384L480 416C480 418.6 479.9 421.3 479.8 423.9L563.2 486.4C577.3 497 580.2 517.1 569.6 531.2C559 545.3 538.9 548.2 524.8 537.6L461.7 490.3C438.5 534.5 395.2 566.5 344 574.2L344 344C344 330.7 333.3 320 320 320C306.7 320 296 330.7 296 344L296 574.2C244.8 566.5 201.5 534.5 178.3 490.3L115.2 537.6C101.1 548.2 81 545.3 70.4 531.2C59.8 517.1 62.7 497 76.8 486.4L160.2 423.9C160.1 421.3 160 418.7 160 416L160 384L64 384C46.3 384 32 369.7 32 352C32 334.3 46.3 320 64 320L162.8 320C165.3 309.6 169.3 299.8 174.6 290.9L76.8 217.6C62.7 207 59.8 186.9 70.4 172.8C81 158.7 101.1 155.8 115.2 166.4L224 248C236.3 242.9 249.8 240 264 240L376 240C390.2 240 403.7 242.8 416 248L524.8 166.4C538.9 155.8 559 158.7 569.6 172.8z" />
+      </svg>
+      <span class="desktop-only">Report Issue</span></a>
+    <!--back to abstract-->
+    <a class="header-button" title="Back to abstract page" aria-label="Back to abstract page"
+      href="/abs/2509.18428v2">
+      <svg class="mobile-only toggle-icon" role="presentation" height="1.25rem" viewBox="0 0 512 512" fill="#ffffff"
+        aria-hidden="true">
+        <path
+          d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z">
+        </path>
+      </svg>
+      <span class="desktop-only">Back to Abstract</span>
+    </a>
+    <!-- PDF download link -->
+    <a class="header-button" title="Download PDF" href="/pdf/2509.18428v2"
+      target="_blank">
+      <svg class="mobile-only toggle-icon" role="presentation" height="1.25rem" viewBox="0 0 576 542">
+        <path
+          d="M208 48L96 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l80 0 0 48-80 0c-35.3 0-64-28.7-64-64L32 64C32 28.7 60.7 0 96 0L229.5 0c17 0 33.3 6.7 45.3 18.7L397.3 141.3c12 12 18.7 28.3 18.7 45.3l0 149.5-48 0 0-128-88 0c-39.8 0-72-32.2-72-72l0-88zM348.1 160L256 67.9 256 136c0 13.3 10.7 24 24 24l68.1 0zM240 380l32 0c33.1 0 60 26.9 60 60s-26.9 60-60 60l-12 0 0 28c0 11-9 20-20 20s-20-9-20-20l0-128c0-11 9-20 20-20zm32 80c11 0 20-9 20-20s-9-20-20-20l-12 0 0 40 12 0zm96-80l32 0c28.7 0 52 23.3 52 52l0 64c0 28.7-23.3 52-52 52l-32 0c-11 0-20-9-20-20l0-128c0-11 9-20 20-20zm32 128c6.6 0 12-5.4 12-12l0-64c0-6.6-5.4-12-12-12l-12 0 0 88 12 0zm76-108c0-11 9-20 20-20l48 0c11 0 20 9 20 20s-9 20-20 20l-28 0 0 24 28 0c11 0 20 9 20 20s-9 20-20 20l-28 0 0 44c0 11-9 20-20 20s-20-9-20-20l0-128z" />
+      </svg>
+      <span class="desktop-only">Download PDF</span></a>
+    <!-- navigational table of contents toggle -->
+    <a class="header-button toggle-icon" href="javascript:toggleNavTOC();" title="Toggle navigation"
+      aria-label="Toggle navigation">
+      <svg height="1.25rem" role="presentation" viewBox="0 0 512 512">
+        <path
+          d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z">
+        </path>
+      </svg>
+    </a>
+    <!--- collapsable header / reading mode toggle -->
+    <a class="header-button toggle-icon" href="javascript:toggleReadingMode();"
+      title="Disable reading mode, show header and footer">
+      <svg role="presentation" height="1.25rem"
+        viewBox="0 0 448 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+        <path
+          d="M32 32C14.3 32 0 46.3 0 64l0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-64 64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 32zM64 352c0-17.7-14.3-32-32-32S0 334.3 0 352l0 96c0 17.7 14.3 32 32 32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0 0-64zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0 0 64c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96c0-17.7-14.3-32-32-32l-96 0zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 64-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l96 0c17.7 0 32-14.3 32-32l0-96z" />
+      </svg>
+    </a>
+    <!--- colored theme toggle -->
+    <button type="button" class="header-button color-tog" onclick="toggleColorScheme();" title="Toggle dark/light mode" aria-label="Toggle color scheme">
+      <span class="toggle-icon automatic-tog" aria-hidden="true">
+        <svg role="presentation" height="1.25rem" viewBox="0 0 24 24">
+          <path
+            d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z">
+          </path>
+        </svg>
+      </span>
+      <span class="toggle-icon light-tog" aria-hidden="true">
+        <svg role="presentation" height="1.25rem" viewBox="0 0 24 24">
+          <path
+            d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z">
+          </path>
+        </svg>
+      </span>
+      <span class="toggle-icon dark-tog" aria-hidden="true">
+        <svg role="presentation" height="1.25rem" viewBox="0 0 24 24">
+          <path
+            d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z">
+          </path>
+        </svg>
+      </span>
+    </button>
+  </nav>
+</header><nav class="ltx_page_navbar">
+<nav class="ltx_TOC">
+<ol class="ltx_toclist">
+<li class="ltx_tocentry ltx_tocentry_abstract"><a href="#abstract1" title="In Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title">Abstract</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section"><a href="#S1" title="In Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">1 </span>Introduction</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section">
+<a href="#S2" title="In Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">2 </span>Related Work</span></a>
+<ol class="ltx_toclist ltx_toclist_section">
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S2.SS1" title="In 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">2.1 </span>Imitation Learning</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S2.SS2" title="In 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">2.2 </span>World Models</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S2.SS3" title="In 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">2.3 </span>Latent Action Methods</span></a></li>
+</ol>
+</li>
+<li class="ltx_tocentry ltx_tocentry_section">
+<a href="#S3" title="In Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">3 </span>Method</span></a>
+<ol class="ltx_toclist ltx_toclist_section">
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S3.SS1" title="In 3 Method ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">3.1 </span>Latent Action Pretraining</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S3.SS2" title="In 3 Method ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">3.2 </span>Action Finetuning</span></a></li>
+</ol>
+</li>
+<li class="ltx_tocentry ltx_tocentry_section">
+<a href="#S4" title="In Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">4 </span>Experiments</span></a>
+<ol class="ltx_toclist ltx_toclist_section">
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S4.SS1" title="In 4 Experiments ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">4.1 </span>Benchmarks and Environments</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_subsection"><a href="#S4.SS2" title="In 4 Experiments ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">4.2 </span>Baselines and Experimental Setup</span></a></li>
+</ol>
+</li>
+<li class="ltx_tocentry ltx_tocentry_section"><a href="#S5" title="In Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">5 </span>Results &amp; Discussion</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section"><a href="#S6" title="In Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">6 </span>Limitations</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section"><a href="#S7" title="In Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">7 </span>Conclusion</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_bibliography"><a href="#bib" title="In Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_title">References</span></a></li>
+</ol></nav>
+</nav>
+<div class="ltx_page_main">
+<div id="infobox" class="infobox">
+  <a id="license-tr" href="https://info.arxiv.org/help/license/index.html#licenses-available">
+    License: arXiv.org perpetual non-exclusive license
+  </a>
+  <div id="watermark-tr">
+arXiv:2509.18428v2 [cs.RO] 13 Jun 2026</div>
+</div><div class="ltx_page_content">
+<article class="ltx_document ltx_authors_1line">
+<h1 class="ltx_title ltx_title_document">Latent Action Pretraining Through World Modeling</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">
+
+<span id="id6.6.6" class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<span class="ltx_thead">
+<span id="id4.4.4.4" class="ltx_tr">
+<span id="id4.4.4.4.4" class="ltx_td ltx_align_center ltx_th ltx_th_column" style="padding-bottom:2.0pt;"><span id="id1.1.1.1.1.1" class="ltx_text ltx_font_bold">Bahey Tharwat<sup id="id1.1.1.1.1.1.1" class="ltx_sup"><span id="id1.1.1.1.1.1.1.1" class="ltx_text ltx_font_medium ltx_font_italic">1</span></sup></span>  <span id="id2.2.2.2.2.2" class="ltx_text ltx_font_bold">Yara Nasser<sup id="id2.2.2.2.2.2.1" class="ltx_sup"><span id="id2.2.2.2.2.2.1.1" class="ltx_text ltx_font_medium ltx_font_italic">2</span></sup></span>  <span id="id3.3.3.3.3.3" class="ltx_text ltx_font_bold">Ali Abouzeid<sup id="id3.3.3.3.3.3.1" class="ltx_sup"><span id="id3.3.3.3.3.3.1.1" class="ltx_text ltx_font_medium ltx_font_italic">1</span></sup></span>  <span id="id4.4.4.4.4.4" class="ltx_text ltx_font_bold">Ian Reid<sup id="id4.4.4.4.4.4.1" class="ltx_sup"><span id="id4.4.4.4.4.4.1.1" class="ltx_text ltx_font_medium ltx_font_italic">1</span></sup></span></span></span>
+</span>
+<span class="ltx_tbody">
+<span id="id5.5.5.5" class="ltx_tr">
+<span id="id5.5.5.5.1" class="ltx_td ltx_align_center" style="padding-bottom:1.0pt;"><sup id="id5.5.5.5.1.1" class="ltx_sup"><span id="id5.5.5.5.1.1.1" class="ltx_text ltx_font_italic">1</span></sup>Mohamed bin Zayed University of Artificial Intelligence, Abu Dhabi, UAE</span></span>
+<span id="id6.6.6.6" class="ltx_tr">
+<span id="id6.6.6.6.1" class="ltx_td ltx_align_center"><sup id="id6.6.6.6.1.1" class="ltx_sup"><span id="id6.6.6.6.1.1.1" class="ltx_text ltx_font_italic">2</span></sup>Alexandria University, Alexandria, Egypt</span></span>
+</span>
+</span>
+</span></span>
+</div>
+
+<div id="abstract1" class="ltx_abstract">
+<h6 class="ltx_title ltx_title_abstract">Abstract</h6>
+<p class="ltx_p">Vision-Language-Action (VLA) models have gained popularity for learning robotic manipulation tasks that follow language instructions. State-of-the-art VLAs, such as OpenVLA and <math class="ltx_Math" alttext="\pi_{0}" display="inline" intent=":literal"><semantics><msub><mi>π</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\pi_{0}</annotation></semantics></math>, were trained on large-scale, manually labeled action datasets collected through teleoperation. More recent approaches, including LAPA and villa-X, introduce latent action representations that enable unsupervised pretraining on unlabeled datasets by modeling abstract visual changes between frames. Although these methods have shown strong results, their large model sizes make deployment in real-world settings challenging.
+In this work, we propose LAWM, a model-agnostic framework to pretrain imitation learning models in a self-supervised way, by learning latent action representations from unlabeled video data through world modeling. These videos can be sourced from robot recordings or videos of humans performing actions with everyday objects. Our framework is able to transfer learned knowledge across tasks, environments, and embodiments. It outperforms models pretrained with ground-truth robot actions and other similar pretraining methods on the LIBERO benchmark and real-world setup, while being efficient and practical for real-world settings.</p>
+</div>
+<figure id="S0.F1" class="ltx_figure"><img src="2509.18428v2/x1.png" id="S0.F1.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="830" height="230" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1: </span>From human demonstrations to robot actions. Our framework uses human demonstration videos for pretraining, then finetunes the pretrained model on robot actions for downstream tasks.</figcaption>
+</figure>
+<section id="S1" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1 </span>Introduction</h2>
+
+<div id="S1.p1" class="ltx_para ltx_noindent">
+<p id="S1.p1.1" class="ltx_p">Self-supervised learning has been a key enabler of recent breakthroughs in Large Language Models (LLMs) such as ChatGPT <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib13" title="ChatGPT" class="ltx_ref">23</a>]</cite> and Gemini <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib14" title="Gemini" class="ltx_ref">9</a>]</cite>, where models learn from large amounts of text on the Internet. Inspired by this success, the robotics community is now ready for its own transformative moment, where we can build systems that learn action representations directly from raw, unstructured video data, rather than relying on curated action labels.</p>
+</div>
+<div id="S1.p2" class="ltx_para ltx_noindent">
+<p id="S1.p2.1" class="ltx_p">Most current approaches to robot learning are heavily based on supervised learning frameworks. Methods like imitation learning and VLA models, including OpenVLA <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib3" title="Openvla: an open-source vision-language-action model" class="ltx_ref">16</a>]</cite> and <math id="S1.p2.1.m1" class="ltx_Math" alttext="\pi_{0}" display="inline" intent=":literal"><semantics><msub><mi>π</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\pi_{0}</annotation></semantics></math> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib2" title="⁢Π0: A vision-language-action flow model for general robot control" class="ltx_ref">3</a>]</cite>, require paired image action datasets often obtained through teleoperation. These action annotations are expensive to collect, difficult to scale, and prone to bias, limiting the generalizability of these systems across tasks, environments, and embodiments.</p>
+</div>
+<div id="S1.p3" class="ltx_para ltx_noindent">
+<p id="S1.p3.1" class="ltx_p">In this work, we introduce <span id="S1.p3.1.1" class="ltx_text ltx_font_bold">LAWM</span>, a <span id="S1.p3.1.2" class="ltx_text ltx_font_bold">L</span>atent <span id="S1.p3.1.3" class="ltx_text ltx_font_bold">A</span>ction pretraining framework through <span id="S1.p3.1.4" class="ltx_text ltx_font_bold">W</span>orld <span id="S1.p3.1.5" class="ltx_text ltx_font_bold">M</span>odeling that aims to overcome these limitations by combining an Imitation Learning Model with a World Model. Our objective, as shown in Figure <a href="#S0.F1" title="Figure 1 ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">1</span></a>, is to learn action representations from both robot-collected and human demonstration videos in a fully self-supervised way. These learned representations serve as action priors that can be effectively leveraged during finetuning on downstream tasks. The proposed framework, illustrated in Figure <a href="#S1.F2" title="Figure 2 ‣ 1 Introduction ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">2</span></a>, is designed to be <span id="S1.p3.1.6" class="ltx_text ltx_font_italic">model-agnostic</span>, meaning that it does not depend on any specific architecture for the imitation learning model or the world model. This flexibility allows for the integration of a variety of different models.</p>
+</div>
+<div id="S1.p4" class="ltx_para ltx_noindent">
+<p id="S1.p4.1" class="ltx_p">Our pipeline follows a two-stage approach. The first stage performs end-to-end self-supervised pretraining, where the learning signal comes from next-frame prediction in video sequences. Given an image frame from a human or robot manipulation task and a language instruction, the imitation learning model predicts <span id="S1.p4.1.1" class="ltx_text ltx_font_italic">action chunk representations</span>. These <math id="S1.p4.1.m1" class="ltx_Math" alttext="n" display="inline" intent=":literal"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> latent actions are used to roll out the world model sequentially from the current frame, predicting each future frame step by step. The second stage finetunes only the imitation learning model on labeled downstream data, while the world model is discarded. As a result, the imitation learning model benefits from a robust prior learned from large-scale unlabeled videos and can be adapted efficiently to downstream robot tasks.</p>
+</div>
+<div id="S1.p5" class="ltx_para ltx_noindent">
+<p id="S1.p5.1" class="ltx_p">We summarize our main contributions and findings below:</p>
+<ul id="S1.I1" class="ltx_itemize">
+<li id="S1.I1.i1" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S1.I1.i1.p1" class="ltx_para">
+<p id="S1.I1.i1.p1.1" class="ltx_p">We propose <span id="S1.I1.i1.p1.1.1" class="ltx_text ltx_font_bold">LAWM</span>, a <span id="S1.I1.i1.p1.1.2" class="ltx_text ltx_font_italic">model-agnostic</span> framework, to learn action chunk representations for imitation learning models from both robot and human videos without action labels.</p>
+</div>
+</li>
+<li id="S1.I1.i2" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S1.I1.i2.p1" class="ltx_para">
+<p id="S1.I1.i2.p1.1" class="ltx_p">Our experiments show that our framework can learn superior action priors from human demonstrations and robotic manipulation videos without using ground-truth action labels.</p>
+</div>
+</li>
+<li id="S1.I1.i3" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S1.I1.i3.p1" class="ltx_para">
+<p id="S1.I1.i3.p1.1" class="ltx_p">We demonstrate that our framework with small models such as Diffusion Policy <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib16" title="Diffusion policy: visuomotor policy learning via action diffusion" class="ltx_ref">7</a>]</cite> and DreamerV3 <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib8" title="Mastering diverse domains through world models" class="ltx_ref">14</a>]</cite> outperforms methods such as villa-X <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib5" title="Villa-x: enhancing latent action modeling in vision-language-action models" class="ltx_ref">6</a>]</cite> on the LIBERO benchmark <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib9" title="Libero: benchmarking knowledge transfer for lifelong robot learning" class="ltx_ref">18</a>]</cite>.</p>
+</div>
+</li>
+</ul>
+</div>
+<figure id="S1.F2" class="ltx_figure"><img src="2509.18428v2/x2.png" id="S1.F2.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="830" height="210" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2: </span>Overview of <span id="S1.F2.8.1" class="ltx_text ltx_font_bold">LAWM</span>, which consists of two stages:
+(a) <span id="S1.F2.9.2" class="ltx_text ltx_font_bold">Latent Action Pretraining</span>, where an imitation learning model predicts latent actions <math id="S1.F2.3.m1" class="ltx_Math" alttext="z_{t:t+n-1}" display="inline" intent=":literal"><semantics><msub><mi>z</mi><mrow><mi>t</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mrow><mi>t</mi><mo>+</mo><mi>n</mi></mrow><mo>−</mo><mn>1</mn></mrow></mrow></msub><annotation encoding="application/x-tex">z_{t:t+n-1}</annotation></semantics></math> from input images and language instructions. These latents are paired with video frames and jointly optimized with a world model through next-frame prediction.
+(b) <span id="S1.F2.10.3" class="ltx_text ltx_font_bold">Action Finetuning</span>, where the pretrained imitation learning model is adapted to downstream robotic tasks using labeled demonstrations, mapping observations (images, language instructions, and robot state) to ground-truth actions <math id="S1.F2.4.m2" class="ltx_Math" alttext="a_{t:t+n-1}" display="inline" intent=":literal"><semantics><msub><mi>a</mi><mrow><mi>t</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mrow><mi>t</mi><mo>+</mo><mi>n</mi></mrow><mo>−</mo><mn>1</mn></mrow></mrow></msub><annotation encoding="application/x-tex">a_{t:t+n-1}</annotation></semantics></math>.</figcaption>
+</figure>
+</section>
+<section id="S2" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2 </span>Related Work</h2>
+
+<div id="S2.p1" class="ltx_para ltx_noindent">
+<p id="S2.p1.1" class="ltx_p">Recent advances in Vision-Language Models (VLMs) trained on large-scale internet text, image, and video datasets have paved the way in Robotics for Vision-Language-Navigation (VLN) models <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib17" title="Navgpt: explicit reasoning in vision-and-language navigation with large language models" class="ltx_ref">36</a>, <a href="#bib.bib18" title="Navgpt-2: unleashing navigational reasoning capability for large vision-language models" class="ltx_ref">35</a>, <a href="#bib.bib19" title="Language and planning in robotic navigation: a multilingual evaluation of state-of-the-art models" class="ltx_ref">19</a>, <a href="#bib.bib30" title="A survey of robotic navigation and manipulation with physics simulators in the era of embodied ai" class="ltx_ref">31</a>]</cite> and for Vision-Language-Action (VLA) models <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib1" title="Rt-2: vision-language-action models transfer web knowledge to robotic control" class="ltx_ref">37</a>, <a href="#bib.bib2" title="⁢Π0: A vision-language-action flow model for general robot control" class="ltx_ref">3</a>, <a href="#bib.bib10" title="Open x-embodiment: robotic learning datasets and rt-x models: open x-embodiment collaboration 0" class="ltx_ref">22</a>, <a href="#bib.bib3" title="Openvla: an open-source vision-language-action model" class="ltx_ref">16</a>]</cite>. These models extend VLMs by grounding multimodal reasoning in robotic action spaces, enabling robots to follow natural language instructions and generalize to new tasks.
+Datasets such as Open X-Embodiment <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib10" title="Open x-embodiment: robotic learning datasets and rt-x models: open x-embodiment collaboration 0" class="ltx_ref">22</a>]</cite> advance this direction by unifying multi-robot datasets, which supports large-scale models like OpenVLA <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib3" title="Openvla: an open-source vision-language-action model" class="ltx_ref">16</a>]</cite>.</p>
+</div>
+<section id="S2.SS1" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.1 </span>Imitation Learning</h3>
+
+<div id="S2.SS1.p1" class="ltx_para ltx_noindent">
+<p id="S2.SS1.p1.1" class="ltx_p">Imitation learning methods leverage demonstrations to directly map observations to actions, enabling robots to learn from expert behavior. At the large-scale end of the spectrum, <span id="S2.SS1.p1.1.1" class="ltx_text ltx_font_bold">OpenVLA</span> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib3" title="Openvla: an open-source vision-language-action model" class="ltx_ref">16</a>]</cite> is a 7B parameter VLA model with dual visual encoders (DINOv2 <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib25" title="Dinov2: learning robust visual features without supervision" class="ltx_ref">24</a>]</cite> and SigLIP <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib26" title="Sigmoid loss for language image pre-training" class="ltx_ref">33</a>]</cite>). It is trained on the Open X-Embodiment <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib10" title="Open x-embodiment: robotic learning datasets and rt-x models: open x-embodiment collaboration 0" class="ltx_ref">22</a>]</cite> dataset with 970k real robot demonstrations. Similarly, <math id="S2.SS1.p1.1.m1" class="ltx_Math" alttext="\pi_{0}" display="inline" intent=":literal"><semantics><msub><mi>π</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\pi_{0}</annotation></semantics></math> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib2" title="⁢Π0: A vision-language-action flow model for general robot control" class="ltx_ref">3</a>]</cite> is a 3.3B parameter VLA model that leverages a pretrained VLM backbone to inherit Internet-scale knowledge. Taking a contrasting lightweight approach, <span id="S2.SS1.p1.1.2" class="ltx_text ltx_font_bold">BAKU</span> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib7" title="Baku: an efficient transformer for multi-task policy learning" class="ltx_ref">15</a>]</cite> is a compact 7M parameter model that fuses multimodal inputs: vision, proprioception, and task instructions through a FiLM-conditioned encoder <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib27" title="Film: visual reasoning with a general conditioning layer" class="ltx_ref">25</a>]</cite> and MLPs. Its observation trunk can be either an MLP or a causal transformer decoder to output actions. Another line of work explores action generation through generative modeling. <span id="S2.SS1.p1.1.3" class="ltx_text ltx_font_bold">Diffusion Policy</span> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib16" title="Diffusion policy: visuomotor policy learning via action diffusion" class="ltx_ref">7</a>]</cite> frames robot control as a conditional denoising diffusion process that refines noisy action sequences into smooth trajectories. Building on temporal reasoning, <span id="S2.SS1.p1.1.4" class="ltx_text ltx_font_bold">Action Chunking Transformer (ACT)</span> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib31" title="Learning fine-grained bimanual manipulation with low-cost hardware" class="ltx_ref">34</a>]</cite> tackles long-horizon planning by predicting ’chunks’ of future actions instead of single steps, reducing error accumulation and improving efficiency in long tasks.</p>
+</div>
+</section>
+<section id="S2.SS2" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.2 </span>World Models</h3>
+
+<div id="S2.SS2.p1" class="ltx_para ltx_noindent">
+<p id="S2.SS2.p1.1" class="ltx_p">World models learn representations of environment dynamics to support planning and control in embodied agents. <span id="S2.SS2.p1.1.1" class="ltx_text ltx_font_bold">DIAMOND</span> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib6" title="Diffusion for world modeling: visual details matter in atari" class="ltx_ref">1</a>]</cite> is a diffusion-based world model that shows strong performance in gaming environments such as CSGO. In contrast, <span id="S2.SS2.p1.1.2" class="ltx_text ltx_font_bold">Dreamer</span> world models family <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib28" title="Dream to control: learning behaviors by latent imagination" class="ltx_ref">12</a>, <a href="#bib.bib29" title="Mastering atari with discrete world models" class="ltx_ref">13</a>, <a href="#bib.bib8" title="Mastering diverse domains through world models" class="ltx_ref">14</a>]</cite> implements a more sophisticated approach through its <span id="S2.SS2.p1.1.3" class="ltx_text ltx_font_bold">Recurrent State-Space Model (RSSM)</span> architecture, which encodes input states into stochastic representations and uses a recurrent sequence model to predict future states given past actions. This RSSM framework enables the agent to learn a world model of its environment and leverage it to plan by <em id="S2.SS2.p1.1.4" class="ltx_emph ltx_font_italic">imagining</em> potential future trajectories, facilitating efficient planning and policy learning in high-dimensional control tasks. Dreamerv3 offers flexible scalability with model sizes ranging from <span id="S2.SS2.p1.1.5" class="ltx_text ltx_font_bold">1 million to 200 million parameters</span>.</p>
+</div>
+</section>
+<section id="S2.SS3" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">2.3 </span>Latent Action Methods</h3>
+
+<div id="S2.SS3.p1" class="ltx_para ltx_noindent">
+<p id="S2.SS3.p1.1" class="ltx_p">Early works explored the pretraining of vision encoders <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib32" title="R3m: a universal visual representation for robot manipulation" class="ltx_ref">21</a>]</cite> on egocentric human videos <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib12" title="Ego4d: around the world in 3,000 hours of egocentric video" class="ltx_ref">11</a>]</cite>, retargeting human motions to robots <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib33" title="Mimicplay: long-horizon imitation learning by watching human play" class="ltx_ref">30</a>]</cite>, or predicting actions from inverse dynamics models <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib34" title="Learning universal policies via text-guided video generation" class="ltx_ref">8</a>]</cite>. Latent action models in simulation and video games <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib35" title="Genie: generative interactive environments" class="ltx_ref">4</a>, <a href="#bib.bib36" title="Learning to act without actions" class="ltx_ref">26</a>]</cite> showed that abstract action spaces improve generalization, but remained limited to non-robotic domains. Building on these foundations, <span id="S2.SS3.p1.1.1" class="ltx_text ltx_font_bold">LAPA</span> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib4" title="Latent action pretraining from videos" class="ltx_ref">32</a>]</cite> introduced a 7B-parameter Vision-Language-Action model that learns latent actions through a three-stage pipeline, enabling training from unlabeled videos. However, it suffers from framework complexity, inference latency, and high computational cost. <span id="S2.SS3.p1.1.2" class="ltx_text ltx_font_bold">UniVLA</span> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib39" title="Univla: learning to act anywhere with task-centric latent actions" class="ltx_ref">5</a>]</cite> proposes learning cross-embodiment vision-language-action policies by deriving task-centric latent action representations from unlabeled videos. This method addresses task-irrelevant visual noise by decoupling task-relevant dynamics through a two-stage training approach that leverages DINOv2 features and language conditioning. While UniVLA achieves state-of-the-art results with improved computational efficiency, it still relies on relatively large models (7B-parameter Prismatic VLM backbone). More recently, <span id="S2.SS3.p1.1.3" class="ltx_text ltx_font_bold">Villa-X</span> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib5" title="Villa-x: enhancing latent action modeling in vision-language-action models" class="ltx_ref">6</a>]</cite> improves upon LAPA by integrating a proprioceptive forward-dynamics model (FDM) into its Latent Action Model (LAM). This auxiliary component predicts future robot joint angles and gripper states from latent tokens. villa-X demonstrated better performance than LAPA on the SIMPLER benchmark <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib37" title="Evaluating real-world robot manipulation policies in simulation" class="ltx_ref">17</a>]</cite>, though it still requires the latent action module during finetuning and remains computationally expensive.</p>
+</div>
+</section>
+</section>
+<section id="S3" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3 </span>Method</h2>
+
+<div id="S3.p1" class="ltx_para ltx_noindent">
+<p id="S3.p1.1" class="ltx_p">LAWM consists of two stages: Latent Action Pretraining and Action Fine-tuning.</p>
+</div>
+<section id="S3.SS1" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.1 </span>Latent Action Pretraining</h3>
+
+<div id="S3.SS1.p1" class="ltx_para ltx_noindent">
+<p id="S3.SS1.p1.1" class="ltx_p">The pretraining stage, illustrated in Figure <a href="#S1.F2" title="Figure 2 ‣ 1 Introduction ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">2</span></a>, is <span id="S3.SS1.p1.1.1" class="ltx_text ltx_font_italic">model-agnostic</span> and trained end-to-end in a self-supervised way. This allows flexible integration of imitation learning and world model architectures.</p>
+</div>
+<div id="S3.SS1.p2" class="ltx_para ltx_noindent">
+<p id="S3.SS1.p2.4" class="ltx_p">Given a current image frame <math id="S3.SS1.p2.1.m1" class="ltx_Math" alttext="x_{t}" display="inline" intent=":literal"><semantics><msub><mi>x</mi><mi>t</mi></msub><annotation encoding="application/x-tex">x_{t}</annotation></semantics></math> and a language instruction <math id="S3.SS1.p2.2.m2" class="ltx_Math" alttext="c" display="inline" intent=":literal"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>, the imitation learning model <math id="S3.SS1.p2.3.m3" class="ltx_Math" alttext="\mathrm{IL}_{\theta}" display="inline" intent=":literal"><semantics><msub><mi>IL</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\mathrm{IL}_{\theta}</annotation></semantics></math> predicts a sequence of <math id="S3.SS1.p2.4.m4" class="ltx_Math" alttext="n" display="inline" intent=":literal"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> latent actions:</p>
+</div>
+<div id="S3.SS1.p3" class="ltx_para ltx_noindent">
+<table id="S3.E1" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E1.m1" class="ltx_Math" alttext="z_{t:t+n-1}=\mathrm{IL}_{\theta}(x_{t},c)," display="block" intent=":literal"><semantics><mrow><mrow><msub><mi>z</mi><mrow><mi>t</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mrow><mi>t</mi><mo>+</mo><mi>n</mi></mrow><mo>−</mo><mn>1</mn></mrow></mrow></msub><mo>=</mo><mrow><msub><mi>IL</mi><mi>θ</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mi>t</mi></msub><mo>,</mo><mi>c</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">z_{t:t+n-1}=\mathrm{IL}_{\theta}(x_{t},c),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(1)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S3.SS1.p4" class="ltx_para ltx_noindent">
+<p id="S3.SS1.p4.5" class="ltx_p">where <math id="S3.SS1.p4.1.m1" class="ltx_Math" alttext="z_{t+n-1}={z_{t},z_{t+1},\ldots,z_{t+n-1}}" display="inline" intent=":literal"><semantics><mrow><msub><mi>z</mi><mrow><mrow><mi>t</mi><mo>+</mo><mi>n</mi></mrow><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mrow><msub><mi>z</mi><mi>t</mi></msub><mo>,</mo><msub><mi>z</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>z</mi><mrow><mrow><mi>t</mi><mo>+</mo><mi>n</mi></mrow><mo>−</mo><mn>1</mn></mrow></msub></mrow></mrow><annotation encoding="application/x-tex">z_{t+n-1}={z_{t},z_{t+1},\ldots,z_{t+n-1}}</annotation></semantics></math> denotes the predicted latent action sequence. These latent actions are not supervised by ground-truth robot actions. Instead, they are used as inputs to the world model. Specifically, the world model <math id="S3.SS1.p4.2.m2" class="ltx_Math" alttext="\mathrm{WM}_{\phi}" display="inline" intent=":literal"><semantics><msub><mi>WM</mi><mi>ϕ</mi></msub><annotation encoding="application/x-tex">\mathrm{WM}_{\phi}</annotation></semantics></math> is initialized from the current frame <math id="S3.SS1.p4.3.m3" class="ltx_Math" alttext="x_{t}" display="inline" intent=":literal"><semantics><msub><mi>x</mi><mi>t</mi></msub><annotation encoding="application/x-tex">x_{t}</annotation></semantics></math> and rolled out sequentially with the <math id="S3.SS1.p4.4.m4" class="ltx_Math" alttext="n" display="inline" intent=":literal"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> predicted latent actions to predict the next <math id="S3.SS1.p4.5.m5" class="ltx_Math" alttext="n" display="inline" intent=":literal"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> frames:</p>
+</div>
+<div id="S3.SS1.p5" class="ltx_para ltx_noindent">
+<table id="S3.E2" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E2.m1" class="ltx_Math" alttext="\hat{x}_{t+1:t+n}=\mathrm{WM}_{\phi}\left(x_{t:t+n-1},z_{t:t+n-1}\right)." display="block" intent=":literal"><semantics><mrow><mrow><msub><mover accent="true"><mi>x</mi><mo>^</mo></mover><mrow><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mi>t</mi><mo>+</mo><mi>n</mi></mrow></mrow></msub><mo>=</mo><mrow><msub><mi>WM</mi><mi>ϕ</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo>(</mo><msub><mi>x</mi><mrow><mi>t</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mrow><mi>t</mi><mo>+</mo><mi>n</mi></mrow><mo>−</mo><mn>1</mn></mrow></mrow></msub><mo>,</mo><msub><mi>z</mi><mrow><mi>t</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mrow><mi>t</mi><mo>+</mo><mi>n</mi></mrow><mo>−</mo><mn>1</mn></mrow></mrow></msub><mo>)</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\hat{x}_{t+1:t+n}=\mathrm{WM}_{\phi}\left(x_{t:t+n-1},z_{t:t+n-1}\right).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(2)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S3.SS1.p6" class="ltx_para ltx_noindent">
+<p id="S3.SS1.p6.2" class="ltx_p">Thus, the model is trained by predicting the shifted future frames <math id="S3.SS1.p6.1.m1" class="ltx_Math" alttext="x_{t+1+n}" display="inline" intent=":literal"><semantics><msub><mi>x</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn><mo>+</mo><mi>n</mi></mrow></msub><annotation encoding="application/x-tex">x_{t+1+n}</annotation></semantics></math> step by step from the current frame and the latent actions predicted by <math id="S3.SS1.p6.2.m2" class="ltx_Math" alttext="\mathrm{IL}_{\theta}" display="inline" intent=":literal"><semantics><msub><mi>IL</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\mathrm{IL}_{\theta}</annotation></semantics></math>.</p>
+</div>
+<div id="S3.SS1.p7" class="ltx_para ltx_noindent">
+<p id="S3.SS1.p7.5" class="ltx_p">In our implementation, <math id="S3.SS1.p7.1.m1" class="ltx_Math" alttext="\mathrm{WM}_{\phi}" display="inline" intent=":literal"><semantics><msub><mi>WM</mi><mi>ϕ</mi></msub><annotation encoding="application/x-tex">\mathrm{WM}_{\phi}</annotation></semantics></math> is instantiated as a recurrent state-space model (RSSM), following DreamerV3 <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib8" title="Mastering diverse domains through world models" class="ltx_ref">14</a>]</cite>. At each rollout step <math id="S3.SS1.p7.2.m2" class="ltx_Math" alttext="k\in\{1,\ldots,n\}" display="inline" intent=":literal"><semantics><mrow><mi>k</mi><mo>∈</mo><mrow><mo stretchy="false">{</mo><mn>1</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mi>n</mi><mo stretchy="false">}</mo></mrow></mrow><annotation encoding="application/x-tex">k\in\{1,\ldots,n\}</annotation></semantics></math>, the model updates a deterministic recurrent state <math id="S3.SS1.p7.3.m3" class="ltx_Math" alttext="h_{t+k}" display="inline" intent=":literal"><semantics><msub><mi>h</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">h_{t+k}</annotation></semantics></math> using the previous state <math id="S3.SS1.p7.4.m4" class="ltx_Math" alttext="\hat{s}_{t+k-1}" display="inline" intent=":literal"><semantics><msub><mover accent="true"><mi>s</mi><mo>^</mo></mover><mrow><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">\hat{s}_{t+k-1}</annotation></semantics></math> and latent action <math id="S3.SS1.p7.5.m5" class="ltx_Math" alttext="z_{t+k-1}" display="inline" intent=":literal"><semantics><msub><mi>z</mi><mrow><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">z_{t+k-1}</annotation></semantics></math>. It then predicts a stochastic latent state and reconstructs the next frame:</p>
+</div>
+<div id="S3.SS1.p8" class="ltx_para ltx_noindent">
+<table id="S7.EGx1" class="ltx_equationgroup ltx_eqn_align ltx_eqn_table">
+
+<tbody id="S3.E3"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math id="S3.E3.m1" class="ltx_Math" alttext="\displaystyle h_{t+k}" display="inline" intent=":literal"><semantics><msub><mi>h</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">\displaystyle h_{t+k}</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math id="S3.E3.m2" class="ltx_Math" alttext="\displaystyle=f_{\phi}\left(\hat{s}_{t+k-1},z_{t+k-1}\right)," display="inline" intent=":literal"><semantics><mrow><mrow><mi></mi><mo>=</mo><mrow><msub><mi>f</mi><mi>ϕ</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo>(</mo><msub><mover accent="true"><mi>s</mi><mo>^</mo></mover><mrow><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>z</mi><mrow><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow><mo>−</mo><mn>1</mn></mrow></msub><mo>)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle=f_{\phi}\left(\hat{s}_{t+k-1},z_{t+k-1}\right),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(3)</span></td>
+</tr></tbody>
+<tbody id="S3.E4"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math id="S3.E4.m1" class="ltx_Math" alttext="\displaystyle u_{t+k}" display="inline" intent=":literal"><semantics><msub><mi>u</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">\displaystyle u_{t+k}</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math id="S3.E4.m2" class="ltx_Math" alttext="\displaystyle\sim q_{\phi}\left(u_{t+k}\mid h_{t+k},x_{t+k}\right)," display="inline" intent=":literal"><semantics><mrow><mrow><mi></mi><mo>∼</mo><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo>(</mo><mrow><msub><mi>u</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><mo>∣</mo><mrow><msub><mi>h</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><mo>,</mo><msub><mi>x</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub></mrow></mrow><mo>)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle\sim q_{\phi}\left(u_{t+k}\mid h_{t+k},x_{t+k}\right),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(4)</span></td>
+</tr></tbody>
+<tbody id="S3.E5"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math id="S3.E5.m1" class="ltx_Math" alttext="\displaystyle\hat{u}_{t+k}" display="inline" intent=":literal"><semantics><msub><mover accent="true"><mi>u</mi><mo>^</mo></mover><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">\displaystyle\hat{u}_{t+k}</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math id="S3.E5.m2" class="ltx_Math" alttext="\displaystyle\sim p_{\phi}\left(\hat{u}_{t+k}\mid h_{t+k}\right)," display="inline" intent=":literal"><semantics><mrow><mrow><mi></mi><mo>∼</mo><mrow><msub><mi>p</mi><mi>ϕ</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo>(</mo><mrow><msub><mover accent="true"><mi>u</mi><mo>^</mo></mover><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><mo>∣</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub></mrow><mo>)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\displaystyle\sim p_{\phi}\left(\hat{u}_{t+k}\mid h_{t+k}\right),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(5)</span></td>
+</tr></tbody>
+<tbody id="S3.E6"><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_td ltx_align_right ltx_eqn_cell"><math id="S3.E6.m1" class="ltx_Math" alttext="\displaystyle\hat{x}_{t+k}" display="inline" intent=":literal"><semantics><msub><mover accent="true"><mi>x</mi><mo>^</mo></mover><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">\displaystyle\hat{x}_{t+k}</annotation></semantics></math></td>
+<td class="ltx_td ltx_align_left ltx_eqn_cell"><math id="S3.E6.m2" class="ltx_Math" alttext="\displaystyle\sim p_{\phi}\left(\hat{x}_{t+k}\mid\hat{s}_{t+k}\right)." display="inline" intent=":literal"><semantics><mrow><mrow><mi></mi><mo>∼</mo><mrow><msub><mi>p</mi><mi>ϕ</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo>(</mo><mrow><msub><mover accent="true"><mi>x</mi><mo>^</mo></mover><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><mo>∣</mo><msub><mover accent="true"><mi>s</mi><mo>^</mo></mover><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub></mrow><mo>)</mo></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\displaystyle\sim p_{\phi}\left(\hat{x}_{t+k}\mid\hat{s}_{t+k}\right).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(6)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S3.SS1.p9" class="ltx_para ltx_noindent">
+<p id="S3.SS1.p9.4" class="ltx_p">Here, <math id="S3.SS1.p9.1.m1" class="ltx_Math" alttext="\hat{s}_{t+k}=\left(h_{t+k},\hat{u}_{t+k}\right)" display="inline" intent=":literal"><semantics><mrow><msub><mover accent="true"><mi>s</mi><mo>^</mo></mover><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><mo>=</mo><mrow><mo>(</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><mo>,</mo><msub><mover accent="true"><mi>u</mi><mo>^</mo></mover><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><mo>)</mo></mrow></mrow><annotation encoding="application/x-tex">\hat{s}_{t+k}=\left(h_{t+k},\hat{u}_{t+k}\right)</annotation></semantics></math>, where <math id="S3.SS1.p9.2.m2" class="ltx_Math" alttext="u_{t+k}" display="inline" intent=":literal"><semantics><msub><mi>u</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">u_{t+k}</annotation></semantics></math> denotes the internal stochastic state of the world model. The posterior <math id="S3.SS1.p9.3.m3" class="ltx_Math" alttext="q_{\phi}" display="inline" intent=":literal"><semantics><msub><mi>q</mi><mi>ϕ</mi></msub><annotation encoding="application/x-tex">q_{\phi}</annotation></semantics></math> and prior <math id="S3.SS1.p9.4.m4" class="ltx_Math" alttext="p_{\phi}" display="inline" intent=":literal"><semantics><msub><mi>p</mi><mi>ϕ</mi></msub><annotation encoding="application/x-tex">p_{\phi}</annotation></semantics></math> are modeled as categorical distributions.</p>
+</div>
+<div id="S3.SS1.p10" class="ltx_para ltx_noindent">
+<p id="S3.SS1.p10.3" class="ltx_p">The imitation learning model <math id="S3.SS1.p10.1.m1" class="ltx_Math" alttext="\mathrm{IL}_{\theta}" display="inline" intent=":literal"><semantics><msub><mi>IL</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\mathrm{IL}_{\theta}</annotation></semantics></math> and world model <math id="S3.SS1.p10.2.m2" class="ltx_Math" alttext="\mathrm{WM}_{\phi}" display="inline" intent=":literal"><semantics><msub><mi>WM</mi><mi>ϕ</mi></msub><annotation encoding="application/x-tex">\mathrm{WM}_{\phi}</annotation></semantics></math> are optimized jointly using a next-frame reconstruction objective. The training signal is the MSE loss between the predicted frames and the ground-truth frames. Following RSSM-based world models, we also include a KL regularization term between posterior and prior latent distributions, weighted by <math id="S3.SS1.p10.3.m3" class="ltx_Math" alttext="\beta" display="inline" intent=":literal"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>. The final objective is:</p>
+</div>
+<div id="S3.SS1.p11" class="ltx_para ltx_noindent">
+<table id="S3.E7" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E7.m1" class="ltx_Math" alttext="\mathcal{L}(\theta,\phi)=\underbrace{\frac{1}{n}\sum_{k=1}^{n}\left\|x_{t+k}-\hat{x}_{t+k}\right\|_{2}^{2}}_{\text{MSE loss}}+\underbrace{\beta\mathcal{L}_{\mathrm{KL}}(\phi)}_{\text{KL Regularizer}}." display="block" intent=":literal"><semantics><mrow><mrow><mrow><mi class="ltx_font_mathcaligraphic">ℒ</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo>,</mo><mi>ϕ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><munder><munder accentunder="true"><mrow><mfrac><mn>1</mn><mi>n</mi></mfrac><mo lspace="0em" rspace="0em">​</mo><mrow><munderover><mo movablelimits="false" rspace="0em">∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msubsup><mrow><mo>‖</mo><mrow><msub><mi>x</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><mo>−</mo><msub><mover accent="true"><mi>x</mi><mo>^</mo></mover><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub></mrow><mo>‖</mo></mrow><mn>2</mn><mn>2</mn></msubsup></mrow></mrow><mo stretchy="true">⏟</mo></munder><mtext>MSE loss</mtext></munder><mo>+</mo><munder><munder accentunder="true"><mrow><mi>β</mi><mo lspace="0em" rspace="0em">​</mo><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>KL</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>ϕ</mi><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="true">⏟</mo></munder><mtext>KL Regularizer</mtext></munder></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}(\theta,\phi)=\underbrace{\frac{1}{n}\sum_{k=1}^{n}\left\|x_{t+k}-\hat{x}_{t+k}\right\|_{2}^{2}}_{\text{MSE loss}}+\underbrace{\beta\mathcal{L}_{\mathrm{KL}}(\phi)}_{\text{KL Regularizer}}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(7)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S3.SS1.p12" class="ltx_para ltx_noindent">
+<p id="S3.SS1.p12.1" class="ltx_p">This training objective encourages <math id="S3.SS1.p12.1.m1" class="ltx_Math" alttext="\mathrm{IL}_{\theta}" display="inline" intent=":literal"><semantics><msub><mi>IL</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\mathrm{IL}_{\theta}</annotation></semantics></math> to produce latent actions that are useful for predicting next frames, thereby grounding the learned action representation in the environment dynamics without requiring ground-truth action supervision.</p>
+</div>
+</section>
+<section id="S3.SS2" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">3.2 </span>Action Finetuning</h3>
+
+<div id="S3.SS2.p1" class="ltx_para ltx_noindent">
+<p id="S3.SS2.p1.1" class="ltx_p">Following the self-supervised pretraining stage, we then proceed to a finetuning stage where the training signal is derived from supervised learning with ground-truth actions. In this stage, the world model is no longer used. Instead, the pretrained imitation learning model (in our case, BAKU <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib7" title="Baku: an efficient transformer for multi-task policy learning" class="ltx_ref">15</a>]</cite> or Diffusion Policy <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib16" title="Diffusion policy: visuomotor policy learning via action diffusion" class="ltx_ref">7</a>]</cite>) is trained on specific downstream tasks to adapt it to the target environment.</p>
+</div>
+<div id="S3.SS2.p2" class="ltx_para ltx_noindent">
+<p id="S3.SS2.p2.1" class="ltx_p">The pretrained model benefits from a robust prior obtained in the pretraining stage from large-scale unlabeled video data, which enables efficient finetuning on labeled datasets. Finetuning can be performed either by (i) adding an additional head that decodes the latent action representation into the ground-truth action space, or (ii) reinitializing the final action latent layer to match the dimensionality of the ground-truth action space and training it accordingly. In our implementation, we adopt the second strategy, reinitializing only the last action latent layer during finetuning as LAPA <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib4" title="Latent action pretraining from videos" class="ltx_ref">32</a>]</cite> demonstrated that this works better empirically.</p>
+</div>
+<div id="S3.SS2.p3" class="ltx_para ltx_noindent">
+<p id="S3.SS2.p3.7" class="ltx_p">For both BAKU <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib7" title="Baku: an efficient transformer for multi-task policy learning" class="ltx_ref">15</a>]</cite> and Diffusion Policy <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib16" title="Diffusion policy: visuomotor policy learning via action diffusion" class="ltx_ref">7</a>]</cite>, finetuning adapts the pretrained imitation learning model <math id="S3.SS2.p3.1.m1" class="ltx_Math" alttext="\mathrm{IL}_{\theta}" display="inline" intent=":literal"><semantics><msub><mi>IL</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\mathrm{IL}_{\theta}</annotation></semantics></math> to predict ground-truth actions from a collected demonstration dataset <math id="S3.SS2.p3.2.m2" class="ltx_Math" alttext="\mathcal{D}" display="inline" intent=":literal"><semantics><mi class="ltx_font_mathcaligraphic">𝒟</mi><annotation encoding="application/x-tex">\mathcal{D}</annotation></semantics></math>. Each observation <math id="S3.SS2.p3.3.m3" class="ltx_Math" alttext="o_{t}=\left(x_{t,\mathrm{view1}},x_{t,\mathrm{view2}},c,p_{t}\right)" display="inline" intent=":literal"><semantics><mrow><msub><mi>o</mi><mi>t</mi></msub><mo>=</mo><mrow><mo>(</mo><msub><mi>x</mi><mrow><mi>t</mi><mo>,</mo><mi>view1</mi></mrow></msub><mo>,</mo><msub><mi>x</mi><mrow><mi>t</mi><mo>,</mo><mi>view2</mi></mrow></msub><mo>,</mo><mi>c</mi><mo>,</mo><msub><mi>p</mi><mi>t</mi></msub><mo>)</mo></mrow></mrow><annotation encoding="application/x-tex">o_{t}=\left(x_{t,\mathrm{view1}},x_{t,\mathrm{view2}},c,p_{t}\right)</annotation></semantics></math> may contain one or two image views, a language instruction <math id="S3.SS2.p3.4.m4" class="ltx_Math" alttext="c" display="inline" intent=":literal"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>, and proprioceptive state <math id="S3.SS2.p3.5.m5" class="ltx_Math" alttext="p_{t}" display="inline" intent=":literal"><semantics><msub><mi>p</mi><mi>t</mi></msub><annotation encoding="application/x-tex">p_{t}</annotation></semantics></math>. Given <math id="S3.SS2.p3.6.m6" class="ltx_Math" alttext="o_{t}" display="inline" intent=":literal"><semantics><msub><mi>o</mi><mi>t</mi></msub><annotation encoding="application/x-tex">o_{t}</annotation></semantics></math>, the model predicts an action sequence <math id="S3.SS2.p3.7.m7" class="ltx_Math" alttext="\hat{a}_{t:t+n-1}=\mathrm{IL}_{\theta}(o_{t})" display="inline" intent=":literal"><semantics><mrow><msub><mover accent="true"><mi>a</mi><mo>^</mo></mover><mrow><mi>t</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mrow><mi>t</mi><mo>+</mo><mi>n</mi></mrow><mo>−</mo><mn>1</mn></mrow></mrow></msub><mo>=</mo><mrow><msub><mi>IL</mi><mi>θ</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msub><mi>o</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\hat{a}_{t:t+n-1}=\mathrm{IL}_{\theta}(o_{t})</annotation></semantics></math>. The finetuning objective can be written as:</p>
+</div>
+<div id="S3.SS2.p4" class="ltx_para ltx_noindent">
+<table id="S3.E8" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E8.m1" class="ltx_Math" alttext="\mathcal{L}_{\mathrm{IL}}(\theta)=\frac{1}{n}\sum_{k=1}^{n}\underbrace{\ell_{\mathrm{act}}\left(\hat{a}_{t+k-1},a_{t+k-1}\right)}_{\text{Action prediction loss}}." display="block" intent=":literal"><semantics><mrow><mrow><mrow><msub><mi class="ltx_font_mathcaligraphic">ℒ</mi><mi>IL</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mfrac><mn>1</mn><mi>n</mi></mfrac><mo lspace="0em" rspace="0em">​</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><munder><munder accentunder="true"><mrow><msub><mi mathvariant="normal">ℓ</mi><mi>act</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo>(</mo><msub><mover accent="true"><mi>a</mi><mo>^</mo></mover><mrow><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>a</mi><mrow><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow><mo>−</mo><mn>1</mn></mrow></msub><mo>)</mo></mrow></mrow><mo stretchy="true">⏟</mo></munder><mtext>Action prediction loss</mtext></munder></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{IL}}(\theta)=\frac{1}{n}\sum_{k=1}^{n}\underbrace{\ell_{\mathrm{act}}\left(\hat{a}_{t+k-1},a_{t+k-1}\right)}_{\text{Action prediction loss}}.</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(8)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S3.SS2.p5" class="ltx_para ltx_noindent">
+<p id="S3.SS2.p5.1" class="ltx_p">Here, <math id="S3.SS2.p5.1.m1" class="ltx_Math" alttext="\ell_{\mathrm{act}}" display="inline" intent=":literal"><semantics><msub><mi mathvariant="normal">ℓ</mi><mi>act</mi></msub><annotation encoding="application/x-tex">\ell_{\mathrm{act}}</annotation></semantics></math> denotes the supervised action loss used by the chosen imitation learning architecture, such as a likelihood-based loss for BAKU or a denoising loss for Diffusion Policy. Through this stage, the imitation learning model learns to map image-text inputs to explicit actions, aligning its predictions with supervised ground-truth demonstrations.</p>
+</div>
+</section>
+</section>
+<section id="S4" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4 </span>Experiments</h2>
+
+<div id="S4.p1" class="ltx_para ltx_noindent">
+<p id="S4.p1.1" class="ltx_p">We focus on answering the following research questions:</p>
+<ul id="S4.I1" class="ltx_itemize">
+<li id="S4.I1.i1" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S4.I1.i1.p1" class="ltx_para">
+<p id="S4.I1.i1.p1.1" class="ltx_p"><span id="S4.I1.i1.p1.1.1" class="ltx_text ltx_font_bold">Q1.</span> Can LAWM learn superior priors compared to pretraining with ground-truth actions?</p>
+</div>
+</li>
+<li id="S4.I1.i2" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S4.I1.i2.p1" class="ltx_para">
+<p id="S4.I1.i2.p1.1" class="ltx_p"><span id="S4.I1.i2.p1.1.1" class="ltx_text ltx_font_bold">Q2.</span> How does LAWM perform compared to recent similar methods like villa-X?</p>
+</div>
+</li>
+<li id="S4.I1.i3" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S4.I1.i3.p1" class="ltx_para">
+<p id="S4.I1.i3.p1.1" class="ltx_p"><span id="S4.I1.i3.p1.1.1" class="ltx_text ltx_font_bold">Q3.</span> Do the learned latent actions correlate with ground-truth actions?</p>
+</div>
+</li>
+</ul>
+</div>
+<section id="S4.SS1" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1 </span>Benchmarks and Environments</h3>
+
+<div id="S4.SS1.p1" class="ltx_para ltx_noindent">
+<p id="S4.SS1.p1.1" class="ltx_p">We evaluate LAWM on diverse datasets and environments for both large-scale pretraining and downstream finetuning, including BridgeData v2, a large-scale robot manipulation dataset, Something-Something v2, a human video dataset featuring interactions with everyday objects, LIBERO, a simulation benchmark for robotic manipulation, and a custom real-world robot manipulation setup. These benchmarks cover a broad range of manipulation tasks and evaluation settings. Additional details regarding the datasets, task suites, and environments are provided in the Appendix  <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:benchmarks</span>.</p>
+</div>
+<figure id="S4.F3" class="ltx_figure"><img src="2509.18428v2/x3.png" id="S4.F3.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="830" height="240" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3: </span>Qualitative results of our framework on the real-world manipulation setup using the 6-DoF Realman robot arm. Top row: Picking the blue cup and placing it in the bowl on top of the plate. Bottom row: Stacking the blue cup on top of the white cup. Images are shown across timesteps.</figcaption>
+</figure>
+</section>
+<section id="S4.SS2" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2 </span>Baselines and Experimental Setup</h3>
+
+<div id="S4.SS2.p1" class="ltx_para ltx_noindent">
+<p id="S4.SS2.p1.1" class="ltx_p">We evaluate LAWM with two imitation learning baselines: BAKU <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib7" title="Baku: an efficient transformer for multi-task policy learning" class="ltx_ref">15</a>]</cite> and Diffusion Policy <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib16" title="Diffusion policy: visuomotor policy learning via action diffusion" class="ltx_ref">7</a>]</cite>. To address our research questions (<span id="S4.SS2.p1.1.1" class="ltx_text ltx_font_bold">Q1–Q3</span>), we design the following experiments (<span id="S4.SS2.p1.1.2" class="ltx_text ltx_font_bold">E1–E3</span>):</p>
+</div>
+<div id="S4.SS2.p2" class="ltx_para ltx_noindent">
+<p id="S4.SS2.p2.1" class="ltx_p"><span id="S4.SS2.p2.1.1" class="ltx_text ltx_font_bold">E1. Latent action priors vs. ground-truth pretraining.</span>
+We establish two performance bounds on the LIBERO-90 benchmark. First, the baseline models are trained from scratch on LIBERO-90. Second, baseline models are pretrained on the ground-truth actions from BridgeData v2 <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib20" title="Bridgedata v2: a dataset for robot learning at scale" class="ltx_ref">29</a>]</cite>, then finetuned on LIBERO-90. To evaluate our approach relative to these bounds, we pretrain our framework on each of Something-Something v2 <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib11" title="The” something something” video database for learning and evaluating visual common sense" class="ltx_ref">10</a>]</cite> and BridgeData v2 <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib20" title="Bridgedata v2: a dataset for robot learning at scale" class="ltx_ref">29</a>]</cite> without action labels, followed by finetuning on LIBERO-90.</p>
+</div>
+<div id="S4.SS2.p3" class="ltx_para ltx_noindent">
+<p id="S4.SS2.p3.1" class="ltx_p"><span id="S4.SS2.p3.1.1" class="ltx_text ltx_font_bold">E2. Comparison with similar methods.</span>
+We pretrain a Diffusion Policy on human videos from Something-Something v2 dataset, then finetune on the LIBERO task suites (Spatial, Object, Goal, and Long), same as villa-X <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib5" title="Villa-x: enhancing latent action modeling in vision-language-action models" class="ltx_ref">6</a>]</cite> and UniVLA  <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib39" title="Univla: learning to act anywhere with task-centric latent actions" class="ltx_ref">5</a>]</cite>, to enable direct comparison. We also compare with other state-of-the-art models pretrained with supervised learning on ground-truth actions and VLAs that are initialized from VLMs trained on internet scale data.</p>
+</div>
+<div id="S4.SS2.p4" class="ltx_para ltx_noindent">
+<p id="S4.SS2.p4.6" class="ltx_p"><span id="S4.SS2.p4.6.1" class="ltx_text ltx_font_bold">E3. Correlation of latent and ground-truth actions.</span>
+To quantify the correlation between our learned latent actions and ground-truth actions, we use Canonical Correlation Analysis (CCA). CCA finds linear transformations of two sets of variables such that their representations are maximally correlated. Given latent actions <math id="S4.SS2.p4.1.m1" class="ltx_Math" alttext="Z\in\mathbb{R}^{n\times p}" display="inline" intent=":literal"><semantics><mrow><mi>Z</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>p</mi></mrow></msup></mrow><annotation encoding="application/x-tex">Z\in\mathbb{R}^{n\times p}</annotation></semantics></math> and ground-truth actions <math id="S4.SS2.p4.2.m2" class="ltx_Math" alttext="Y\in\mathbb{R}^{n\times q}" display="inline" intent=":literal"><semantics><mrow><mi>Y</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>q</mi></mrow></msup></mrow><annotation encoding="application/x-tex">Y\in\mathbb{R}^{n\times q}</annotation></semantics></math>, CCA finds weight vectors <math id="S4.SS2.p4.3.m3" class="ltx_Math" alttext="a\in\mathbb{R}^{p}" display="inline" intent=":literal"><semantics><mrow><mi>a</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>p</mi></msup></mrow><annotation encoding="application/x-tex">a\in\mathbb{R}^{p}</annotation></semantics></math> and <math id="S4.SS2.p4.4.m4" class="ltx_Math" alttext="b\in\mathbb{R}^{q}" display="inline" intent=":literal"><semantics><mrow><mi>b</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>q</mi></msup></mrow><annotation encoding="application/x-tex">b\in\mathbb{R}^{q}</annotation></semantics></math> that maximize the correlation between transformed variables <math id="S4.SS2.p4.5.m5" class="ltx_Math" alttext="u" display="inline" intent=":literal"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math> and <math id="S4.SS2.p4.6.m6" class="ltx_Math" alttext="v" display="inline" intent=":literal"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>.</p>
+<table id="S4.E9" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S4.E9.m1" class="ltx_Math" alttext="u=Za,\quad v=Yb," display="block" intent=":literal"><semantics><mrow><mrow><mrow><mi>u</mi><mo>=</mo><mrow><mi>Z</mi><mo lspace="0em" rspace="0em">​</mo><mi>a</mi></mrow></mrow><mo rspace="1.167em">,</mo><mrow><mi>v</mi><mo>=</mo><mrow><mi>Y</mi><mo lspace="0em" rspace="0em">​</mo><mi>b</mi></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">u=Za,\quad v=Yb,</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(9)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S4.SS2.p5" class="ltx_para ltx_noindent">
+<p id="S4.SS2.p5.4" class="ltx_p">CCA produces pairs of canonical components <math id="S4.SS2.p5.1.m1" class="ltx_Math" alttext="(u_{i},v_{i})" display="inline" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>u</mi><mi>i</mi></msub><mo>,</mo><msub><mi>v</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(u_{i},v_{i})</annotation></semantics></math> that capture the linear correlations between latent and ground-truth actions, ordered from strongest to weakest. The first pair <math id="S4.SS2.p5.2.m2" class="ltx_Math" alttext="(u_{1},v_{1})" display="inline" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo><msub><mi>v</mi><mn>1</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(u_{1},v_{1})</annotation></semantics></math>, known as the first <em id="S4.SS2.p5.4.1" class="ltx_emph ltx_font_italic">canonical components</em> has the strongest correlation. The correlation factor is simply the <span id="S4.SS2.p5.4.2" class="ltx_text ltx_font_bold">Pearson correlation coefficient</span> between transformed variables <math id="S4.SS2.p5.3.m3" class="ltx_Math" alttext="u" display="inline" intent=":literal"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math> and <math id="S4.SS2.p5.4.m4" class="ltx_Math" alttext="v" display="inline" intent=":literal"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>.</p>
+</div>
+<div id="S4.SS2.p6" class="ltx_para ltx_noindent">
+<table id="S4.E10" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S4.E10.m1" class="ltx_Math" alttext="\rho=\frac{\operatorname{cov}(u,v)}{\sqrt{\operatorname{var}(u)}\,\sqrt{\operatorname{var}(v)}}" display="block" intent=":literal"><semantics><mrow><mi>ρ</mi><mo>=</mo><mfrac><mrow><mi>cov</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow><mrow><msqrt><mrow><mi>var</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">)</mo></mrow></mrow></msqrt><mo lspace="0.170em" rspace="0em">​</mo><msqrt><mrow><mi>var</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow></msqrt></mrow></mfrac></mrow><annotation encoding="application/x-tex">\rho=\frac{\operatorname{cov}(u,v)}{\sqrt{\operatorname{var}(u)}\,\sqrt{\operatorname{var}(v)}}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(10)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S4.SS2.p7" class="ltx_para ltx_noindent">
+<p id="S4.SS2.p7.4" class="ltx_p">Where <math id="S4.SS2.p7.1.m1" class="ltx_Math" alttext="\operatorname{cov}(u,v)" display="inline" intent=":literal"><semantics><mrow><mi>cov</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\operatorname{cov}(u,v)</annotation></semantics></math> denotes the covariance between <math id="S4.SS2.p7.2.m2" class="ltx_Math" alttext="u" display="inline" intent=":literal"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math> and <math id="S4.SS2.p7.3.m3" class="ltx_Math" alttext="v" display="inline" intent=":literal"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>, and <math id="S4.SS2.p7.4.m4" class="ltx_Math" alttext="\operatorname{var}(u),\operatorname{var}(v)" display="inline" intent=":literal"><semantics><mrow><mrow><mi>var</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">)</mo></mrow></mrow><mo>,</mo><mrow><mi>var</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\operatorname{var}(u),\operatorname{var}(v)</annotation></semantics></math> are their variances.</p>
+</div>
+</section>
+</section>
+<section id="S5" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5 </span>Results &amp; Discussion</h2>
+
+<div id="S5.p1" class="ltx_para ltx_noindent">
+<p id="S5.p1.1" class="ltx_p">We present quantitative and qualitative results of our framework across the LIBERO benchmark, its task suites, and a real-world setup, followed by a discussion of our findings. We use a DreamerV3 world model with a 50M-parameter configuration and a latent action space of dimension 7, matching the dimensionality of the ground-truth actions. The action chunk size is set to 10 future actions for BAKU experiments and 16 for Diffusion Policy experiments. Performance is evaluated using Success Rate (SR), defined as the percentage of successful trials over the total number of attempts. Results are reported across three random seeds, with 30 evaluation trials per task in LIBERO and 10 evaluation trials in the real-world setup. Additional training details are provided in the Appendix  <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:training</span>.</p>
+</div>
+<div id="S5.p2" class="ltx_para ltx_noindent">
+<p id="S5.p2.1" class="ltx_p"><span id="S5.p2.1.1" class="ltx_text ltx_font_bold">R1. Latent action priors vs. ground-truth pretraining.</span>
+We use BAKU and Diffusion Policy on LIBERO-90 tasks as baselines. An interesting finding is that pretraining on robotics or human video datasets <em id="S5.p2.1.2" class="ltx_emph ltx_font_italic">without</em> ground-truth actions, when combined with world models, can outperform supervised pretraining on action labels. We hypothesize that supervised pretraining on actions, forces the model to map observations to actions, which can cause it to overfit to the distribution of BridgeData v2 actions (specific robots, trajectories, task setups). However, world model pretraining encourage the model to learn state transitions and dynamics. This generalizes better when finetuned on downstream tasks, since the dynamics are more universal across tasks than a specific embodiment.</p>
+</div>
+<section id="S5.SS0.SSSx1" class="ltx_subsubsection">
+<h4 class="ltx_title ltx_title_subsubsection">Results on LIBERO-90</h4>
+
+<div id="S5.SS0.SSSx1.p1" class="ltx_para">
+<p id="S5.SS0.SSSx1.p1.1" class="ltx_p">As shown in Figure <a href="#S5.F4" title="Figure 4 ‣ Results on LIBERO-90 ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">4</span></a>, Training from scratch provides baselines of 91.4% (BAKU) and 85.7% Diffusion Policy, while supervised pretraining on BridgeData improves performance to 92.7% and 91.9%, respectively.
+World modeling pretraining results in improvement: BAKU reaches 93.7% with BridgeData (WM) and 92.6% with Something-Something (WM), while Diffusion Policy achieves 93.0% and 91.9% under the same settings. These results highlight that world modeling not only reduces reliance on action labels but can match or surpass supervised pretraining across models.</p>
+</div>
+<figure id="S5.F4" class="ltx_figure">
+<div class="ltx_flex_figure">
+<div class="ltx_flex_cell ltx_flex_size_1">
+<figure id="S5.F4.sf1" class="ltx_figure ltx_figure_panel ltx_align_center"><img src="2509.18428v2/figures/results/baku_bar_plot.png" id="S5.F4.sf1.g1" class="ltx_graphics ltx_img_square" width="269" height="236" alt="Refer to caption">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_figure">(a) </span>Success rates of <span id="S5.F4.sf1.2.1" class="ltx_text ltx_font_bold">BAKU</span> on LIBERO-90 under different pretraining strategies.</figcaption>
+</figure>
+</div>
+<div class="ltx_flex_break"></div>
+<div class="ltx_flex_cell ltx_flex_size_1">
+<figure id="S5.F4.sf2" class="ltx_figure ltx_figure_panel ltx_align_center"><img src="2509.18428v2/figures/results/dp_bar_plot.png" id="S5.F4.sf2.g1" class="ltx_graphics ltx_img_square" width="269" height="236" alt="Refer to caption">
+<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_figure">(b) </span>Success rates of <span id="S5.F4.sf2.2.1" class="ltx_text ltx_font_bold">Diffusion Policy</span> on LIBERO-90 under different pretraining strategies.</figcaption>
+</figure>
+</div>
+</div>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4: </span>Comparison of success rates under different pretraining strategies for (a) BAKU and (b) Diffusion Policy on LIBERO-90 benchmark. WM = world modeling without action labels.</figcaption>
+</figure>
+</section>
+<section id="S5.SS0.SSSx2" class="ltx_subsubsection">
+<h4 class="ltx_title ltx_title_subsubsection">Results on Real-world setup</h4>
+
+<div id="S5.SS0.SSSx2.p1" class="ltx_para ltx_noindent">
+<p id="S5.SS0.SSSx2.p1.1" class="ltx_p">Pretraining our framework solely on human videos from the Something-Something v2 dataset significantly improves performance on real-world tasks, achieving near-perfect success rates across five custom downstream tasks. Training only on our custom dataset without pretraining gives an average success rate of 84%, which increases to 94% with our pretraining framework. As shown in Table <a href="#S5.T1" title="Table 1 ‣ Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">1</span></a>, these results show that world modeling improves performance not just in simulation but also in real-world tasks. The qualitative results of our framework on real-world testing are shown in Figure <a href="#S4.F3" title="Figure 3 ‣ 4.1 Benchmarks and Environments ‣ 4 Experiments ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">3</span></a>, demonstrating the ability of our approach to handle complex real-world scenarios.</p>
+</div>
+<figure id="S5.T1" class="ltx_table">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 1: </span>Success Rates (%) on five tasks from the real-world manipulation setup.</figcaption>
+<div id="S5.T1.1" class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:377.3pt;height:45.6pt;vertical-align:-20.5pt;"><span class="ltx_transformed_inner" style="transform:translate(-16.4pt,2.0pt) scale(0.92,0.92) ;">
+<table id="S5.T1.1.1" class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr id="S5.T1.1.1.1.1" class="ltx_tr">
+<th id="S5.T1.1.1.1.1.1" class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Model</th>
+<th id="S5.T1.1.1.1.1.2" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt" colspan="3">Pick-and-place</th>
+<th id="S5.T1.1.1.1.1.3" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Move</th>
+<th id="S5.T1.1.1.1.1.4" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Stack</th>
+<th id="S5.T1.1.1.1.1.5" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Average</th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr id="S5.T1.1.1.2.1" class="ltx_tr">
+<th id="S5.T1.1.1.2.1.1" class="ltx_td ltx_th ltx_th_row"></th>
+<th id="S5.T1.1.1.2.1.2" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">1</th>
+<th id="S5.T1.1.1.2.1.3" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">2</th>
+<th id="S5.T1.1.1.2.1.4" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_t">3</th>
+<th id="S5.T1.1.1.2.1.5" class="ltx_td ltx_th ltx_th_column"></th>
+<th id="S5.T1.1.1.2.1.6" class="ltx_td ltx_th ltx_th_column"></th>
+<td id="S5.T1.1.1.2.1.7" class="ltx_td"></td>
+</tr>
+<tr id="S5.T1.1.1.3.2" class="ltx_tr">
+<th id="S5.T1.1.1.3.2.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">BAKU w/o latent <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib7" title="Baku: an efficient transformer for multi-task policy learning" class="ltx_ref">15</a>]</cite>
+</th>
+<td id="S5.T1.1.1.3.2.2" class="ltx_td ltx_align_center ltx_border_t">80.0</td>
+<td id="S5.T1.1.1.3.2.3" class="ltx_td ltx_align_center ltx_border_t"><span id="S5.T1.1.1.3.2.3.1" class="ltx_text ltx_font_bold">100.0</span></td>
+<td id="S5.T1.1.1.3.2.4" class="ltx_td ltx_align_center ltx_border_t">90.0</td>
+<td id="S5.T1.1.1.3.2.5" class="ltx_td ltx_align_center ltx_border_t">70.0</td>
+<td id="S5.T1.1.1.3.2.6" class="ltx_td ltx_align_center ltx_border_t">80.0</td>
+<td id="S5.T1.1.1.3.2.7" class="ltx_td ltx_align_center ltx_border_t">84.0</td>
+</tr>
+<tr id="S5.T1.1.1.4.3" class="ltx_tr">
+<th id="S5.T1.1.1.4.3.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">BAKU w/ latent (<span id="S5.T1.1.1.4.3.1.1" class="ltx_text ltx_font_bold">Ours</span>)</th>
+<td id="S5.T1.1.1.4.3.2" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T1.1.1.4.3.2.1" class="ltx_text ltx_font_bold">90.0</span></td>
+<td id="S5.T1.1.1.4.3.3" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T1.1.1.4.3.3.1" class="ltx_text ltx_font_bold">100.0</span></td>
+<td id="S5.T1.1.1.4.3.4" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T1.1.1.4.3.4.1" class="ltx_text ltx_font_bold">90.0</span></td>
+<td id="S5.T1.1.1.4.3.5" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T1.1.1.4.3.5.1" class="ltx_text ltx_font_bold">90.0</span></td>
+<td id="S5.T1.1.1.4.3.6" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T1.1.1.4.3.6.1" class="ltx_text ltx_font_bold">100.0</span></td>
+<td id="S5.T1.1.1.4.3.7" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T1.1.1.4.3.7.1" class="ltx_text ltx_font_bold">94.0</span></td>
+</tr>
+</tbody>
+</table>
+</span></div>
+</figure>
+<div id="S5.SS0.SSSx2.p2" class="ltx_para ltx_noindent">
+<p id="S5.SS0.SSSx2.p2.2" class="ltx_p"><span id="S5.SS0.SSSx2.p2.2.1" class="ltx_text ltx_font_bold">R2. Comparison with similar methods.</span>
+We compare our framework using the diffusion policy model with other state-of-the-art models on the LIBERO task suites (Spatial, Object, Goal, Long). Table <a href="#S5.T2" title="Table 2 ‣ Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">2</span></a> compares three categories of models:
+1) Models pretrained on ground-truth robotics actions (Octo <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib21" title="Octo: an open-source generalist robot policy" class="ltx_ref">28</a>]</cite>, OpenVLA <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib3" title="Openvla: an open-source vision-language-action model" class="ltx_ref">16</a>]</cite>, <math id="S5.SS0.SSSx2.p2.1.m1" class="ltx_Math" alttext="\pi_{0}" display="inline" intent=":literal"><semantics><msub><mi>π</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\pi_{0}</annotation></semantics></math> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib2" title="⁢Π0: A vision-language-action flow model for general robot control" class="ltx_ref">3</a>]</cite>). 2) Models initialized from VLMs trained on internet scale data (<math id="S5.SS0.SSSx2.p2.2.m2" class="ltx_Math" alttext="\pi_{0}" display="inline" intent=":literal"><semantics><msub><mi>π</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\pi_{0}</annotation></semantics></math> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib2" title="⁢Π0: A vision-language-action flow model for general robot control" class="ltx_ref">3</a>]</cite> initialized from PaliGemma <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib24" title="Paligemma: a versatile 3b vlm for transfer" class="ltx_ref">2</a>]</cite> and smolVLA <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib22" title="Smolvla: a vision-language-action model for affordable and efficient robotics" class="ltx_ref">27</a>]</cite> from smolVLM <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib23" title="Smolvlm: redefining small and efficient multimodal models" class="ltx_ref">20</a>]</cite>).
+3) Models with a similar objective to ours, relying on human videos, robot videos, or a mix of both, such as LAPA <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib4" title="Latent action pretraining from videos" class="ltx_ref">32</a>]</cite>, UniVLA <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib39" title="Univla: learning to act anywhere with task-centric latent actions" class="ltx_ref">5</a>]</cite>, and villa-X <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib5" title="Villa-x: enhancing latent action modeling in vision-language-action models" class="ltx_ref">6</a>]</cite>. We first train the diffusion policy on the LIBERO task suites without any pretraining. Providing a baseline that underperforms UniVLA and villa-X, with our proposed pretraining framework on Something-Something v2 dataset, we further improve upon the diffusion policy, achieving the best average success rate across task suites.</p>
+</div>
+<figure id="S5.T2" class="ltx_table">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 2: </span>Baseline models’ performance comparison across LIBERO task suites. Reported SR scores are taken directly from the original publications. LAPA results are reproduced by UniVLA authors.</figcaption>
+<div id="S5.T2.2" class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:481.3pt;height:114.2pt;vertical-align:-55.0pt;"><span class="ltx_transformed_inner" style="transform:translate(-42.5pt,10.1pt) scale(0.85,0.85) ;">
+<table id="S5.T2.2.2" class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr id="S5.T2.2.2.3.1" class="ltx_tr">
+<th id="S5.T2.2.2.3.1.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt">Model</th>
+<th id="S5.T2.2.2.3.1.2" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_tt">Pretraining Method</th>
+<td id="S5.T2.2.2.3.1.3" class="ltx_td ltx_align_center ltx_border_tt">Spatial</td>
+<td id="S5.T2.2.2.3.1.4" class="ltx_td ltx_align_center ltx_border_tt">Object</td>
+<td id="S5.T2.2.2.3.1.5" class="ltx_td ltx_align_center ltx_border_tt">Goal</td>
+<td id="S5.T2.2.2.3.1.6" class="ltx_td ltx_align_center ltx_border_tt">Long</td>
+<td id="S5.T2.2.2.3.1.7" class="ltx_td ltx_align_center ltx_border_tt">Average</td>
+</tr>
+<tr id="S5.T2.2.2.4.2" class="ltx_tr">
+<th id="S5.T2.2.2.4.2.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">Octo <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib21" title="Octo: an open-source generalist robot policy" class="ltx_ref">28</a>]</cite>
+</th>
+<th id="S5.T2.2.2.4.2.2" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">Robot Actions</th>
+<td id="S5.T2.2.2.4.2.3" class="ltx_td ltx_align_center ltx_border_t">78.90</td>
+<td id="S5.T2.2.2.4.2.4" class="ltx_td ltx_align_center ltx_border_t">85.70</td>
+<td id="S5.T2.2.2.4.2.5" class="ltx_td ltx_align_center ltx_border_t">84.60</td>
+<td id="S5.T2.2.2.4.2.6" class="ltx_td ltx_align_center ltx_border_t">51.10</td>
+<td id="S5.T2.2.2.4.2.7" class="ltx_td ltx_align_center ltx_border_t">75.10</td>
+</tr>
+<tr id="S5.T2.2.2.5.3" class="ltx_tr">
+<th id="S5.T2.2.2.5.3.1" class="ltx_td ltx_align_left ltx_th ltx_th_row">OpenVLA <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib3" title="Openvla: an open-source vision-language-action model" class="ltx_ref">16</a>]</cite>
+</th>
+<th id="S5.T2.2.2.5.3.2" class="ltx_td ltx_align_left ltx_th ltx_th_row">Robot Actions</th>
+<td id="S5.T2.2.2.5.3.3" class="ltx_td ltx_align_center">84.70</td>
+<td id="S5.T2.2.2.5.3.4" class="ltx_td ltx_align_center">88.40</td>
+<td id="S5.T2.2.2.5.3.5" class="ltx_td ltx_align_center">79.20</td>
+<td id="S5.T2.2.2.5.3.6" class="ltx_td ltx_align_center">53.70</td>
+<td id="S5.T2.2.2.5.3.7" class="ltx_td ltx_align_center">76.50</td>
+</tr>
+<tr id="S5.T2.1.1.1" class="ltx_tr">
+<th id="S5.T2.1.1.1.1" class="ltx_td ltx_align_left ltx_th ltx_th_row">
+<math id="S5.T2.1.1.1.1.m1" class="ltx_Math" alttext="\pi_{0}" display="inline" intent=":literal"><semantics><msub><mi>π</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\pi_{0}</annotation></semantics></math> <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib2" title="⁢Π0: A vision-language-action flow model for general robot control" class="ltx_ref">3</a>]</cite>
+</th>
+<th id="S5.T2.1.1.1.2" class="ltx_td ltx_align_left ltx_th ltx_th_row">Robot Actions</th>
+<td id="S5.T2.1.1.1.3" class="ltx_td ltx_align_center">90.00</td>
+<td id="S5.T2.1.1.1.4" class="ltx_td ltx_align_center">86.00</td>
+<td id="S5.T2.1.1.1.5" class="ltx_td ltx_align_center">95.00</td>
+<td id="S5.T2.1.1.1.6" class="ltx_td ltx_align_center">73.00</td>
+<td id="S5.T2.1.1.1.7" class="ltx_td ltx_align_center">86.00</td>
+</tr>
+<tr id="S5.T2.2.2.2" class="ltx_tr">
+<th id="S5.T2.2.2.2.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">
+<math id="S5.T2.2.2.2.1.m1" class="ltx_Math" alttext="\pi_{0}" display="inline" intent=":literal"><semantics><msub><mi>π</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\pi_{0}</annotation></semantics></math> (Paligemma-3B) <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib2" title="⁢Π0: A vision-language-action flow model for general robot control" class="ltx_ref">3</a>]</cite>
+</th>
+<th id="S5.T2.2.2.2.2" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">VLM Checkpoint</th>
+<td id="S5.T2.2.2.2.3" class="ltx_td ltx_align_center ltx_border_t">87.00</td>
+<td id="S5.T2.2.2.2.4" class="ltx_td ltx_align_center ltx_border_t">63.00</td>
+<td id="S5.T2.2.2.2.5" class="ltx_td ltx_align_center ltx_border_t">89.00</td>
+<td id="S5.T2.2.2.2.6" class="ltx_td ltx_align_center ltx_border_t">48.00</td>
+<td id="S5.T2.2.2.2.7" class="ltx_td ltx_align_center ltx_border_t">71.80</td>
+</tr>
+<tr id="S5.T2.2.2.6.4" class="ltx_tr">
+<th id="S5.T2.2.2.6.4.1" class="ltx_td ltx_align_left ltx_th ltx_th_row">SmolVLA (SmolVLM-2.25B) <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib22" title="Smolvla: a vision-language-action model for affordable and efficient robotics" class="ltx_ref">27</a>]</cite>
+</th>
+<th id="S5.T2.2.2.6.4.2" class="ltx_td ltx_align_left ltx_th ltx_th_row">VLM Checkpoint</th>
+<td id="S5.T2.2.2.6.4.3" class="ltx_td ltx_align_center">93.00</td>
+<td id="S5.T2.2.2.6.4.4" class="ltx_td ltx_align_center">94.00</td>
+<td id="S5.T2.2.2.6.4.5" class="ltx_td ltx_align_center">91.00</td>
+<td id="S5.T2.2.2.6.4.6" class="ltx_td ltx_align_center">77.00</td>
+<td id="S5.T2.2.2.6.4.7" class="ltx_td ltx_align_center">88.75</td>
+</tr>
+<tr id="S5.T2.2.2.7.5" class="ltx_tr">
+<th id="S5.T2.2.2.7.5.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">LAPA <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib4" title="Latent action pretraining from videos" class="ltx_ref">32</a>]</cite>
+</th>
+<th id="S5.T2.2.2.7.5.2" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">Mix Videos</th>
+<td id="S5.T2.2.2.7.5.3" class="ltx_td ltx_align_center ltx_border_t">73.80</td>
+<td id="S5.T2.2.2.7.5.4" class="ltx_td ltx_align_center ltx_border_t">74.60</td>
+<td id="S5.T2.2.2.7.5.5" class="ltx_td ltx_align_center ltx_border_t">58.80</td>
+<td id="S5.T2.2.2.7.5.6" class="ltx_td ltx_align_center ltx_border_t">55.40</td>
+<td id="S5.T2.2.2.7.5.7" class="ltx_td ltx_align_center ltx_border_t">65.70</td>
+</tr>
+<tr id="S5.T2.2.2.8.6" class="ltx_tr">
+<th id="S5.T2.2.2.8.6.1" class="ltx_td ltx_align_left ltx_th ltx_th_row">UniVLA <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib39" title="Univla: learning to act anywhere with task-centric latent actions" class="ltx_ref">5</a>]</cite>
+</th>
+<th id="S5.T2.2.2.8.6.2" class="ltx_td ltx_align_left ltx_th ltx_th_row">Human Videos</th>
+<td id="S5.T2.2.2.8.6.3" class="ltx_td ltx_align_center">91.20</td>
+<td id="S5.T2.2.2.8.6.4" class="ltx_td ltx_align_center">94.20</td>
+<td id="S5.T2.2.2.8.6.5" class="ltx_td ltx_align_center">90.20</td>
+<td id="S5.T2.2.2.8.6.6" class="ltx_td ltx_align_center"><span id="S5.T2.2.2.8.6.6.1" class="ltx_text ltx_framed ltx_framed_underline">79.40</span></td>
+<td id="S5.T2.2.2.8.6.7" class="ltx_td ltx_align_center">88.70</td>
+</tr>
+<tr id="S5.T2.2.2.9.7" class="ltx_tr">
+<th id="S5.T2.2.2.9.7.1" class="ltx_td ltx_align_left ltx_th ltx_th_row">villa-X <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib5" title="Villa-x: enhancing latent action modeling in vision-language-action models" class="ltx_ref">6</a>]</cite>
+</th>
+<th id="S5.T2.2.2.9.7.2" class="ltx_td ltx_align_left ltx_th ltx_th_row">Mix Videos</th>
+<td id="S5.T2.2.2.9.7.3" class="ltx_td ltx_align_center"><span id="S5.T2.2.2.9.7.3.1" class="ltx_text ltx_font_bold">97.50</span></td>
+<td id="S5.T2.2.2.9.7.4" class="ltx_td ltx_align_center"><span id="S5.T2.2.2.9.7.4.1" class="ltx_text ltx_font_bold">97.00</span></td>
+<td id="S5.T2.2.2.9.7.5" class="ltx_td ltx_align_center"><span id="S5.T2.2.2.9.7.5.1" class="ltx_text ltx_framed ltx_framed_underline">91.50</span></td>
+<td id="S5.T2.2.2.9.7.6" class="ltx_td ltx_align_center">74.50</td>
+<td id="S5.T2.2.2.9.7.7" class="ltx_td ltx_align_center"><span id="S5.T2.2.2.9.7.7.1" class="ltx_text ltx_framed ltx_framed_underline">90.10</span></td>
+</tr>
+<tr id="S5.T2.2.2.10.8" class="ltx_tr">
+<th id="S5.T2.2.2.10.8.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">Diffusion Policy w/o latent <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib16" title="Diffusion policy: visuomotor policy learning via action diffusion" class="ltx_ref">7</a>]</cite>
+</th>
+<th id="S5.T2.2.2.10.8.2" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">None</th>
+<td id="S5.T2.2.2.10.8.3" class="ltx_td ltx_align_center ltx_border_t">88.10</td>
+<td id="S5.T2.2.2.10.8.4" class="ltx_td ltx_align_center ltx_border_t">81.40</td>
+<td id="S5.T2.2.2.10.8.5" class="ltx_td ltx_align_center ltx_border_t">87.50</td>
+<td id="S5.T2.2.2.10.8.6" class="ltx_td ltx_align_center ltx_border_t">70.50</td>
+<td id="S5.T2.2.2.10.8.7" class="ltx_td ltx_align_center ltx_border_t">81.87</td>
+</tr>
+<tr id="S5.T2.2.2.11.9" class="ltx_tr">
+<th id="S5.T2.2.2.11.9.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">Diffusion Policy w/ latent (<span id="S5.T2.2.2.11.9.1.1" class="ltx_text ltx_font_bold">Ours</span>)</th>
+<th id="S5.T2.2.2.11.9.2" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">Human Videos</th>
+<td id="S5.T2.2.2.11.9.3" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T2.2.2.11.9.3.1" class="ltx_text ltx_framed ltx_framed_underline">92.70</span></td>
+<td id="S5.T2.2.2.11.9.4" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T2.2.2.11.9.4.1" class="ltx_text ltx_framed ltx_framed_underline">96.30</span></td>
+<td id="S5.T2.2.2.11.9.5" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T2.2.2.11.9.5.1" class="ltx_text ltx_font_bold">94.20</span></td>
+<td id="S5.T2.2.2.11.9.6" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T2.2.2.11.9.6.1" class="ltx_text ltx_font_bold">88.00</span></td>
+<td id="S5.T2.2.2.11.9.7" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T2.2.2.11.9.7.1" class="ltx_text ltx_font_bold">92.80</span></td>
+</tr>
+</tbody>
+</table>
+</span></div>
+</figure>
+<div id="S5.SS0.SSSx2.p3" class="ltx_para ltx_noindent">
+<p id="S5.SS0.SSSx2.p3.1" class="ltx_p"><span id="S5.SS0.SSSx2.p3.1.1" class="ltx_text ltx_font_bold">R3. Correlation of latent and ground-truth actions.</span>
+We group actions by task type to assess correlation across manipulation tasks. As shown in Table <a href="#S5.T3" title="Table 3 ‣ Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">3</span></a>, the first canonical component achieves strong correlations in all task categories: Put (0.9154), Move (0.9599), Remove (0.9098), and Take (0.9541). Our method shows better correlation factors than villa-X <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib5" title="Villa-x: enhancing latent action modeling in vision-language-action models" class="ltx_ref">6</a>]</cite> in most tasks, which we attribute to the fact that our latent actions are predicted by an imitation learning model conditioned on task instruction, aligning more closely with ground-truth actions. In contrast, villa-X relies on inverse dynamics models, whose latents primarily capture scene transitions rather than actions.</p>
+</div>
+<figure id="S5.T3" class="ltx_table">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_table">Table 3: </span>CCA First Coefficient per group of tasks</figcaption>
+<div id="S5.T3.1" class="ltx_inline-block ltx_align_center ltx_transformed_outer" style="width:307.3pt;height:35.3pt;vertical-align:-15.3pt;"><span class="ltx_transformed_inner" style="transform:translate(-8.1pt,0.9pt) scale(0.95,0.95) ;">
+<table id="S5.T3.1.1" class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr id="S5.T3.1.1.1.1" class="ltx_tr">
+<th id="S5.T3.1.1.1.1.1" class="ltx_td ltx_align_left ltx_th ltx_th_column ltx_th_row ltx_border_tt">Method</th>
+<th id="S5.T3.1.1.1.1.2" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Put</th>
+<th id="S5.T3.1.1.1.1.3" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Move</th>
+<th id="S5.T3.1.1.1.1.4" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Remove</th>
+<th id="S5.T3.1.1.1.1.5" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_border_tt">Take</th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr id="S5.T3.1.1.2.1" class="ltx_tr">
+<th id="S5.T3.1.1.2.1.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_t">villa-X <cite class="ltx_cite ltx_citemacro_citep">[<a href="#bib.bib5" title="Villa-x: enhancing latent action modeling in vision-language-action models" class="ltx_ref">6</a>]</cite>
+</th>
+<td id="S5.T3.1.1.2.1.2" class="ltx_td ltx_align_center ltx_border_t">0.7863</td>
+<td id="S5.T3.1.1.2.1.3" class="ltx_td ltx_align_center ltx_border_t">0.9174</td>
+<td id="S5.T3.1.1.2.1.4" class="ltx_td ltx_align_center ltx_border_t"><span id="S5.T3.1.1.2.1.4.1" class="ltx_text ltx_font_bold">0.9955</span></td>
+<td id="S5.T3.1.1.2.1.5" class="ltx_td ltx_align_center ltx_border_t">0.9270</td>
+</tr>
+<tr id="S5.T3.1.1.3.2" class="ltx_tr">
+<th id="S5.T3.1.1.3.2.1" class="ltx_td ltx_align_left ltx_th ltx_th_row ltx_border_bb">LAWM (<span id="S5.T3.1.1.3.2.1.1" class="ltx_text ltx_font_bold">Ours</span>)</th>
+<td id="S5.T3.1.1.3.2.2" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T3.1.1.3.2.2.1" class="ltx_text ltx_font_bold">0.9154</span></td>
+<td id="S5.T3.1.1.3.2.3" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T3.1.1.3.2.3.1" class="ltx_text ltx_font_bold">0.9599</span></td>
+<td id="S5.T3.1.1.3.2.4" class="ltx_td ltx_align_center ltx_border_bb">0.9098</td>
+<td id="S5.T3.1.1.3.2.5" class="ltx_td ltx_align_center ltx_border_bb"><span id="S5.T3.1.1.3.2.5.1" class="ltx_text ltx_font_bold">0.9541</span></td>
+</tr>
+</tbody>
+</table>
+</span></div>
+</figure>
+</section>
+</section>
+<section id="S6" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">6 </span>Limitations</h2>
+
+<div id="S6.p1" class="ltx_para ltx_noindent">
+<p id="S6.p1.1" class="ltx_p">Despite the proposed improvements, this work still has limitations. First, jointly training an imitation learning model and a world model can be computationally expensive, especially with recent VLAs and world models with billions of parameters. Second, training the world model with MSE image reconstruction is known for rewarding pixel accuracy over task-relevant dynamics (blur, background shortcuts). Adding perceptual loss, optical flow loss, or masked modeling could help reduce shortcut learning. Third, the world model is trained only on single-view visual observations, ignoring multi-view inputs, proprioceptive data, and gripper states. This may limit its understanding of manipulation dynamics and scene geometry. Including these sources of information could help the model learn more physically grounded latent actions. We leave these explorations for future work.</p>
+</div>
+</section>
+<section id="S7" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">7 </span>Conclusion</h2>
+
+<div id="S7.p1" class="ltx_para ltx_noindent">
+<p id="S7.p1.1" class="ltx_p">In this paper, we introduce LAWM, a Latent Action pretraining framework for imitation learning models to learn high-quality action representations through World Modeling from unlabeled videos. We demonstrate that our method improves model performance in downstream tasks compared to supervised pretraining in the LIBERO benchmark and real-world setup. We also show that our method can be applied to human demonstration videos, where explicit action information is absent and the embodiment gap is substantial. LAWM provides a scalable way to learn action priors without relying on action labels. We expect that our work will open up the potential for building foundation models for robotics by pretraining large models on much larger web-scale video data.</p>
+</div>
+<div class="ltx_pagination ltx_role_newpage"></div>
+</section>
+<section id="bib" class="ltx_bibliography">
+<h2 class="ltx_title ltx_title_bibliography">References</h2>
+
+<ul id="bib.L1" class="ltx_biblist">
+<li id="bib.bib6" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[1]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">E. Alonso, A. Jelley, V. Micheli, A. Kanervisto, A. J. Storkey, T. Pearce, and F. Fleuret</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Diffusion for world modeling: visual details matter in atari</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in Neural Information Processing Systems</span> <span class="ltx_text ltx_bib_volume">37</span>, <span class="ltx_text ltx_bib_pages"> pp. 58757–58791</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS2.p1.1" title="2.2 World Models ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li id="bib.bib24" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[2]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">L. Beyer, A. Steiner, A. S. Pinto, A. Kolesnikov, X. Wang, D. Salz, M. Neumann, I. Alabdulmohsin, M. Tschannen, E. Bugliarello, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Paligemma: a versatile 3b vlm for transfer</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2407.07726</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S5.SS0.SSSx2.p2.2" title="Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§5</span></a>.
+</span>
+</li>
+<li id="bib.bib2" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[3]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">K. Black, N. Brown, D. Driess, A. Esmail, M. Equi, C. Finn, N. Fusai, L. Groom, K. Hausman, B. Ichter, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title"><math id="bib.bib2.1.m1a" class="ltx_Math" alttext="\Pi 0" display="inline" intent=":literal"><semantics><mrow><mi mathvariant="normal">Π</mi><mo lspace="0em" rspace="0em">​</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\Pi 0</annotation></semantics></math>: A vision-language-action flow model for general robot control</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2410.24164</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="1 Introduction ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a href="#S2.SS1.p1.1" title="2.1 Imitation Learning ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a href="#S2.p1.1" title="2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a href="#S5.SS0.SSSx2.p2.2" title="Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§5</span></a>,
+<a href="#S5.T2.1.1.1.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 2</span></a>,
+<a href="#S5.T2.2.2.2.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 2</span></a>.
+</span>
+</li>
+<li id="bib.bib35" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[4]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">J. Bruce, M. D. Dennis, A. Edwards, J. Parker-Holder, Y. Shi, E. Hughes, M. Lai, A. Mavalankar, R. Steigerwald, C. Apps, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Genie: generative interactive environments</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Forty-first International Conference on Machine Learning</span>,
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS3.p1.1" title="2.3 Latent Action Methods ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li id="bib.bib39" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[5]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">Q. Bu, Y. Yang, J. Cai, S. Gao, G. Ren, M. Yao, P. Luo, and H. Li</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Univla: learning to act anywhere with task-centric latent actions</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2505.06111</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS3.p1.1" title="2.3 Latent Action Methods ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.3</span></a>,
+<a href="#S4.SS2.p3.1" title="4.2 Baselines and Experimental Setup ‣ 4 Experiments ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§4.2</span></a>,
+<a href="#S5.SS0.SSSx2.p2.2" title="Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§5</span></a>,
+<a href="#S5.T2.2.2.8.6.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 2</span></a>.
+</span>
+</li>
+<li id="bib.bib5" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[6]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">X. Chen, H. Wei, P. Zhang, C. Zhang, K. Wang, Y. Guo, R. Yang, Y. Wang, X. Xiao, L. Zhao, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Villa-x: enhancing latent action modeling in vision-language-action models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2507.23682</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.I1.i3.p1.1" title="In 1 Introduction ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">3rd item</span></a>,
+<a href="#S2.SS3.p1.1" title="2.3 Latent Action Methods ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.3</span></a>,
+<a href="#S4.SS2.p3.1" title="4.2 Baselines and Experimental Setup ‣ 4 Experiments ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§4.2</span></a>,
+<a href="#S5.SS0.SSSx2.p2.2" title="Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§5</span></a>,
+<a href="#S5.SS0.SSSx2.p3.1" title="Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§5</span></a>,
+<a href="#S5.T2.2.2.9.7.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 2</span></a>,
+<a href="#S5.T3.1.1.2.1.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 3</span></a>.
+</span>
+</li>
+<li id="bib.bib16" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[7]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">C. Chi, Z. Xu, S. Feng, E. Cousineau, Y. Du, B. Burchfiel, R. Tedrake, and S. Song</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Diffusion policy: visuomotor policy learning via action diffusion</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">The International Journal of Robotics Research</span>, <span class="ltx_text ltx_bib_pages"> pp. 02783649241273668</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.I1.i3.p1.1" title="In 1 Introduction ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">3rd item</span></a>,
+<a href="#S2.SS1.p1.1" title="2.1 Imitation Learning ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a href="#S3.SS2.p1.1" title="3.2 Action Finetuning ‣ 3 Method ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§3.2</span></a>,
+<a href="#S3.SS2.p3.7" title="3.2 Action Finetuning ‣ 3 Method ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§3.2</span></a>,
+<a href="#S4.SS2.p1.1" title="4.2 Baselines and Experimental Setup ‣ 4 Experiments ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§4.2</span></a>,
+<a href="#S5.T2.2.2.10.8.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 2</span></a>.
+</span>
+</li>
+<li id="bib.bib34" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[8]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">Y. Du, S. Yang, B. Dai, H. Dai, O. Nachum, J. Tenenbaum, D. Schuurmans, and P. Abbeel</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Learning universal policies via text-guided video generation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in neural information processing systems</span> <span class="ltx_text ltx_bib_volume">36</span>, <span class="ltx_text ltx_bib_pages"> pp. 9156–9172</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS3.p1.1" title="2.3 Latent Action Methods ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li id="bib.bib14" class="ltx_bibitem ltx_bib_misc">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[9]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">Google</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Gemini</span>.
+</span>
+<span class="ltx_bibblock">Note: <span class="ltx_text ltx_bib_note"><a href="https://gemini.google.com" title="" class="ltx_ref ltx_url ltx_font_typewriter">https://gemini.google.com</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p1.1" title="1 Introduction ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li id="bib.bib11" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[10]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">R. Goyal, S. Ebrahimi Kahou, V. Michalski, J. Materzynska, S. Westphal, H. Kim, V. Haenel, I. Fruend, P. Yianilos, M. Mueller-Freitag, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2017)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">The” something something” video database for learning and evaluating visual common sense</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE international conference on computer vision</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 5842–5850</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S4.SS2.p2.1" title="4.2 Baselines and Experimental Setup ‣ 4 Experiments ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§4.2</span></a>.
+</span>
+</li>
+<li id="bib.bib12" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[11]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">K. Grauman, A. Westbury, E. Byrne, Z. Chavis, A. Furnari, R. Girdhar, J. Hamburger, H. Jiang, M. Liu, X. Liu, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2022)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Ego4d: around the world in 3,000 hours of egocentric video</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF conference on computer vision and pattern recognition</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 18995–19012</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS3.p1.1" title="2.3 Latent Action Methods ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li id="bib.bib28" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[12]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">D. Hafner, T. Lillicrap, J. Ba, and M. Norouzi</span><span class="ltx_text ltx_bib_year"> (2019)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Dream to control: learning behaviors by latent imagination</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:1912.01603</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS2.p1.1" title="2.2 World Models ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li id="bib.bib29" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[13]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">D. Hafner, T. Lillicrap, M. Norouzi, and J. Ba</span><span class="ltx_text ltx_bib_year"> (2020)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Mastering atari with discrete world models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2010.02193</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS2.p1.1" title="2.2 World Models ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.2</span></a>.
+</span>
+</li>
+<li id="bib.bib8" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[14]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">D. Hafner, J. Pasukonis, J. Ba, and T. Lillicrap</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Mastering diverse domains through world models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2301.04104</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.I1.i3.p1.1" title="In 1 Introduction ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">3rd item</span></a>,
+<a href="#S2.SS2.p1.1" title="2.2 World Models ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.2</span></a>,
+<a href="#S3.SS1.p7.5" title="3.1 Latent Action Pretraining ‣ 3 Method ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§3.1</span></a>.
+</span>
+</li>
+<li id="bib.bib7" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[15]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">S. Haldar, Z. Peng, and L. Pinto</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Baku: an efficient transformer for multi-task policy learning</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in Neural Information Processing Systems</span> <span class="ltx_text ltx_bib_volume">37</span>, <span class="ltx_text ltx_bib_pages"> pp. 141208–141239</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="2.1 Imitation Learning ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a href="#S3.SS2.p1.1" title="3.2 Action Finetuning ‣ 3 Method ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§3.2</span></a>,
+<a href="#S3.SS2.p3.7" title="3.2 Action Finetuning ‣ 3 Method ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§3.2</span></a>,
+<a href="#S4.SS2.p1.1" title="4.2 Baselines and Experimental Setup ‣ 4 Experiments ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§4.2</span></a>,
+<a href="#S5.T1.1.1.3.2.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 1</span></a>.
+</span>
+</li>
+<li id="bib.bib3" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[16]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">M. J. Kim, K. Pertsch, S. Karamcheti, T. Xiao, A. Balakrishna, S. Nair, R. Rafailov, E. Foster, G. Lam, P. Sanketi, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Openvla: an open-source vision-language-action model</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2406.09246</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p2.1" title="1 Introduction ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§1</span></a>,
+<a href="#S2.SS1.p1.1" title="2.1 Imitation Learning ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a href="#S2.p1.1" title="2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2</span></a>,
+<a href="#S5.SS0.SSSx2.p2.2" title="Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§5</span></a>,
+<a href="#S5.T2.2.2.5.3.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 2</span></a>.
+</span>
+</li>
+<li id="bib.bib37" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[17]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">X. Li, K. Hsu, J. Gu, K. Pertsch, O. Mees, H. R. Walke, C. Fu, I. Lunawat, I. Sieh, S. Kirmani, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Evaluating real-world robot manipulation policies in simulation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2405.05941</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS3.p1.1" title="2.3 Latent Action Methods ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li id="bib.bib9" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[18]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">B. Liu, Y. Zhu, C. Gao, Y. Feng, Q. Liu, Y. Zhu, and P. Stone</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Libero: benchmarking knowledge transfer for lifelong robot learning</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">Advances in Neural Information Processing Systems</span> <span class="ltx_text ltx_bib_volume">36</span>, <span class="ltx_text ltx_bib_pages"> pp. 44776–44791</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.I1.i3.p1.1" title="In 1 Introduction ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">3rd item</span></a>.
+</span>
+</li>
+<li id="bib.bib19" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[19]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">M. Mansour, A. Aly, B. Tharwat, S. Hashmi, D. An, and I. Reid</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Language and planning in robotic navigation: a multilingual evaluation of state-of-the-art models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2501.05478</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.p1.1" title="2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li id="bib.bib23" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[20]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">A. Marafioti, O. Zohar, M. Farré, M. Noyan, E. Bakouch, P. Cuenca, C. Zakka, L. B. Allal, A. Lozhkov, N. Tazi, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Smolvlm: redefining small and efficient multimodal models</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2504.05299</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S5.SS0.SSSx2.p2.2" title="Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§5</span></a>.
+</span>
+</li>
+<li id="bib.bib32" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[21]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">S. Nair, A. Rajeswaran, V. Kumar, C. Finn, and A. Gupta</span><span class="ltx_text ltx_bib_year"> (2022)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">R3m: a universal visual representation for robot manipulation</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2203.12601</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS3.p1.1" title="2.3 Latent Action Methods ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li id="bib.bib10" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[22]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">A. O’Neill, A. Rehman, A. Maddukuri, A. Gupta, A. Padalkar, A. Lee, A. Pooley, A. Gupta, A. Mandlekar, A. Jain, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Open x-embodiment: robotic learning datasets and rt-x models: open x-embodiment collaboration 0</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">2024 IEEE International Conference on Robotics and Automation (ICRA)</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 6892–6903</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="2.1 Imitation Learning ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.1</span></a>,
+<a href="#S2.p1.1" title="2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li id="bib.bib13" class="ltx_bibitem ltx_bib_misc">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[23]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">OpenAI</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">ChatGPT</span>.
+</span>
+<span class="ltx_bibblock">Note: <span class="ltx_text ltx_bib_note"><a href="https://chat.openai.com" title="" class="ltx_ref ltx_url ltx_font_typewriter">https://chat.openai.com</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S1.p1.1" title="1 Introduction ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§1</span></a>.
+</span>
+</li>
+<li id="bib.bib25" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[24]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">M. Oquab, T. Darcet, T. Moutakanni, H. Vo, M. Szafraniec, V. Khalidov, P. Fernandez, D. Haziza, F. Massa, A. El-Nouby, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Dinov2: learning robust visual features without supervision</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2304.07193</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="2.1 Imitation Learning ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li id="bib.bib27" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[25]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">E. Perez, F. Strub, H. De Vries, V. Dumoulin, and A. Courville</span><span class="ltx_text ltx_bib_year"> (2018)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Film: visual reasoning with a general conditioning layer</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the AAAI conference on artificial intelligence</span>,
+</span>
+<span class="ltx_bibblock">Vol. <span class="ltx_text ltx_bib_volume">32</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="2.1 Imitation Learning ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li id="bib.bib36" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[26]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">D. Schmidt and M. Jiang</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Learning to act without actions</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2312.10812</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS3.p1.1" title="2.3 Latent Action Methods ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li id="bib.bib22" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[27]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">M. Shukor, D. Aubakirova, F. Capuano, P. Kooijmans, S. Palma, A. Zouitine, M. Aractingi, C. Pascal, M. Russi, A. Marafioti, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Smolvla: a vision-language-action model for affordable and efficient robotics</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2506.01844</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S5.SS0.SSSx2.p2.2" title="Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§5</span></a>,
+<a href="#S5.T2.2.2.6.4.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 2</span></a>.
+</span>
+</li>
+<li id="bib.bib21" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[28]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">O. M. Team, D. Ghosh, H. Walke, K. Pertsch, K. Black, O. Mees, S. Dasari, J. Hejna, T. Kreiman, C. Xu, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Octo: an open-source generalist robot policy</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2405.12213</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S5.SS0.SSSx2.p2.2" title="Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§5</span></a>,
+<a href="#S5.T2.2.2.4.2.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 2</span></a>.
+</span>
+</li>
+<li id="bib.bib20" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[29]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">H. R. Walke, K. Black, T. Z. Zhao, Q. Vuong, C. Zheng, P. Hansen-Estruch, A. W. He, V. Myers, M. J. Kim, M. Du, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Bridgedata v2: a dataset for robot learning at scale</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Conference on Robot Learning</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 1723–1736</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S4.SS2.p2.1" title="4.2 Baselines and Experimental Setup ‣ 4 Experiments ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§4.2</span></a>.
+</span>
+</li>
+<li id="bib.bib33" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[30]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">C. Wang, L. Fan, J. Sun, R. Zhang, L. Fei-Fei, D. Xu, Y. Zhu, and A. Anandkumar</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Mimicplay: long-horizon imitation learning by watching human play</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2302.12422</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS3.p1.1" title="2.3 Latent Action Methods ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.3</span></a>.
+</span>
+</li>
+<li id="bib.bib30" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[31]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">L. H. K. Wong, X. Kang, K. Bai, and J. Zhang</span><span class="ltx_text ltx_bib_year"> (2025)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">A survey of robotic navigation and manipulation with physics simulators in the era of embodied ai</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2505.01458</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.p1.1" title="2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li id="bib.bib4" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[32]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">S. Ye, J. Jang, B. Jeon, S. Joo, J. Yang, B. Peng, A. Mandlekar, R. Tan, Y. Chao, B. Y. Lin, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Latent action pretraining from videos</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2410.11758</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS3.p1.1" title="2.3 Latent Action Methods ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.3</span></a>,
+<a href="#S3.SS2.p2.1" title="3.2 Action Finetuning ‣ 3 Method ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§3.2</span></a>,
+<a href="#S5.SS0.SSSx2.p2.2" title="Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§5</span></a>,
+<a href="#S5.T2.2.2.7.5.1" title="In Results on Real-world setup ‣ 5 Results &amp; Discussion ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">Table 2</span></a>.
+</span>
+</li>
+<li id="bib.bib26" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[33]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">X. Zhai, B. Mustafa, A. Kolesnikov, and L. Beyer</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Sigmoid loss for language image pre-training</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the IEEE/CVF international conference on computer vision</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 11975–11986</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="2.1 Imitation Learning ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li id="bib.bib31" class="ltx_bibitem ltx_bib_article">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[34]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">T. Z. Zhao, V. Kumar, S. Levine, and C. Finn</span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Learning fine-grained bimanual manipulation with low-cost hardware</span>.
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_journal">arXiv preprint arXiv:2304.13705</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.SS1.p1.1" title="2.1 Imitation Learning ‣ 2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2.1</span></a>.
+</span>
+</li>
+<li id="bib.bib18" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[35]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">G. Zhou, Y. Hong, Z. Wang, X. E. Wang, and Q. Wu</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Navgpt-2: unleashing navigational reasoning capability for large vision-language models</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">European Conference on Computer Vision</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 260–278</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.p1.1" title="2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li id="bib.bib17" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[36]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">G. Zhou, Y. Hong, and Q. Wu</span><span class="ltx_text ltx_bib_year"> (2024)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Navgpt: explicit reasoning in vision-and-language navigation with large language models</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Proceedings of the AAAI Conference on Artificial Intelligence</span>,
+</span>
+<span class="ltx_bibblock">Vol. <span class="ltx_text ltx_bib_volume">38</span>, <span class="ltx_text ltx_bib_pages"> pp. 7641–7649</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.p1.1" title="2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+<li id="bib.bib1" class="ltx_bibitem ltx_bib_inproceedings">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[37]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">B. Zitkovich, T. Yu, S. Xu, P. Xu, T. Xiao, F. Xia, J. Wu, P. Wohlhart, S. Welker, A. Wahid, <span class="ltx_text ltx_bib_etal">et al.</span></span><span class="ltx_text ltx_bib_year"> (2023)</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">Rt-2: vision-language-action models transfer web knowledge to robotic control</span>.
+</span>
+<span class="ltx_bibblock">In <span class="ltx_text ltx_bib_inbook">Conference on Robot Learning</span>,
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_pages"> pp. 2165–2183</span>.
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a href="#S2.p1.1" title="2 Related Work ‣ Latent Action Pretraining Through World Modeling" class="ltx_ref"><span class="ltx_text ltx_ref_tag">§2</span></a>.
+</span>
+</li>
+</ul>
+</section>
+<div class="ltx_pagination ltx_role_newpage"></div>
+</article>
+</div>
+</div>
+<footer class="arxiv-html-footer">
+  <div class="ltx_page_logo">
+    Experimental support, please
+    <a href="./2509.18428v2/__stdout.txt" class="ltx_ref"
+    target="_blank" rel="nofollow">view the build logs</a>
+    for errors. Generated by
+    <a href="https://math.nist.gov/~BMiller/LaTeXML/" target="_blank" class="ltx_ref ltx_LaTeXML_logo">
+      <span style="letter-spacing: -0.2em; margin-right: 0.1em;">
+        L
+        <span style="font-size: 70%; position: relative; bottom: 2.2pt;">A</span>
+        T
+        <span style="position: relative; bottom: -0.4ex;">E</span>
+      </span>
+      <span class="ltx_font_smallcaps">xml</span>
+      <img alt="[LOGO]"
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAOCAYAAAD5YeaVAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wKExQZLWTEaOUAAAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAdpJREFUKM9tkL+L2nAARz9fPZNCKFapUn8kyI0e4iRHSR1Kb8ng0lJw6FYHFwv2LwhOpcWxTjeUunYqOmqd6hEoRDhtDWdA8ApRYsSUCDHNt5ul13vz4w0vWCgUnnEc975arX6ORqN3VqtVZbfbTQC4uEHANM3jSqXymFI6yWazP2KxWAXAL9zCUa1Wy2tXVxheKA9YNoR8Pt+aTqe4FVVVvz05O6MBhqUIBGk8Hn8HAOVy+T+XLJfLS4ZhTiRJgqIoVBRFIoric47jPnmeB1mW/9rr9ZpSSn3Lsmir1fJZlqWlUonKsvwWwD8ymc/nXwVBeLjf7xEKhdBut9Hr9WgmkyGEkJwsy5eHG5vN5g0AKIoCAEgkEkin0wQAfN9/cXPdheu6P33fBwB4ngcAcByHJpPJl+fn54mD3Gg0NrquXxeLRQAAwzAYj8cwTZPwPH9/sVg8PXweDAauqqr2cDjEer1GJBLBZDJBs9mE4zjwfZ85lAGg2+06hmGgXq+j3+/DsixYlgVN03a9Xu8jgCNCyIegIAgx13Vfd7vdu+FweG8YRkjXdWy329+dTgeSJD3ieZ7RNO0VAXAPwDEAO5VKndi2fWrb9jWl9Esul6PZbDY9Go1OZ7PZ9z/lyuD3OozU2wAAAABJRU5ErkJggg==">
+    </a>.
+  </div>
+  <div class="keyboard-glossary">
+    <h2>Instructions for reporting errors</h2>
+    <p>We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+      support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+      methods listed below:</p>
+    <ul>
+      <li>Click the "Report Issue" <span class="mobile-only">(<svg role="presentation"
+            style="display: inline-block; vertical-align: middle; fill: var(--text-color);" aria-hidden="true"
+            height="1em" viewBox="0 0 640 640">
+            <path
+              d="M224 160C224 107 267 64 320 64C373 64 416 107 416 160L416 163.6C416 179.3 403.3 192 387.6 192L252.5 192C236.8 192 224.1 179.3 224.1 163.6L224.1 160zM569.6 172.8C580.2 186.9 577.3 207 563.2 217.6L465.4 290.9C470.7 299.8 474.7 309.6 477.2 320L576 320C593.7 320 608 334.3 608 352C608 369.7 593.7 384 576 384L480 384L480 416C480 418.6 479.9 421.3 479.8 423.9L563.2 486.4C577.3 497 580.2 517.1 569.6 531.2C559 545.3 538.9 548.2 524.8 537.6L461.7 490.3C438.5 534.5 395.2 566.5 344 574.2L344 344C344 330.7 333.3 320 320 320C306.7 320 296 330.7 296 344L296 574.2C244.8 566.5 201.5 534.5 178.3 490.3L115.2 537.6C101.1 548.2 81 545.3 70.4 531.2C59.8 517.1 62.7 497 76.8 486.4L160.2 423.9C160.1 421.3 160 418.7 160 416L160 384L64 384C46.3 384 32 369.7 32 352C32 334.3 46.3 320 64 320L162.8 320C165.3 309.6 169.3 299.8 174.6 290.9L76.8 217.6C62.7 207 59.8 186.9 70.4 172.8C81 158.7 101.1 155.8 115.2 166.4L224 248C236.3 242.9 249.8 240 264 240L376 240C390.2 240 403.7 242.8 416 248L524.8 166.4C538.9 155.8 559 158.7 569.6 172.8z" />
+          </svg>)</span> button, located in the page header.</li>
+    </ul>
+    <p><strong>Tip:</strong> You can select the relevant text first, to include it in your report.</p>
+    <p>Our team has already identified <a class="ltx_ref" href="https://github.com/arXiv/html_feedback/issues"
+        target="_blank">the following issues</a>. We appreciate your time reviewing and reporting rendering errors we
+      may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+      should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+      all.</p>
+    <p>Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a <a
+        class="ltx_ref" href="https://github.com/brucemiller/LaTeXML/wiki/Porting-LaTeX-packages-for-LaTeXML"
+        target="_blank">list of packages that need conversion</a>, and welcome <a class="ltx_ref"
+        href="https://github.com/brucemiller/LaTeXML/issues" target="_blank">developer contributions</a>.</p>
+  </div>
+</footer><footer class="ds-site-footer">
+  <div class="ds-site-footer-grid">
+    <div class="ds-site-footer-main">
+      <div class="ds-site-footer-ack">
+        We gratefully acknowledge support from
+        our <strong>major funders</strong>,
+        <a href="https://info.arxiv.org/about/ourmembers.html"><strong>member institutions</strong></a><span class="ack-member-inline" hidden>, <strong></strong></span>,
+        and all contributors.
+      </div>
+      <nav class="ds-site-footer-links" aria-label="Site navigation">
+        <a href="https://info.arxiv.org/about">About</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help">Help</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help/contact.html">Contact</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help/subscribe">Subscribe</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help/license/index.html">Copyright</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help/policies/privacy_policy.html">Privacy</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://info.arxiv.org/help/web_accessibility.html">Accessibility</a>
+        <span class="ds-site-footer-sep" aria-hidden="true">&middot;</span>
+        <a href="https://status.arxiv.org" target="_blank" rel="noopener noreferrer">Operational Status<span class="is-sr-only"> (opens in new tab)</span></a>
+      </nav>
+    </div>
+
+    <div class="ds-site-footer-funders" aria-label="Major funders">
+      <div class="ds-site-footer-funders-label">Major funding support from</div>
+      <div class="ds-site-footer-funders-logos">
+        <a class="ds-funder-link" href="https://www.simonsfoundation.org/" target="_blank" rel="noopener noreferrer">
+          <img class="ds-funder-logo" src="/static/base/1.0.1/images/funders/simons-foundation.png" alt="Simons Foundation">
+        </a>
+        <a class="ds-funder-link" href="https://www.sfi.org.bm/" target="_blank" rel="noopener noreferrer">
+          <img class="ds-funder-logo" src="/static/base/1.0.1/images/funders/simons-foundation-international.png" alt="Simons Foundation International">
+        </a>
+        <a class="ds-funder-link" href="https://www.schmidtsciences.org/" target="_blank" rel="noopener noreferrer">
+          <img class="ds-funder-logo" src="/static/base/1.0.1/images/funders/schmidt-sciences.png" alt="Schmidt Sciences">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><div id="fixed-buttons-container">
+  <a id="disable-reading-mode-btn" class="header-button" href="javascript:toggleReadingMode();"
+    title="Disable reading mode, show header and footer">
+    <svg role="presentation" height="1.25rem"
+      viewBox="0 0 448 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+      <path
+        d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z" />
+    </svg>
+  </a>
+</div></body>
+</html>

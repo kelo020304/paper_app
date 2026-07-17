@@ -1,0 +1,45 @@
+{
+  "id": "2602.18639v1",
+  "baseId": "2602.18639",
+  "title": "Learning Invariant Visual Representations for Planning with Joint-Embedding Predictive World Models",
+  "authors": [
+    "Leonardo F. Toso",
+    "Davit Shadunts",
+    "Yunyang Lu",
+    "Nihal Sharma",
+    "Donglin Zhan",
+    "Nam H. Nguyen",
+    "James Anderson"
+  ],
+  "abstract": "World models learned from high-dimensional visual observations allow agents to make decisions and plan directly in latent space, avoiding pixel-level reconstruction. However, recent latent predictive architectures (JEPAs), including the DINO world model (DINO-WM), display a degradation in test time robustness due to their sensitivity to \"slow features\". These include visual variations such as background changes and distractors that are irrelevant to the task being solved. We address this limitation by augmenting the predictive objective with a bisimulation encoder that enforces control-relevant state equivalence, mapping states with similar transition dynamics to nearby latent states while limiting contributions from slow features. We evaluate our model on a simple navigation task under different test-time background changes and visual distractors. Across all benchmarks, our model consistently improves robustness to slow features while operating in a reduced latent space, up to 10x smaller than that of DINO-WM. Moreover, our model is agnostic to the choice of pretrained visual encoder and maintains robustness when paired with DINOv2, SimDINOv2, and iBOT features.",
+  "published": "2026-02-20T00:00:00Z",
+  "updated": "2026-02-20T00:00:00Z",
+  "categories": [
+    "cs.LG",
+    "math.OC"
+  ],
+  "primaryCategory": "cs.LG",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2602.18639v1",
+  "pdfUrl": "https://arxiv.org/pdf/2602.18639",
+  "tags": [
+    "Latent-WM",
+    "DINO特征",
+    "JEPA",
+    "鲁棒性",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2602.18639",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:36:06.552Z",
+  "modifiedAt": "2026-07-16T02:36:51.123Z",
+  "valueScore": 7,
+  "valueReason": "问题明确、方法与诊断高度对齐，且在受控视觉分布移位下给出一致的定量收益和跨三种骨干的测试；PCA-VCReg 与低维 patch 表示也具有工程针对性。主要扣分在于实验范围单一、基线覆盖有限、SimDINOv2 的绝对表现偏低，以及理论界在正文证明中依赖未写入定理的额外 ε 条件。"
+}

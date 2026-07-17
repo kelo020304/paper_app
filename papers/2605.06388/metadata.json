@@ -1,0 +1,43 @@
+{
+  "id": "2605.06388v1",
+  "baseId": "2605.06388",
+  "title": "Reconstruction or Semantics? What Makes a Latent Space Useful for Robotic World Models",
+  "authors": [
+    "Nilaksh",
+    "Saurav Jha",
+    "Artem Zholus",
+    "Sarath Chandar"
+  ],
+  "abstract": "World model-based policy evaluation is a practical proxy for testing real-world robot control by rolling out candidate actions in action-conditioned video diffusion models. As these models increasingly adopt latent diffusion modeling (LDM), choosing the right latent space becomes critical. While the status quo uses autoencoding latent spaces like VAEs that are primarily trained for pixel reconstruction, recent work suggests benefits from pretrained encoders with representation-aligned semantic latent spaces. We systematically evaluate these latent spaces for action-conditioned LDM by comparing six reconstruction and semantic encoders to train world model variants under a fixed protocol on BridgeV2 dataset, and show effective world model training in high-dimensional representation spaces with and without dimension compression. We then propose three axes to assess robotic world model performance: visual fidelity, planning and downstream policy performance, and latent representation quality. Our results show visual fidelity alone is insufficient for world model selection. While reconstruction encoders like VAE and Cosmos achieve strong pixel-level scores, semantic encoders such as V-JEPA 2.1 (strongest overall on policy), Web-DINO, and SigLIP 2 generally excel across the other two axes at all model scales. Our study advocates semantic latent space as stronger foundation for policy-relevant robotics diffusion world models.",
+  "published": "2026-05-07T00:00:00Z",
+  "updated": "2026-05-07T00:00:00Z",
+  "categories": [
+    "cs.CV",
+    "cs.LG",
+    "cs.RO"
+  ],
+  "primaryCategory": "cs.CV",
+  "comment": "9 pages",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2605.06388v1",
+  "pdfUrl": "https://arxiv.org/pdf/2605.06388",
+  "tags": [
+    "Latent-WM",
+    "DINO特征",
+    "JEPA",
+    "表征评测",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2605.06388",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:36:15.843Z",
+  "modifiedAt": "2026-07-16T02:37:10.565Z",
+  "valueScore": 8,
+  "valueReason": "价值在于把常被默认的“更会重建即更好的世界模型”假设转化为可控实验，并用多轴证据显示动作相关结构比像素质量更能预测规划和策略评估表现。实验协议、指标与消融较完整，且给出高维语义扩散的可操作配方。主要扣分来自外部有效性尚有限：只有一个主要机器人数据/具身设定，且关键闭环成功评测部分依赖VLM代理。"
+}

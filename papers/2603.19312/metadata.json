@@ -1,0 +1,43 @@
+{
+  "id": "2603.19312v3",
+  "baseId": "2603.19312",
+  "title": "LeWorldModel: Stable End-to-End Joint-Embedding Predictive Architecture from Pixels",
+  "authors": [
+    "Lucas Maes",
+    "Quentin Le Lidec",
+    "Damien Scieur",
+    "Yann LeCun",
+    "Randall Balestriero"
+  ],
+  "abstract": "Joint Embedding Predictive Architectures (JEPAs) offer a compelling framework for learning world models in compact latent spaces, yet existing methods remain fragile, relying on complex multi-term losses, exponential moving averages, pre-trained encoders, or auxiliary supervision to avoid representation collapse. In this work, we introduce LeWorldModel (LeWM), the first JEPA that trains stably end-to-end from raw pixels using only two loss terms: a next-embedding prediction loss and a regularizer enforcing Gaussian-distributed latent embeddings. This reduces tunable loss hyperparameters from six to one compared to the only existing end-to-end alternative. With ~15M parameters trainable on a single GPU in a few hours, LeWM plans up to 48x faster than foundation-model-based world models while remaining competitive across diverse 2D and 3D control tasks. Beyond control, we show that LeWM's latent space encodes meaningful physical structure through probing of physical quantities. Surprise evaluation confirms that the model reliably detects physically implausible events.",
+  "published": "2026-03-13T00:00:00Z",
+  "updated": "2026-03-13T00:00:00Z",
+  "categories": [
+    "cs.LG",
+    "cs.AI"
+  ],
+  "primaryCategory": "cs.LG",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2603.19312v3",
+  "pdfUrl": "https://arxiv.org/pdf/2603.19312",
+  "tags": [
+    "Latent-WM",
+    "JEPA",
+    "端到端",
+    "效率",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2603.19312",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:36:08.401Z",
+  "modifiedAt": "2026-07-16T02:37:01.052Z",
+  "valueScore": 7,
+  "valueReason": "问题明确且方法简洁：用分布级防塌缩正则替代多项启发式损失，带来可观的工程可复现性价值，并在多个控制任务呈现竞争性结果与速度优势。分数未更高的原因是实验规模有限、最复杂 3D 任务未胜过 DINO-WM、短时规划限制明显，且“稳定/可证明”结论需与 SIGReg 的理论适用条件及有限实验范围一并看待。"
+}

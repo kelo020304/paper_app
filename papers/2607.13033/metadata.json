@@ -1,0 +1,43 @@
+{
+  "id": "2607.13033v1",
+  "baseId": "2607.13033",
+  "title": "DenseReward: Dense Reward Learning via Failure Synthesis for Robotic Manipulation",
+  "authors": [
+    "Yu Fang",
+    "Wanxi Dong",
+    "Jiaqi Liu",
+    "Yue Yang",
+    "Mingxiao Huo",
+    "Yao Mu",
+    "Huaxiu Yao",
+    "Li Erran Li",
+    "Daniel Szafir",
+    "Mingyu Ding"
+  ],
+  "abstract": "Reinforcement learning holds great promise for improving robot policies beyond the limits of imitation learning. However, its practical adoption remains bottlenecked by the lack of reliable vision-language reward models that provide dense and informative feedback. Two key challenges remain: acquiring diverse failure data at scale and obtaining fine-grained reward signals beyond sparse trajectory-level success labels. Collecting failure trajectories typically requires laborious human effort, while pseudo-failures constructed by relabeling successful demonstrations fail to capture the diverse physical failure modes that arise during robot execution. Meanwhile, existing reward models often predict sparse binary or trajectory-level rewards, which provide limited guidance for efficient policy optimization. We introduce DenseReward, a dense robotic reward model that addresses both challenges. To train DenseReward, we develop an automated failure data generation pipeline that synthesizes physically realistic failure trajectories in simulation without human labeling, covering diverse failure modes such as collisions, missed grasps, object drops, and recovery behaviors. DenseReward predicts dense frame-level reward scores from visual observations and language instructions, enabling fine-grained estimation of task progress throughout an episode. Experiments show that DenseReward outperforms general-purpose VLMs and existing robotic reward models in dense reward prediction across both simulated and real-world manipulation. We further demonstrate that DenseReward provides effective reward guidance for downstream model predictive control and reinforcement learning. We release the dataset, trained reward models, and evaluation suite to support the development of failure-aware dense reward modeling for robot learning.",
+  "published": "2026-07-14T17:59:29Z",
+  "updated": "2026-07-14T17:59:29Z",
+  "categories": [
+    "cs.RO"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "Website: https://dense-reward.github.io/",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.13033v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.13033v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-17",
+  "valueScore": 8,
+  "valueReason": "论文把“可规模化、物理一致的失败数据”和“帧级进度奖励”两个奖励学习瓶颈统一到可复现的流水线，并同时验证离线预测、控制和真机 RL；尤其失败数据消融和真机小样本提升提供了直接支持。扣分在于失败与奖励曲线仍是人工设计的仿真机制，真机实验规模有限，且部分 RL 结果未报告完整数值和统计不确定性。",
+  "tags": [
+    "每日精选:2026-07-17"
+  ],
+  "key": "2607.13033",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-14",
+  "addedAt": "2026-07-17T01:07:37.991Z",
+  "modifiedAt": "2026-07-17T01:08:21.684Z",
+  "analysisStatus": "ready"
+}

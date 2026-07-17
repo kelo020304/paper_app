@@ -1,0 +1,41 @@
+{
+  "id": "2607.12356v1",
+  "baseId": "2607.12356",
+  "title": "VistaVLA: Geometry- and Semantic-Aware 3D Gaussian-Grounded VLA for Robotic Manipulation",
+  "authors": [
+    "Mohan Liu",
+    "Zhihao Gu",
+    "Xuanyu Chen",
+    "Haitian Zhang",
+    "Kaimin Mao",
+    "Yan Wu",
+    "Wei-Yun Yau",
+    "Lin Wang"
+  ],
+  "abstract": "Vision-Language-Action (VLA) models have emerged as a powerful end-to-end paradigm for robotic manipulation by mapping language instructions and 2D visual inputs directly to actions. However, these models lack an explicit, scene-level 3D representation, limiting their ability to reason over spatial layouts and geometric constraints. While recent efforts incorporate explicit 3D cues, such as depth maps or point clouds, to improve geometric awareness, they primarily capture low-level structures and lack high-level semantic grounding in 3D space. In human cognition, interaction with the physical world relies on a 3D semantic cognitive map - an internal mental model that integrates spatial layouts with semantic context to enable persistent, viewpoint-invariant reasoning. In light of this, we present VistaVLA, a novel two-stage framework that constructs a geometry- and semantics-aware 3D cognitive representation from 3D Gaussian primitives and grounds it as compact context tokens for VLA policy learning. Specifically, VistaVLA lifts multi-view vision-language features into 3D Gaussian primitives, forming geometry-anchored semantic tokens that align view-consistent spatial grounding with 2D visual feature spaces. To make this 3D representation computationally tractable for effective VLA control, we introduce Merge-then-Query (MtQ), a token summarization mechanism. MtQ compresses dense Gaussian primitives into a highly compact set of spatially informative tokens, achieving a 99% token reduction while preserving action-relevant 3D layouts and semantic context. Extensive evaluations in both simulated and real-world environments demonstrate the effectiveness of VistaVLA. Notably, in real-world scenarios, VistaVLA improves success rates by 22.8% across seven real-world tasks and by 30.0% over the VLA-Adapter baseline on challenging out-of-distribution tasks.",
+  "published": "2026-07-14T05:08:50Z",
+  "updated": "2026-07-14T05:08:50Z",
+  "categories": [
+    "cs.RO"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.12356v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.12356v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-17",
+  "valueScore": 8,
+  "valueReason": "论文将“语义对齐的三维场景表示”与“固定长度的策略接口”同时落地，且给出了真实机器人、标准模拟和空间 OOD 的对照与消融。其最有价值的证据是：在不依赖大规模动作预训练的设置下，标准 LIBERO 和 Pro-Swap 均优于所列无预训练基线。不过，实测场景与本体范围较窄、试验次数有限，且尚未证明对动态或弱标定部署的泛化，故评为高价值但非决定性证据。",
+  "tags": [
+    "每日精选:2026-07-17"
+  ],
+  "key": "2607.12356",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-14",
+  "addedAt": "2026-07-17T01:02:32.702Z",
+  "modifiedAt": "2026-07-17T01:03:17.580Z",
+  "analysisStatus": "ready"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "2603.22281v2",
+  "baseId": "2603.22281",
+  "title": "ThinkJEPA: Empowering Latent World Models with Large Vision-Language Reasoning Model",
+  "authors": [
+    "Haichao Zhang",
+    "Yijiang Li",
+    "Shwai He",
+    "Tushar Nagarajan",
+    "Mingfei Chen",
+    "Jianglin Lu",
+    "Ang Li",
+    "Yun Fu"
+  ],
+  "abstract": "Recent progress in latent world models (e.g., V-JEPA2) has shown promising capability in forecasting future world states from video observations. Nevertheless, dense prediction from a short observation window limits temporal context and can bias predictors toward local, low-level extrapolation, making it difficult to capture long-horizon semantics and reducing downstream utility. Vision--language models (VLMs), in contrast, provide strong semantic grounding and general knowledge by reasoning over uniformly sampled frames, but they are not ideal as standalone dense predictors due to compute-driven sparse sampling, a language-output bottleneck that compresses fine-grained interaction states into text-oriented representations, and a data-regime mismatch when adapting to small action-conditioned datasets. We propose a VLM-guided JEPA-style latent world modeling framework that combines dense-frame dynamics modeling with long-horizon semantic guidance via a dual-temporal pathway: a dense JEPA branch for fine-grained motion and interaction cues, and a uniformly sampled VLM \\emph{thinker} branch with a larger temporal stride for knowledge-rich guidance. To transfer the VLM's progressive reasoning signals effectively, we introduce a hierarchical pyramid representation extraction module that aggregates multi-layer VLM representations into guidance features compatible with latent prediction. Experiments on hand-manipulation trajectory prediction show that our method outperforms both a strong VLM-only baseline and a JEPA-predictor baseline, and yields more robust long-horizon rollout behavior.",
+  "published": "2026-03-23T00:00:00Z",
+  "updated": "2026-03-23T00:00:00Z",
+  "categories": [
+    "cs.CV",
+    "cs.AI",
+    "cs.CL",
+    "cs.LG",
+    "cs.RO"
+  ],
+  "primaryCategory": "cs.CV",
+  "comment": "10 pages, 5 figures",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2603.22281v2",
+  "pdfUrl": "https://arxiv.org/pdf/2603.22281",
+  "tags": [
+    "Latent-WM",
+    "JEPA",
+    "VLM",
+    "长时预测",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2603.22281",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:36:11.505Z",
+  "modifiedAt": "2026-07-16T02:36:55.954Z",
+  "valueScore": 7,
+  "valueReason": "选题切中“语义推理”与“稠密潜变量动力学”之间的互补，双时间尺度加多层 VLM 条件化的设计清晰，并在四类任务上报告一致改进。增益在部分基准上较明显，但核心是工程性融合而非新的世界模型学习范式；实验协议的受控子集、表内数值不一致及缺少闭环规划验证，限制了结论强度。"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "2606.15768v1",
+  "baseId": "2606.15768",
+  "title": "LaWAM: Latent World Action Models for Efficient Dynamics-Aware Robot Policies",
+  "authors": [
+    "Jialei Chen",
+    "Kai Wang",
+    "Kang Chen",
+    "Shuaihang Chen",
+    "Feng Gao",
+    "Wenhao Tang",
+    "Zhiyuan Li",
+    "Weilin Liu",
+    "Zhuyu Yao",
+    "Boxun Li",
+    "Yuanbo Xu",
+    "Chao Yu"
+  ],
+  "abstract": "Vision-Language-Action models (VLAs) leverage large-scale vision-language pretraining for semantic robot control, but often lack explicit foresight into how robot actions change the scene. World-Action Models (WAMs) address this limitation by conditioning policies on predicted futures, yet existing approaches typically rely on computationally expensive video generation with substantial pixel-level redundancy. We present LaWAM, a Latent World Action Model that exposes predictive dynamics to robot policies through compact latent visual subgoals instead of reconstructed future video. At the core of LaWAM is a latent-action-conditioned Latent World Model (LaWM). We obtain LaWM by training a latent action model in the latent space of a pretrained vision foundation model and repurposing its forward decoder to predict future observation features for scene evolution. LaWAM then conditions action generation on these predicted latent visual subgoals to enable dynamics-aware robot control. LaWAM achieves state-of-the-art or competitive success rates (SRs) across LIBERO (98.6% SR), RoboTwin (91.22% SR), and real-world manipulation tasks while retaining low-latency inference. LaWAM runs in 187 ms per action-chunk prediction and achieves up to 24x lower wall-clock latency than pixel-space WAMs.",
+  "published": "2026-06-14T00:00:00Z",
+  "updated": "2026-06-14T00:00:00Z",
+  "categories": [
+    "cs.RO",
+    "cs.AI"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2606.15768v1",
+  "pdfUrl": "https://arxiv.org/pdf/2606.15768",
+  "tags": [
+    "Latent-WM",
+    "DINO特征",
+    "Latent-Action",
+    "WAM",
+    "核心必读",
+    "机器人策略",
+    "专题-2026-07",
+    "LaWAM"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2606.15768",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T03:01:56.604Z",
+  "modifiedAt": "2026-07-16T03:02:48.132Z",
+  "valueScore": 8,
+  "valueReason": "论文的问题设定明确，方法将潜在动作学习与世界—动作条件化连接起来，并同时报告了仿真、双臂与真实世界结果及消融。其核心价值是以紧凑潜在子目标替代像素未来生成，且在所报告的 LIBERO 延迟—性能比较中具有显著效率优势；但真实世界样本规模有限、随机 RoboTwin 并非最佳，且相机运动和细粒度变形动态仍是明确边界。"
+}

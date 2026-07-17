@@ -1,0 +1,42 @@
+{
+  "id": "2506.01392v2",
+  "baseId": "2506.01392",
+  "title": "Sparse Imagination for Efficient Visual World Model Planning",
+  "authors": [
+    "Junha Chun",
+    "Youngjoon Jeong",
+    "Taesup Kim"
+  ],
+  "abstract": "World model based planning has significantly improved decision-making in complex environments by enabling agents to simulate future states and make informed choices. This computational burden is particularly restrictive in robotics, where resources are severely constrained. To address this limitation, we propose a Sparse Imagination for Efficient Visual World Model Planning, which enhances computational efficiency by reducing the number of tokens processed during forward prediction. Our method leverages a sparsely trained vision-based world model based on transformers with randomized grouped attention strategy, allowing the model to flexibly adjust the number of tokens processed based on the computational resource. By enabling sparse imagination during latent rollout, our approach significantly accelerates planning while maintaining high control fidelity. Experimental results demonstrate that sparse imagination preserves task performance while dramatically improving inference efficiency. This general technique for visual planning is applicable from simple test-time trajectory optimization to complex real-world tasks with the latest VLAs, enabling the deployment of world models in real-time scenarios.",
+  "published": "2025-06-02T00:00:00Z",
+  "updated": "2025-06-02T00:00:00Z",
+  "categories": [
+    "cs.RO",
+    "cs.AI",
+    "cs.CV"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "Accepted to ICLR 2026; Project Page: this https URL",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2506.01392v2",
+  "pdfUrl": "https://arxiv.org/pdf/2506.01392",
+  "tags": [
+    "Latent-WM",
+    "DINO特征",
+    "规划",
+    "效率",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2506.01392",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:36:31.238Z",
+  "modifiedAt": "2026-07-16T02:37:27.187Z",
+  "valueScore": 8,
+  "valueReason": "问题明确且工程价值强：它直接降低 visual world-model MPC 的主要注意力开销，并在多类仿真、VLA 引导规划和小规模实机试验中给出一致的效率—性能折中。方法十分简洁，随机采样优于复杂选择器的盲区分析也具有启发性。扣分主要来自实机样本有限、部分“实时”表述依赖异步机制、绝对规划耗时较高，以及对动态自适应选择和分布外鲁棒性尚未充分验证。"
+}

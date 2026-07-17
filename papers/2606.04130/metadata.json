@@ -1,0 +1,45 @@
+{
+  "id": "2606.04130v1",
+  "baseId": "2606.04130",
+  "title": "CLAW: Learning Continuous Latent Action World Models via Adversarial Latent Regularization",
+  "authors": [
+    "Tewodros Ayalew",
+    "Matthew Jeung",
+    "Samuel Wheeler",
+    "Xiao Zhang",
+    "Andre de la Cruz Arce",
+    "Kaylene Stocking",
+    "Michael Maire",
+    "Matthew R. Walter"
+  ],
+  "abstract": "We introduce CLAW, a fully end-to-end self-supervised framework for learning a world model jointly with continuous latent action representations directly from action-free videos. Our approach leverages adversarial latent regularization and diffusion-based video generation to capture structured and semantically meaningful action representations while modeling rich, predictive environment dynamics, without relying on any action labels or annotations. By simultaneously training the Latent Action Model and world model, CLAW learns to reason about how inferred actions induce environment transitions from visual observations alone. We show that the resulting latent action world model supports both imitation learning from observation and goal-directed planning. In imitation learning, latent actions extracted from raw videos enable behavior cloning. For planning, CLAW generates sequences of latent actions and maps them to executable actions to reach desired goals. Extensive experiments across diverse tasks and embodiments demonstrate that CLAW produces semantically meaningful latent action representations, supports effective action transfer, and enables planning and imitation from observation, outperforming existing methods.",
+  "published": "2026-06-02T00:00:00Z",
+  "updated": "2026-06-02T00:00:00Z",
+  "categories": [
+    "cs.RO"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "8 pages, 15 pages of supplementary material",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2606.04130v1",
+  "pdfUrl": "https://arxiv.org/pdf/2606.04130",
+  "tags": [
+    "Latent-WM",
+    "Latent-Action",
+    "WAM",
+    "视频学习",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2606.04130",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:36:19.116Z",
+  "modifiedAt": "2026-07-16T02:37:07.595Z",
+  "valueScore": 8,
+  "valueReason": "该工作针对无动作视频学习可控世界模型中的核心退化问题给出了清晰、可实现的端到端方案，并在多类模拟环境与真实 UR5 上提供了较广泛证据。其价值主要在于把连续潜在动作、扩散世界模型和对抗防泄漏结合起来；但实际控制仍依赖带标注参考集，长时程记忆不足，且并非所有基准均优于 AdaWorld，因此更适合作为有潜力的方法论文而非已充分解决零样本具身控制的结论。"
+}

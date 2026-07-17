@@ -1,0 +1,24 @@
+{
+  "oneSentence": "S²-VLA 是一个面向自动驾驶端到端规划的双流 VLA：以多尺度 VLM 特征建模语义意图、以视觉编码器直连特征和地图/目标辅助任务保留几何约束，并用级联注意力生成轨迹。",
+  "problem": "现有 VLM 的离散自回归语言表征难以直接输出连续精确轨迹；常见单流 VLA 又将高层语义与低层控制耦合，论文将由此造成的细粒度空间/几何信息损失称为“spatial representation collapse”。",
+  "contributions": [
+    "提出语义—空间解耦架构：语义流从 InternVL3-2B 的第 {3,8,13,18,23,24} 层稀疏抽取多尺度特征，并注入 64 个动作查询；空间流绕过语言自回归瓶颈，直接从 ViT 获取视觉特征。",
+    "空间流对每幅图采用 8 个局部裁剪加 1 个全局缩略图，并为每个 patch 注入 64 个视觉查询；通过局部可见 BEV 语义地图和 30-query DETR 式动态目标检测提供辅助监督，显式学习道路边界与障碍物几何先验。",
+    "设计双流规划适配器：规划 token 先通过交叉注意力对齐语义特征和自车历史状态，再以空间特征进行级联细化；联合优化轨迹 L1、加速度/jerk 平滑、地图和目标损失。",
+    "在 NAVSIM navtest 闭环评测中，纯 SFT 设置下报告 PDMS 87.1、NC 98.4；相对同骨干 InternVL3-2B 基线，PDMS 提升 3.0。"
+  ],
+  "method": "输入为导航指令、前视单目图像和自车运动历史。语义流将文本、视觉 token 与动作查询送入 InternVL3-2B（InternViT + Qwen2.5），以选定层的 dense semantic features、action-centric features 和 MLP 编码的自车状态形成语义记忆。空间流在 ViT 输入中拼接视觉查询、CLS token 与 patch token，将 9 个图块的查询特征汇聚为稠密空间表示；重排为 24×24 网格后解码 128×256 的局部可见 BEV 语义图（前方 0–32 m、横向 −32–32 m），并用 DETR 范式预测目标有向框和类别。规划适配器以 8 个可学习 waypoint token 为查询，每个 block 先融合多尺度语义、状态记忆及自注意力结果，再对空间特征交叉注意力和 FFN 细化，MLP 最终输出 8×3 未来轨迹。训练分三阶段：ReCogDrive VQA 上 SFT 3 epoch；冻结 VLM 后以 LoRA 训练意图抽取和辅助感知 4 epoch；冻结感知/意图组件后训练视觉细化模块 4 epoch。",
+  "experiments": "仅报告 NAVSIM 闭环 navtest。指标为 NC、DAC、EP、TTC、Comfort 和 PDMS。S²-VLA（单前视相机）为 NC 98.4、DAC 94.9、EP 81.6、TTC 94.6、Comfort 100、PDMS 87.1。它高于表中 VLM/VLA 的 InternVL3-2B（84.1）、ImagiDrive（86.4）、ReCogDrive（86.5），也高于 ARTEMIS（87.0）和 DRAMA（86.9）；但低于使用图像+LiDAR 的 DiffusionDrive（88.1）。消融从基础 VLM 的 84.1 开始：加入多层语义特征至 85.6，加入空间流至 86.2，再加入辅助感知至 87.1。比较刻意排除了 AutoVLA、ReCogDrive 的 RL 增强变体，因而“VLA SOTA”应限定为其表内纯 SFT 比较设定。",
+  "limitations": [
+    "论文明确指出，稠密空间特征提取和双流融合带来不可忽略的计算开销；未给出延迟、吞吐或参数量对比。",
+    "论文明确指出，尚未结合闭环强化学习后训练，拟作为与双流架构兼容的后续方向。",
+    "证据限于单目前视相机的 NAVSIM 闭环 benchmark；正文未报告真实道路、跨数据集、恶劣天气或传感器失效条件下的验证。",
+    "局部 BEV 地图只重建自车前方可见区域，范围为 X∈[0,32] m、Y∈[-32,32] m；该设计对更远距离或不可见区域的空间建模能力未在文中评估。"
+  ],
+  "relatedWorks": "端到端自动驾驶方面，TransFuser（Chitta 等，2023）以 Transformer 融合图像与 LiDAR 做模仿学习，UniAD（Hu 等，2023）和 VAD（Jiang 等，2023）以统一多任务/矢量场景表示连接感知与规划，PARA-Drive（Weng 等，2024）、DRAMA（Yuan 等，2024）、ARTEMIS（Feng 等，2025）和 DiffusionDrive（Liao 等，2025）进一步从实时并行、Mamba、MoE 自回归或扩散生成改进规划。它们主要直接从感知表征预测动作，语义可解释性和语言指令整合较弱；S²-VLA 的差异在于引入 VLM 语义流，但不让语义表征单独承担几何控制，而是用独立空间流及地图/目标监督约束规划。\\n\\n驾驶 VLM/推理方面，DriveLM（Sima 等，2024）和 DriveGPT4（Xu 等，2024）利用视觉问答或 CoT 生成驾驶决策及解释，ReasonPlan（Liu 等，2025）显式产生逐步决策过程；这些方法强化高层语义推理，但通常是开环顾问式输出，仍需下游控制器。S²-VLA 同样使用 VLM 的语义能力，却直接输出连续 waypoint，并主张以从视觉编码器绕过语言头的空间通路缓解离散 token 对几何信息的压缩。\\n\\nVLA 方面，RT-2（Zitkovich 等，2023）奠定视觉—语言—动作统一策略，VLA-Adapter（Wang 等，2026）以层级桥接和动作查询把小规模 VLM 适配到动作学习；SimLingo（Renz 等，2025）、Orion（Fu 等，2025）、CoT-VLA（Zhao 等，2025）、AutoVLA（Zhou 等，2025）、ReCogDrive（Li 等，2025）与 ImagiDrive（Li 等，2025）分别探索语言—动作对齐、语言指令动作、视觉 CoT、自适应推理/RL、认知 token+扩散规划及想象增强规划。相较这些方法，S²-VLA 的核心区别不是继续扩充文本推理或采用生成式规划器，而是结构性地分离语义与空间表征：语义流先定意图，空间流随后以显式几何特征细化轨迹。该差异的实证仅在 NAVSIM 的纯 SFT 比较中给出。",
+  "valueScore": 7,
+  "valueReason": "问题定位清晰，双流解耦、空间辅助监督与级联融合形成完整且可消融验证的设计；在表内纯 SFT VLA 中结果强，且单目方案接近部分 LiDAR 方法。不过论文为 2026-07 的 arXiv v1，实验集中于单一 NAVSIM 基准，缺少计算成本、跨域和真实道路验证；“空间表示坍塌”的机制解释目前主要由性能与定性案例间接支持。",
+  "suggestedCategory": "每日精选 2026-07-15",
+  "isKeyPaper": false,
+  "imagePrompt": "为自动驾驶机器学习论文绘制简洁、可发表的横向方法图：左侧输入为前视单目道路图像、导航指令和自车历史状态；中部清晰分为蓝色“Semantic Stream”与绿色“Spatial Stream”。蓝色流展示 InternVL3 VLM 的多尺度层特征和 action queries，强调高层意图；绿色流直接从 ViT visual encoder 提取未压缩空间特征，并分出 BEV semantic map 与 dynamic agent detection 两个辅助监督头，强调车道边界、可行驶区域与障碍物。右侧为橙色“Dual-Stream Planning Adapter”，先语义对齐、后空间细化，输出平滑且避障的未来 8 个轨迹点。白底、矢量风格、严格网格布局、少量中文或英文标签均可读、无装饰性渐变。"
+}

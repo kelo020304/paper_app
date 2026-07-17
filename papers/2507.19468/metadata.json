@@ -1,0 +1,46 @@
+{
+  "id": "2507.19468v1",
+  "baseId": "2507.19468",
+  "title": "Back to the Features: DINO as a Foundation for Video World Models",
+  "authors": [
+    "Federico Baldassarre",
+    "Marc Szafraniec",
+    "Basile Terver",
+    "Vasil Khalidov",
+    "Francisco Massa",
+    "Yann LeCun",
+    "Patrick Labatut",
+    "Maximilian Seitzer",
+    "Piotr Bojanowski"
+  ],
+  "abstract": "We present DINO-world, a powerful generalist video world model trained to predict future frames in the latent space of DINOv2. By leveraging a pre-trained image encoder and training a future predictor on a large-scale uncurated video dataset, DINO-world learns the temporal dynamics of diverse scenes, from driving and indoor scenes to simulated environments. We show that DINO-world outperforms previous models on a variety of video prediction benchmarks, e.g. segmentation and depth forecasting, and demonstrates strong understanding of intuitive physics. Furthermore, we show that it is possible to fine-tune the predictor on observation-action trajectories. The resulting action-conditioned world model can be used for planning by simulating candidate trajectories in latent space.",
+  "published": "2025-07-25T00:00:00Z",
+  "updated": "2025-07-25T00:00:00Z",
+  "categories": [
+    "cs.CV"
+  ],
+  "primaryCategory": "cs.CV",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2507.19468v1",
+  "pdfUrl": "https://arxiv.org/pdf/2507.19468",
+  "tags": [
+    "Latent-WM",
+    "DINO特征",
+    "视频预测",
+    "核心必读",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2507.19468",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:36:22.299Z",
+  "modifiedAt": "2026-07-16T02:37:15.654Z",
+  "valueScore": 8,
+  "valueReason": "对“冻结视觉基础模型 + 大规模无动作视频动力学预训练 + 小数据动作适配”这一可扩展路线给出了清晰架构、较完整的跨范式评测和积极结果，尤其在 VSPW、GRASP/InfLevel 及模拟规划上有说服力。价值受限于私有数据、特征空间而非像素输出、约 1 秒的有效预测边界，以及真实世界控制尚未验证。"
+}

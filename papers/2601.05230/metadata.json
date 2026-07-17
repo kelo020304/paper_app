@@ -1,0 +1,44 @@
+{
+  "id": "2601.05230v2",
+  "baseId": "2601.05230",
+  "title": "Learning Latent Action World Models In The Wild",
+  "authors": [
+    "Quentin Garrido",
+    "Tushar Nagarajan",
+    "Basile Terver",
+    "Nicolas Ballas",
+    "Yann LeCun",
+    "Michael Rabbat"
+  ],
+  "abstract": "Agents capable of reasoning and planning in the real world require the ability of predicting the consequences of their actions. While world models possess this capability, they most often require action labels, that can be complex to obtain at scale. This motivates the learning of latent action models, that can learn an action space from videos alone. Our work addresses the problem of learning latent actions world models on in-the-wild videos, expanding the scope of existing works that focus on simple robotics simulations, video games, or manipulation data. While this allows us to capture richer actions, it also introduces challenges stemming from the video diversity, such as environmental noise, or the lack of a common embodiment across videos. To address some of the challenges, we discuss properties that actions should follow as well as relevant architectural choices and evaluations. We find that continuous, but constrained, latent actions are able to capture the complexity of actions from in-the-wild videos, something that the common vector quantization does not. We for example find that changes in the environment coming from agents, such as humans entering the room, can be transferred across videos. This highlights the capability of learning actions that are specific to in-the-wild videos. In the absence of a common embodiment across videos, we are mainly able to learn latent actions that become localized in space, relative to the camera. Nonetheless, we are able to train a controller that maps known actions to latent ones, allowing us to use latent actions as a universal interface and solve planning tasks with our world model with similar performance as action-conditioned baselines. Our analyses and experiments provide a step towards scaling latent action models to the real world.",
+  "published": "2026-01-08T00:00:00Z",
+  "updated": "2026-01-08T00:00:00Z",
+  "categories": [
+    "cs.AI",
+    "cs.CV"
+  ],
+  "primaryCategory": "cs.AI",
+  "comment": "37 pages, 25 figures; updated references and experimental details",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2601.05230v2",
+  "pdfUrl": "https://arxiv.org/pdf/2601.05230",
+  "tags": [
+    "Latent-WM",
+    "Latent-Action",
+    "WAM",
+    "核心必读",
+    "专题-2026-07"
+  ],
+  "source": "manual",
+  "analysisStatus": "ready",
+  "key": "2601.05230",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "daily-2026-07-15",
+  "dailyCategoryId": "",
+  "addedAt": "2026-07-16T02:36:04.028Z",
+  "modifiedAt": "2026-07-16T02:37:45.441Z",
+  "valueScore": 8,
+  "valueReason": "问题直指世界模型扩展的动作标注瓶颈，方法与诊断较完整，并给出自然视频预训练到操作/导航规划的连接。价值主要在数据分布与潜变量约束的实证结论；其通用性仍受相机相对表征、额外控制器和离线评估限制。"
+}
