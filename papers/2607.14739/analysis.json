@@ -1,0 +1,25 @@
+{
+  "oneSentence": "FoMoVLA 通过训练期联合学习“未来视觉特征（终点）”与“稀疏二维点轨迹（路径）”，并以未来条件交叉注意力将二者耦合，从而提升 VLA 的长时程操控与零样本鲁棒性。",
+  "problem": "现有 VLA 通常将当前观测和语言直接映射为动作，缺少对未来场景演化的显式建模。未来预测方法虽能表达“要到哪里”，但往往未提供抵达该状态所需的连续运动约束；仅建模光流或点轨迹的方法则缺少终态视觉目标。论文试图以紧凑的时空监督同时补足这两点。",
+  "contributions": [
+    "提出 FoMoVLA：在 VLA 主干上以训练期辅助任务联合注入未来特征预测与稀疏 2D 点跟踪监督。",
+    "以 16 个 <Foresight> token 经 MAE 式解码重建动作块终帧的 EMA 教师视觉特征，形成紧凑的目标状态表征。",
+    "使用冻结的 CoTracker-v3 为与图像 token 对齐的 8×8 网格点生成跨动作块的位移与可见性标签，并加入二阶差分平滑损失。",
+    "提出零初始化的 Future-Conditioned Cross-Attention（FCCA）：以未来 token 为键和值，将终态先验注入图像 token 的点轨迹预测；从恒等映射开始以减少对预训练表征的扰动。",
+    "在论文报告的 LIBERO、RoboCasa GR-1 Tabletop 和 LIBERO-Plus 上取得强结果；完整模型在 LIBERO 平均 98.8%、RoboCasa 平均 56.9%、LIBERO-Plus 零样本总体 80.5%。"
+  ],
+  "method": "给定观测、语言和动作块，FoMoVLA 沿用以预训练 VLM 为条件、DiT 流匹配头生成连续动作块的范式。输入排列为“指令→当前图像→Foresight token→动作”：指令位于图像之前，使图像隐藏状态可获得语言条件。点跟踪分支从 64 个图像 token 解码 T 步二维位移和可见性，以 CoTracker-v3 标签监督位移 MSE、可见性 BCE 与轨迹二阶差分平滑。未来分支用 EMA 视觉编码器提取终帧 64 个 patch 特征，并由 16 个未来 token 加 48 个 mask token 的两层 ViT/MAE 解码器，以余弦损失重建这些特征。FCCA 对图像 token 查询、未来 token 键值执行 8 头交叉注意力，再供位移投影头使用。总损失为动作流匹配损失与加权未来、跟踪损失之和（λ1=0.1、λ2=0.3、λsmooth=0.1）。训练后移除 MAE 解码器、FCCA、跟踪和可见性头；但保留 16 个未来 token 供动作头访问。",
+  "experiments": "LIBERO：40 个任务、每任务 50 条示范，T=8，按任务 20 次 rollout 评测。完整 FoMoVLA 在 Spatial/Object/Goal/Long 上为 98.4/99.6/99.4/97.6，平均 98.8；相对其 Base Backbone 的 96.5 提升 2.3 个百分点，并比不使用 FCCA 的“双辅助任务”版本（98.3）高 0.5 个百分点，Long 提升 1.8 个百分点。RoboCasa GR-1 Tabletop：24 个任务、每任务 1,000 条示范，T=16，50 次 rollout/任务；FoMoVLA 为 56.9%，较 StarVLA-GR00T 的 47.8 高 9.1 个百分点。LIBERO-Plus 零样本扰动测试：总体 80.5%，较 StarVLA 的 74.1 高 6.4 个百分点，与表中 Abot-M0 持平；相机和机器人状态扰动上的收益较有限。消融显示，64 点的 8×8 稀疏网格优于 256 点的 16×16 网格；16→64 的 MAE 瓶颈优于直接使用 64 个未来 token；“图像 token + 目标 token 交叉注意力”优于共享目标 token、分离查询 token或共享图像 token。附录的跟踪评估中，FCCA 将 ATE-all 从 1.2 px 降至 0.9 px、ATE-moving 从 3.8 px 降至 2.3 px，Survival@10px 从 78.0% 提升至 95.3%。部署参数量与基线均为 4599.3M；不过保留未来 token 后，中位推理延迟从 94.3 ms 增至 103.7 ms，GPU 显存从 9.3 GB 增至 9.4 GB。",
+  "limitations": [
+    "论文明确指出其跟踪监督仅建模视角相关的图像空间二维运动，未显式表示动态场景的三维几何、深度或视角不变运动。",
+    "LIBERO-Plus 中相机与机器人状态变化的提升较小；作者将其归因于固定视角和初始位姿训练，以及纯 2D 运动线索对新构型泛化的局限。",
+    "实验覆盖 LIBERO、RoboCasa GR-1 Tabletop 与 LIBERO-Plus；正文未报告真实机器人部署或真实世界跨域结果，因此无法据此判断现实环境中的有效性。",
+    "辅助分支虽在推理时移除，但未来 token 仍带来实测 9.4 ms 中位延迟和 0.1 GB 显存增量；因此“零参数开销”仅指部署参数量不增加，并非严格零运行时开销。"
+  ],
+  "relatedWorks": "视觉-语言-动作（VLA）模型通常通过机器人示范微调预训练 VLM，将视觉观测与语言直接映射至动作；代表性工作包括 Brohan 等的 RT-2、Kim 等的 OpenVLA 与 Ghosh 等的 Octo。动作建模侧，Black 等的 π0 采用流匹配，Chi 等的 Diffusion Policy 及后续 VLA 使用扩散式动作生成；感知侧，Bjorck 等的 GR00T-N1 与 Shi 等的 MemoryVLA 分别探索更强的双系统架构和专用视觉表征。FoMoVLA 不更换其核心连续动作范式，而是在 StarVLA-GR00T 与流匹配动作头上增加训练期时空监督，针对论文所强调的视觉动态表征不足。\n\n在预测式/world-model VLA 路线中，Cen 等的 WorldVLA、Zhang 等的 DreamVLA、Bu 等的 UniVLA，以及 Bai 等的 LaRA-VLA、Lin 等的 HiF-VLA，均以显式或隐式未来预测增强动作决策；其中像素级未来帧生成或生成—动作交错方法提供信息丰富的预测，但论文认为其计算代价较高且包含较多与控制无关的静态内容。Sun 等的 VLA-JEPA、Fan 等的 FUTURE-VLA、Lyu 等的 LDA-1B、Su 等的 World Guidance、Ma 等的相关工作和 Syed 等的工作则代表直接预测潜在/特征空间状态的高效路线。相对这些方法，FoMoVLA 不只用未来特征表征终态：它将未来特征压缩为少量 foresight token，并将其显式作为后续运动预测的条件，以连接“终点”与“到达终点的轨迹”。\n\n几何与运动监督路线以更紧凑的方式表征动作相关动态。Zhong 等的 FlowVLA 预测像素级光流，将其作为视觉链式思维；Guan 等的 JOPAT 在扩散框架中联合去噪稀疏二维点轨迹、可见性和动作；Li 等的 Spatial Forcing 则从冻结教师蒸馏几何知识，Qian 等的 GeoPredict 也引入预测运动学与 3D Gaussian 几何。FoMoVLA 与这些方法同样使用几何运动信号，但选择训练期由冻结 CoTracker-v3 提供的 patch 对齐稀疏 2D 轨迹，并额外预测未来视觉特征。其关键差异不是简单并列两个辅助损失，而是通过 FCCA 用未来状态条件化点轨迹预测；论文消融显示，这种耦合优于共享 token 或独立多任务设计。",
+  "valueScore": 8,
+  "valueReason": "价值主要在于提出并实证了一个简洁、可迁移的“终态特征 + 连续几何轨迹 + 显式耦合”训练范式，且对长时程任务与两种策略头给出较完整消融。证据目前主要来自仿真基准和教师生成的二维跟踪标签，尚缺真实机器人及三维动态泛化验证。",
+  "suggestedCategory": "每日精选 2026-07-18",
+  "isKeyPaper": true,
+  "imagePrompt": "Paper-ready robotic-learning method overview, clean white background, 16:9. Left: current RGB observation and language instruction enter a VLA backbone. Center-top: 16 compact blue “Foresight” tokens decode a future scene feature map labeled “where to end up”. Center-bottom: 8×8 sparse grid points on the image predict smooth 2D multi-frame trajectories labeled “how to move”. A gold future-conditioned cross-attention bridge connects foresight tokens to trajectory prediction. Right: flow-matching action head outputs a continuous action chunk controlling a robot arm. Mark all decoder/tracking auxiliary modules as training-only with dashed outlines; at inference retain only foresight tokens and action policy. Use restrained blue, teal, amber palette, vector scientific diagram, crisp readable English labels, no logos."
+}

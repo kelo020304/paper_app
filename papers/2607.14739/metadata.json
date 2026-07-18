@@ -32,15 +32,15 @@
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-18",
   "valueScore": 8,
-  "valueReason": "把 VLA 从反应式策略推进到显式视觉预见，并与稀疏点轨迹的运动约束结合，设计有清晰互补性。LIBERO、RoboCasa、LIBERO-Plus 上的广泛评测和零样本结果，值得核查其是否真正带来长时程与几何泛化。",
+  "valueReason": "价值主要在于提出并实证了一个简洁、可迁移的“终态特征 + 连续几何轨迹 + 显式耦合”训练范式，且对长时程任务与两种策略头给出较完整消融。证据目前主要来自仿真基准和教师生成的二维跟踪标签，尚缺真实机器人及三维动态泛化验证。",
   "tags": [
     "每日精选:2026-07-18"
   ],
   "key": "2607.14739",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-18",
   "addedAt": "2026-07-18T09:49:24.742Z",
-  "modifiedAt": "2026-07-18T09:49:24.743Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-18T09:51:55.406Z",
+  "analysisStatus": "ready"
 }
