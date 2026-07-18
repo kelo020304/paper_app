@@ -37,16 +37,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.14203v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-18",
-  "valueScore": 7,
-  "valueReason": "自动驾驶方向中较有工程穿透力：从短多视角日志前馈式重建可闭环仿真的分层 3DGS 世界，约 1.5 秒建场景，并有 Waymo 上的量化画质提升和仿真平台兼容性。方法不直接是 VLA，但很可能降低闭环驾驶评测与数据生成的成本。",
+  "valueScore": 8,
+  "valueReason": "论文的核心价值在于把此前高成本的驾驶场景分层 3DGS 重建压缩到约 1.5 秒的前馈过程，同时保留闭环仿真需要的动态可编辑表示，并在 Waymo 的所列前馈基线上取得明显图像质量提升、在内部闭环评测中复现 NuRec 的策略排序。局限是关键训练数据和较大规模验证主要为内部数据，且与逐场景优化的绝对差距及部署鲁棒性尚需独立复现验证。",
   "tags": [
     "每日精选:2026-07-18"
   ],
   "key": "2607.14203",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-18",
   "addedAt": "2026-07-18T09:59:11.919Z",
-  "modifiedAt": "2026-07-18T09:59:11.920Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-18T10:01:41.015Z",
+  "analysisStatus": "ready"
 }
