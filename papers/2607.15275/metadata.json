@@ -32,15 +32,15 @@
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-18",
   "valueScore": 9,
-  "valueReason": "最值得精读。将测试时训练的快速权重引入 VLA，把可用时序上下文扩到 8K 步且不增加推理延迟，是明确的新缩放轴；真实机器人多阶段、5 分钟装配任务及多项对照使其影响力与可信度都很强。",
+  "valueReason": "论文针对机器人策略的长上下文瓶颈给出了清晰的结构、可训练方案和真实机器人闭环证据，并同时验证尺度趋势、一次视频模仿、扰动恢复和 DAgger 在线纠错。其价值主要受限于实验任务与硬件范围较窄、试验数量有限，以及尚未证明跨骨干和跨场景泛化。",
   "tags": [
     "每日精选:2026-07-18"
   ],
   "key": "2607.15275",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-18",
   "addedAt": "2026-07-18T09:39:44.069Z",
-  "modifiedAt": "2026-07-18T09:39:44.071Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-18T09:42:18.929Z",
+  "analysisStatus": "ready"
 }
