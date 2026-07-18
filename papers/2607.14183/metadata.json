@@ -52,15 +52,15 @@
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-18",
   "valueScore": 8,
-  "valueReason": "潜在影响主要来自基础设施：约 2,000 小时、500+ 贡献者的第一视角操作数据，同时提供手部姿态、相机轨迹、原子动作及面向 VLA/WAM/world model 的转换与训练工具。对人类示范到机器人迁移很关键；精读时应重点审视数据质量、许可和下游增益。",
+  "valueReason": "数据规模虽小于 EgoScale 等超大视频语料，但其价值在于将多设备自然采集、密集时空/几何标注、隐私与质检流程及下游转换工具打通。若代码、许可证和数据访问如文中所述持续可用，它会显著降低第一视角人类数据用于跨具身学习的工程门槛；不过下游机器人收益尚缺少统一任务上的独立验证。",
   "tags": [
     "每日精选:2026-07-18"
   ],
   "key": "2607.14183",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-15",
   "addedAt": "2026-07-18T09:54:19.458Z",
-  "modifiedAt": "2026-07-18T09:54:19.460Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-18T09:56:48.308Z",
+  "analysisStatus": "ready"
 }
