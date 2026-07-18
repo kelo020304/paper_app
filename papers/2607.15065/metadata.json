@@ -1,0 +1,39 @@
+{
+  "id": "2607.15065v1",
+  "baseId": "2607.15065",
+  "title": "DriftWorld: Fast World Modeling through Drifting",
+  "authors": [
+    "Susie Lu",
+    "Haonan Chen",
+    "Weirui Ye",
+    "Yilun Du"
+  ],
+  "abstract": "Predictive world models enable robots to plan by imagining the outcomes of their actions, but their value for control hinges on generating many rollouts quickly. This creates a bottleneck for diffusion-based world models: multistep sampling makes each rollout expensive, limiting large-scale action search at inference time. We introduce DriftWorld, an action-conditioned world model based on drifting generative models. Rather than denoising iteratively at inference, DriftWorld learns an action-conditioned drift during training, allowing it to generate future frames from the current observation and a candidate action sequence in a single forward pass at 30+ fps, which is 17x faster on average than diffusion based baselines. We evaluate DriftWorld on standard vision-based robotic manipulation benchmarks, including Bridge-V2, RT-1, Language Table, Push-T, and Robomimic. By producing rollouts that are both accurate and fast, DriftWorld achieves state-of-the-art decision-making performance with far less inference time than diffusion-based world model baselines. Beyond online control, DriftWorld can also serve as an offline simulator for ranking real-world robot policies, with rollout-based scores correlating with ground truth at up to 0.99. These results show that drifting models are a strong fit for robot world modeling, where fast, high-quality imagination directly supports planning and policy evaluation.",
+  "published": "2026-07-16T14:37:43Z",
+  "updated": "2026-07-16T14:37:43Z",
+  "categories": [
+    "cs.RO",
+    "cs.CV",
+    "cs.LG"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "Website at https://susie-lu.github.io/driftworld/",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.15065v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.15065v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-18",
+  "valueScore": 9,
+  "valueReason": "机器人 world model 的核心痛点是规划所需的高速多 rollout；以单次前向的 action-conditioned drift 替代扩散采样，兼顾方法新颖性与 30+ fps 的实用性。覆盖多个标准操作基准，并报告决策性能和离线策略排序相关性，实验链条完整。",
+  "tags": [
+    "每日精选:2026-07-18"
+  ],
+  "key": "2607.15065",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "",
+  "addedAt": "2026-07-18T09:44:33.071Z",
+  "modifiedAt": "2026-07-18T09:44:33.072Z",
+  "analysisStatus": "analyzing"
+}
