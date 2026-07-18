@@ -1,0 +1,46 @@
+{
+  "id": "2607.14739v1",
+  "baseId": "2607.14739",
+  "title": "FoMoVLA: Bridging Visual Foresight and Motion Guidance for Vision-Language-Action Models",
+  "authors": [
+    "Wei Li",
+    "Peijin Jia",
+    "Yuan Ma",
+    "Xuefeng Jiang",
+    "Titong Jiang",
+    "Sheng Sun",
+    "Yujian Li",
+    "Xin Wen",
+    "Han Hong",
+    "Zhikang Liu",
+    "Bailin Li",
+    "Kun Zhan"
+  ],
+  "abstract": "Vision-Language-Action (VLA) models have achieved impressive results in visuomotor policy learning, yet remain fundamentally reactive, mapping current observations and language to actions without explicit forward prediction of world dynamics. Existing visual foresight methods predict future visual states but lack explicit motion guidance: they show where to go but not how to get there. We argue that future feature prediction and sparse point tracking are naturally complementary: the former provides the goal state, while the latter captures the continuous motion path toward it. We propose FoMoVLA, a framework that augments VLA representations with explicit spatio-temporal supervision by jointly learning future feature foresight and sparse 2D point tracking, enhancing the continuous action policy. FoMoVLA introduces compact foresight tokens to decode future feature states, decodes sparse temporal 2D point trajectories to model compact geometric motion, and couples both through a lightweight future-conditioned cross-attention module that enables consistent reasoning between anticipated states and point dynamics. Extensive experiments on LIBERO, RoboCasa GR-1 Tabletop, and LIBERO-Plus demonstrate state-of-the-art performance and strong zero-shot generalization. Project page is available at https://liauto-research.github.io/FoMoVLA.",
+  "published": "2026-07-16T09:04:50Z",
+  "updated": "2026-07-16T09:04:50Z",
+  "categories": [
+    "cs.CV",
+    "cs.AI"
+  ],
+  "primaryCategory": "cs.CV",
+  "comment": "12 pages, 7 figures, 8 tables. Project page: https://liauto-research.github.io/FoMoVLA",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.14739v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.14739v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-18",
+  "valueScore": 8,
+  "valueReason": "把 VLA 从反应式策略推进到显式视觉预见，并与稀疏点轨迹的运动约束结合，设计有清晰互补性。LIBERO、RoboCasa、LIBERO-Plus 上的广泛评测和零样本结果，值得核查其是否真正带来长时程与几何泛化。",
+  "tags": [
+    "每日精选:2026-07-18"
+  ],
+  "key": "2607.14739",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "",
+  "addedAt": "2026-07-18T09:49:24.742Z",
+  "modifiedAt": "2026-07-18T09:49:24.743Z",
+  "analysisStatus": "analyzing"
+}
