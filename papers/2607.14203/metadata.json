@@ -1,0 +1,52 @@
+{
+  "id": "2607.14203v1",
+  "baseId": "2607.14203",
+  "title": "Instant NuRec: Feed-Forward 3D Gaussian Reconstruction for Driving Scene Simulation",
+  "authors": [
+    "NVIDIA",
+    ":",
+    "Jiahui Huang",
+    "Jiawei Ren",
+    "Michal Tyszkiewicz",
+    "Bjoern Haefner",
+    "Michael Shelley",
+    "Xin Kang",
+    "Seung Wook Kim",
+    "Ning Xu",
+    "Qi Wu",
+    "Janick Martinez Esturo",
+    "Shengyu Huang",
+    "Nick Schneider",
+    "Laura Leal-Taixe",
+    "Zan Gojcic",
+    "Sanja Fidler"
+  ],
+  "abstract": "3D simulation platforms are critical for autonomous driving because they enable end-to-end policy evaluation, thereby reducing development costs and improving safety. In recent years, neural simulation has become predominant, with methods such as NuRec playing a central role; however, these methods remain relatively slow and typically require per-scene tuning. In this work, we present Instant NuRec, a feed-forward neural reconstruction model that turns a short multi-view driving log into a fully simulatable 3D Gaussian Splatting (3DGS) world in a single forward pass. The model accepts multi-view input from a calibrated camera rig and emits a layered output consisting of static and dynamic 3DGS layers, a sky cubemap, and per-camera ISP corrections, while providing native support for non-pinhole camera models via 3DGUT. It reconstructs a 10-20-second multi-camera scene in roughly 1.5 seconds and achieves a PSNR on the Waymo Open Dataset that is 2.01 dB above the strongest evaluated baseline. Instant NuRec is deeply integrated into NuRec and is compatible with AlpaSim for closed-loop simulation.",
+  "published": "2026-07-15T17:50:23Z",
+  "updated": "2026-07-15T17:50:23Z",
+  "categories": [
+    "cs.GR",
+    "cs.AI",
+    "cs.CV"
+  ],
+  "primaryCategory": "cs.GR",
+  "comment": "Project Page: https://research.nvidia.com/labs/sil/projects/instant-nurec/",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.14203v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.14203v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-18",
+  "valueScore": 7,
+  "valueReason": "自动驾驶方向中较有工程穿透力：从短多视角日志前馈式重建可闭环仿真的分层 3DGS 世界，约 1.5 秒建场景，并有 Waymo 上的量化画质提升和仿真平台兼容性。方法不直接是 VLA，但很可能降低闭环驾驶评测与数据生成的成本。",
+  "tags": [
+    "每日精选:2026-07-18"
+  ],
+  "key": "2607.14203",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "",
+  "addedAt": "2026-07-18T09:59:11.919Z",
+  "modifiedAt": "2026-07-18T09:59:11.920Z",
+  "analysisStatus": "analyzing"
+}
