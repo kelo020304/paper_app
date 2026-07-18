@@ -24,16 +24,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.15065v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-18",
-  "valueScore": 9,
-  "valueReason": "机器人 world model 的核心痛点是规划所需的高速多 rollout；以单次前向的 action-conditioned drift 替代扩散采样，兼顾方法新颖性与 30+ fps 的实用性。覆盖多个标准操作基准，并报告决策性能和离线策略排序相关性，实验链条完整。",
+  "valueScore": 8,
+  "valueReason": "论文对机器人视觉世界模型的核心推理瓶颈给出了一条明确且有实证支撑的替代路线：不是仅减少扩散步数，而是从头训练单步漂移生成器。贡献的价值主要在于把该生成机制与动作条件视频、在线候选动作搜索和离线策略评估完整打通，并在五个基准上报告速度、视觉质量和下游效用。需保留的判断是：该结论来自 v1 论文中的特定基准、GPU 与部分任务设定；训练显存成本和真实闭环泛化仍是重要边界。",
   "tags": [
     "每日精选:2026-07-18"
   ],
   "key": "2607.15065",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-17",
   "addedAt": "2026-07-18T09:44:33.071Z",
-  "modifiedAt": "2026-07-18T09:44:33.072Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-18T09:47:08.686Z",
+  "analysisStatus": "ready"
 }
