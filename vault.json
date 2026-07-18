@@ -15,7 +15,7 @@
     "time": "09:00",
     "keywords": "vision language action model , robot manipulation， robot VLA， autonomous driving, world model",
     "limit": 5,
-    "lastRunDate": "2026-07-17"
+    "lastRunDate": "2026-07-18"
   },
   "git": {
     "remote": "git@github.com:kelo020304/paper_app.git",
