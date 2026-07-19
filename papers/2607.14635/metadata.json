@@ -1,0 +1,41 @@
+{
+  "id": "2607.14635v1",
+  "baseId": "2607.14635",
+  "title": "Action QFormer: Structured Representation Shaping under Action Supervision in Vision-Language-Action Models",
+  "authors": [
+    "Yufeng Ji",
+    "Wenhao Tang",
+    "Haoyi Niu",
+    "Koushil Sreenath",
+    "Yi Wu",
+    "Zhongyu Li"
+  ],
+  "abstract": "Action supervision in vision-language-action (VLA) models is often treated as a downstream objective for learning action prediction. In this paper, we study it instead as a force that shapes inherited multimodal representations. We show that this shaping has a dual effect: it is necessary for forming action-compatible representations, but when action supervision is applied too directly to the inherited multimodal pathway, it can also destabilize representations that support language-side processing and object grounding. To address this tension, we introduce Action QFormer, a query-based action-facing interface that uses instruction-conditioned queries to reorganize inherited multimodal information into action-facing representations before downstream action generation. In zero-shot sim-to-real navigation, Action QFormer improves average closed-loop task success from 18.8% to 56.3%, raises fixed-instruction action-generation correctness from 22.5% to 75.5%, and nearly eliminates out-of-distribution instruction generations. Further analyses show that Action QFormer changes how action supervision shapes inherited multimodal representations, reducing broad upstream rewriting while preserving targeted and sometimes constructive action-supervised adaptation. These results suggest that improving VLA performance requires not only stronger pretrained backbones, but also better ways of selecting and organizing inherited multimodal information while controlling how it is shaped under action supervision.",
+  "published": "2026-07-16T06:59:39Z",
+  "updated": "2026-07-16T06:59:39Z",
+  "categories": [
+    "cs.AI",
+    "cs.CV",
+    "cs.RO"
+  ],
+  "primaryCategory": "cs.AI",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.14635v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.14635v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-19",
+  "valueScore": 8,
+  "valueReason": "提出将动作监督与继承的视觉语言表征隔离的Action QFormer，切中VLA训练中“动作适配破坏语言/grounding能力”的核心矛盾。闭环sim-to-real成功率从18.8%到56.3%，且有表征分析，实验信号很强；不足是场景偏导航而非操作。",
+  "tags": [
+    "每日精选:2026-07-19"
+  ],
+  "key": "2607.14635",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "",
+  "addedAt": "2026-07-19T01:10:46.579Z",
+  "modifiedAt": "2026-07-19T01:10:46.580Z",
+  "analysisStatus": "analyzing"
+}
