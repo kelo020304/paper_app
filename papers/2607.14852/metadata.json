@@ -1,0 +1,38 @@
+{
+  "id": "2607.14852v1",
+  "baseId": "2607.14852",
+  "title": "Towards Human-like Physical Intelligence: LifelongVision-Language-Action Learning for Robotic Manipulation",
+  "authors": [
+    "Yao He",
+    "Gan Sun",
+    "Wenqi Liang",
+    "Fazeng Li",
+    "Yang Cong"
+  ],
+  "abstract": "Similar to the natural capabilities of humans to sequentially learn new tasks, robots with Vision-Language-Action (VLA) models should possess lifelong learning ability to learn a new task when deployed in open-world environments. However, most recently proposed lifelong learning models aim to effectively learn the current task (plasticity) or maintain high accuracy on previous tasks (stability), while the plasticity-stability trade-off remains largely unsolved in robotic manipulation models. To address this fundamental challenge, we propose a cache-efficient lifelong Vision-Language-Action learning framework for robotic manipulation (i.e., LifelongVLA), which alleviates the plasticity-stability trade-off with a dual-timescale adaptation mechanism while achieving low-cost robotic deployment with a cache-efficient replay strategy. More concretely, we propose a dual-timescale LoRA gating module to decompose VLA adaptation into two lightweight pathways: a short-term adapter for plasticity and a long-term adapter for stable consolidation. These pathways are integrated via a task-aware gate, enabling explicit control of the plasticity-stability trade-off. In the skill replay phase, a cache-efficient stochastic replay strategy is proposed to preserve more balanced retention signals without full-trajectory storage. Finally, experiments show that LifelongVLA outperforms existing baselines, demonstrating efficient skill expansion, robust retention of learned manipulation behaviors, and reduced reliance on retraining for real-world deployment on an xArm robot.",
+  "published": "2026-07-16T11:22:06Z",
+  "updated": "2026-07-16T11:22:06Z",
+  "categories": [
+    "cs.RO"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.14852v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.14852v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-19",
+  "valueScore": 8,
+  "valueReason": "直击机器人VLA开放世界部署中的持续学习难题。双时间尺度LoRA门控把可塑性与稳定性显式分开，再配合低缓存回放，方法针对性强，并报告了xArm真实机器人实验；值得重点检查任务序列、遗忘度量和与全量回放的公平比较。",
+  "tags": [
+    "每日精选:2026-07-19"
+  ],
+  "key": "2607.14852",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "",
+  "addedAt": "2026-07-19T01:07:11.830Z",
+  "modifiedAt": "2026-07-19T01:07:11.831Z",
+  "analysisStatus": "analyzing"
+}
