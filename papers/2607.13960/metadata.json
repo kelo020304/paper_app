@@ -47,16 +47,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.13960v2",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-19",
-  "valueScore": 9,
-  "valueReason": "最贴合“world model + robot VLA”：以未来视觉动力学作为训练监督、推理时仅解码动作，直接解决世界模型策略的实时闭环瓶颈（85 ms）。方法上有明确的动作中心化建模与专家解耦，兼顾潜在影响和部署价值；但精读时应核实真实机器人任务规模及相对基线的完整收益。",
+  "valueScore": 7,
+  "valueReason": "论文的价值在于将“未来视觉作为训练监督、动作作为部署输出”的设计贯彻到架构与运行时，并在给定实机设置上同时展示了 SR 和延迟优势。其结论目前仍受技术报告性质、较小规模实机评测、内部数据与不完整统计报告限制；更适合作为高效 WAM 的有前景工程方案，而非已充分验证的通用机器人基础策略。",
   "tags": [
     "每日精选:2026-07-19"
   ],
   "key": "2607.13960",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-17",
   "addedAt": "2026-07-19T01:02:08.808Z",
-  "modifiedAt": "2026-07-19T01:02:08.811Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-19T01:04:47.775Z",
+  "analysisStatus": "ready"
 }
