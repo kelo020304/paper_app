@@ -26,16 +26,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.14635v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-19",
-  "valueScore": 8,
-  "valueReason": "提出将动作监督与继承的视觉语言表征隔离的Action QFormer，切中VLA训练中“动作适配破坏语言/grounding能力”的核心矛盾。闭环sim-to-real成功率从18.8%到56.3%，且有表征分析，实验信号很强；不足是场景偏导航而非操作。",
+  "valueScore": 7,
+  "valueReason": "论文的价值主要在于提出并实证检验一个较少被显式讨论的 VLA 机制问题：动作梯度如何影响共享多模态表征。方法小而清晰，主比较保持动作头和训练目标一致，且行为、消融和表征诊断彼此对应；sim-to-real 闭环提升也很显著。扣分在于真实评测规模小、任务域单一、探针评价含人工规则，且机制结论仍主要是诊断性证据，尚需跨任务和更严格统计验证。",
   "tags": [
     "每日精选:2026-07-19"
   ],
   "key": "2607.14635",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-17",
   "addedAt": "2026-07-19T01:10:46.579Z",
-  "modifiedAt": "2026-07-19T01:10:46.580Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-19T01:11:42.048Z",
+  "analysisStatus": "ready"
 }
