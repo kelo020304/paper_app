@@ -24,15 +24,15 @@
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-19",
   "valueScore": 8,
-  "valueReason": "直击机器人VLA开放世界部署中的持续学习难题。双时间尺度LoRA门控把可塑性与稳定性显式分开，再配合低缓存回放，方法针对性强，并报告了xArm真实机器人实验；值得重点检查任务序列、遗忘度量和与全量回放的公平比较。",
+  "valueReason": "问题具有明确的实际价值，方法同时处理可塑性—稳定性与VLA回放成本，并在所报告的同设定10任务LIBERO实验中相对ER有显著SR/FOR提升，还提供xArm顺序学习验证。证据强度受限于固定且较短的任务流、缺少多顺序/方差报告、真实机器人细节不在正文，以及内存节省数值存在文本与表格不一致。",
   "tags": [
     "每日精选:2026-07-19"
   ],
   "key": "2607.14852",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-17",
   "addedAt": "2026-07-19T01:07:11.830Z",
-  "modifiedAt": "2026-07-19T01:07:11.831Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-19T01:09:42.011Z",
+  "analysisStatus": "ready"
 }
