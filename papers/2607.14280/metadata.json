@@ -1,0 +1,38 @@
+{
+  "id": "2607.14280v1",
+  "baseId": "2607.14280",
+  "title": "DiMaS: Distribution Matching for Steering Vision-Language-Action Models",
+  "authors": [
+    "Pegah Khayatan",
+    "Sara Meziane",
+    "Jayneel Parekh",
+    "Matthieu Cord"
+  ],
+  "abstract": "Flow-matching-based vision-language-action (VLA) models have emerged as powerful policies for robotic manipulation, yet a critical capability remains underexplored: fine-grained behavioral control, the ability to govern how a robot performs a task by intervening on its internal representations. Representation steering is a well-established interpretability tool for language and vision-language models, where behavioral features are typically encoded as linear directions, but we show that these classic methods fall short in VLAs. We propose DiMaS, a Distribution-Matching Steering strategy tailored to flow-matching VLAs, which transports between representation distributions rather than shifting along a fixed direction, and show that it effectively controls behavior across two state-of-the-art VLAs. We further examine the generalizability of this strategy as the tasks it is learned from and evaluated on grow increasingly dissimilar, characterizing where behavioral control transfers and where it weakens. Finally, through an analysis of the representation structure of the action expert, we explain why classical linear steering falls short in the visuomotor setting: behavioral features are linearly decodable but not linearly steerable, which motivates the distribution-matching design of DiMaS. Our code is publicly available at https://github.com/pegah-kh/dimas, with additional results and videos at https://pegah-kh.github.io/dimas/",
+  "published": "2026-07-15T18:39:13Z",
+  "updated": "2026-07-15T18:39:13Z",
+  "categories": [
+    "cs.RO",
+    "cs.LG"
+  ],
+  "primaryCategory": "cs.RO",
+  "comment": "",
+  "journalRef": "",
+  "doi": "",
+  "absUrl": "https://arxiv.org/abs/2607.14280v1",
+  "pdfUrl": "https://arxiv.org/pdf/2607.14280v1",
+  "source": "daily",
+  "dailyCategoryId": "daily-2026-07-19",
+  "valueScore": 7,
+  "valueReason": "将VLA行为可控性从线性表征操纵推进到分布匹配，并解释“可线性解码不等于可线性操纵”的原因。跨两种SOTA VLA、不同任务相似度的转移实验及公开代码使其研究价值较高；精读时需关注控制是否覆盖真实机器人及与策略性能的权衡。",
+  "tags": [
+    "每日精选:2026-07-19"
+  ],
+  "key": "2607.14280",
+  "status": "unread",
+  "favorite": false,
+  "categoryId": "",
+  "addedAt": "2026-07-19T01:14:36.903Z",
+  "modifiedAt": "2026-07-19T01:14:36.904Z",
+  "analysisStatus": "analyzing"
+}
