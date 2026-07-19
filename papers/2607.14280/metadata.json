@@ -24,7 +24,7 @@
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-19",
   "valueScore": 7,
-  "valueReason": "将VLA行为可控性从线性表征操纵推进到分布匹配，并解释“可线性解码不等于可线性操纵”的原因。跨两种SOTA VLA、不同任务相似度的转移实验及公开代码使其研究价值较高；精读时需关注控制是否覆盖真实机器人及与策略性能的权衡。",
+  "valueReason": "将VLA行为可控性从线性表征操纵推进到分布匹配，并解释“可线性解码不等于可线性操纵”的原因。跨两种SOTA VLA、不同任务相似度的转移实验及公开代码使其研究价值较高；精读时需关注控制是否覆盖真实机器人及与策略性能的权衡。；解析失败：Codex 解析超过 3 分钟，请稍后在论文详情中重试",
   "tags": [
     "每日精选:2026-07-19"
   ],
@@ -33,6 +33,6 @@
   "favorite": false,
   "categoryId": "",
   "addedAt": "2026-07-19T01:14:36.903Z",
-  "modifiedAt": "2026-07-19T01:14:36.904Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-19T01:17:37.798Z",
+  "analysisStatus": "failed"
 }
