@@ -23,16 +23,16 @@
   "pdfUrl": "https://arxiv.org/pdf/2607.14439v1",
   "source": "daily",
   "dailyCategoryId": "daily-2026-07-19",
-  "valueScore": 8,
-  "valueReason": "不是新VLA架构，却是非常值得精读的评测论文：把真实机器人泛化评测建模为主动实验设计，并完成2331次真实世界试验。它对判断各类generalist manipulation/VLA论文的实验可信度尤其有用，且20–40%的试验节省具有实际影响。",
+  "valueScore": 7,
+  "valueReason": "问题具有实际价值，且完整真实硬件配置集使随机与主动方法的比较较有依据；方法本身主要是对成熟主动测试组件的面向机器人评测的系统化适配，实验规模和外部覆盖范围仍有限。",
   "tags": [
     "每日精选:2026-07-19"
   ],
   "key": "2607.14439",
   "status": "unread",
   "favorite": false,
-  "categoryId": "",
+  "categoryId": "daily-2026-07-17",
   "addedAt": "2026-07-19T01:12:49.410Z",
-  "modifiedAt": "2026-07-19T01:12:49.411Z",
-  "analysisStatus": "analyzing"
+  "modifiedAt": "2026-07-19T01:13:38.528Z",
+  "analysisStatus": "ready"
 }
